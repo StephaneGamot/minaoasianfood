@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "title": "Poulet croustillant",
+    "image": "/images/dishe1.jpg",
+    "tags": ["Poulet", "Épicé", "Entrée"],
+    "description": "Poulet frit croustillant servi avec une sauce maison relevée."
+  },
+  {
+    "id": "2",
+    "title": "Nouilles sautées",
+    "image": "/images/dishe1.jpg",
+    "tags": ["Végétarien","Nouilles sautées"],
+    "description": "Nouilles sautées aux légumes croquants et sauce soja."
+  },
+  {
+    "id": "3",
+    "title": "Poulet croustillant",
+    "image": "/images/dishe1.jpg",
+    "tags": ["Riz sautés", "Fruit de mer", "Baos"],
+    "description": "Poulet frit croustillant servi avec une sauce maison relevée."
+  }
+]

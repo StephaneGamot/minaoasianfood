@@ -1,0 +1,10 @@
+{
+  "header": {
+    "menu": "Menu",
+    "contact": "Contact",
+    "home": "Home"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  }
+}

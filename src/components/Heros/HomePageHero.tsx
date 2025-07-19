@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function HomePageHero() {
   return (
-<section className="text-center px-4 py-10 max-w-3xl mx-auto">
+<section className="text-center px-4 py-10 max-w-3xl mx-auto bg-stone-100">
   <h1 className="text-3xl font-bold text-gray-900 mb-4">
     Chez Minao Asian Food, chaque plat a une âme.
   </h1>

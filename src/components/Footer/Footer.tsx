@@ -53,7 +53,7 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-gray-100">
+    <footer className="bg-zinc-900 text-zinc-300">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* NAVIGATION */}
         <nav className="mb-10 flex justify-center gap-x-8 text-sm font-medium">

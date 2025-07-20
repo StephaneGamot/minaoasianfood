@@ -36,7 +36,7 @@ export default function WitchRestaurant() {
       <div className="mx-auto max-w-7xl text-center mb-12">
         <h2 className="text-3xl font-bold text-gray-900">Nos restaurants</h2>
         <p className="mt-2 text-gray-600">
-          Retrouvez-nous à Bruxelles et Liège pour une expérience asiatique
+          Retrouvez-nous à Bruxelles et Dilbeek pour une expérience asiatique
           inoubliable.
         </p>
       </div>

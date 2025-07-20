@@ -1,7 +1,8 @@
 import React from 'react'
 import HomePageHero from '@/components/Heros/HomePageHero'
 import WitchRestaurant from '@/components/WitchRestaurant/WitchRestaurant'
-import MenuCategoriesSection from './menu/MenuCategoriesSection'
+import MenuCategoriesSection from '../../components/Menu/MenuCategoriesSection'
+import CardContainer from '@/components/DishesCards/CardContainer'
 
 export default function Homepage() {
   return (
@@ -11,6 +12,7 @@ export default function Homepage() {
       <HomePageHero />
       <WitchRestaurant />
       <MenuCategoriesSection />
+      <CardContainer />
     </main>
   )
 }

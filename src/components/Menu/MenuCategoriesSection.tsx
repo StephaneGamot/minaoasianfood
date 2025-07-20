@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import Entrees from "./../../../../public/images/menu/entrees.jpg"
-import Riz from "./../../../../public/images/menu/riz.jpg"
-import Bao from "./../../../../public/images/menu/bao.jpg"
-import Nouilles from "./../../../../public/images/menu/nouilles.jpg"
-import PasThai from "./../../../../public/images/menu/pad-thai.jpg"
-import Desserts from "./../../../../public/images/menu/desserts.jpg"
-import Boissons from "./../../../../public/images/menu/boissons.jpg"
-import PlatsSauce from "./../../../../public/images/menu/plats-sauce.jpg"
-import Incontournables from "./../../../../public/images/menu/incontournables.jpg"
-import Nouveautes from "./../../../../public/images/menu/nouveautes.jpg"
+import Entrees from "./../../../public/images/menu/entrees.jpg"
+import Riz     from "./../../../public/images/menu/riz.jpg"
+import Bao from "./../../../public/images/menu/bao.jpg"
+import Nouilles from "./../../../public/images/menu/nouilles.jpg"
+import PasThai from "./../../../public/images/menu/pad-thai.jpg"
+import Desserts from "./../../../public/images/menu/desserts.jpg"
+import Boissons from "./../../../public/images/menu/boissons.jpg"
+import PlatsSauce from "./../../../public/images/menu/plats-sauce.jpg"
+import Incontournables from "./../../../public/images/menu/incontournables.jpg"
+import Nouveautes from "./../../../public/images/menu/nouveautes.jpg"
 
 const categories = [
   {
@@ -98,7 +98,7 @@ const categories = [
 
 export default function MenuCategoriesSection() {
   return (
-    <section className="bg-white py-16">
+    <section className="bg-stone-100 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center">
           Explorez notre carte

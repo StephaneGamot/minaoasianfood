@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { tagStyles } from "./tagStyles";
+import { tagStyles } from "../Menu/tagStyles";
 
 type Props = {
   title: string;

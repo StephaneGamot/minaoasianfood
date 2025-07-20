@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "Nouilles sautées veggie",
+    "description": "",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées végétariennes",
+    "price": "13,90 €",
+    "tags": ["Nouilles", "Végétarien"],
+    "searchTag": ["nouilles", "sautées", "veggie", "végétarien"]
+  },
+  {
+    "id": 2,
+    "name": "Nouilles sautées poulet",
+    "description": "",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées au poulet",
+    "price": "13,90 €",
+    "tags": ["Nouilles", "Poulet"],
+    "searchTag": ["nouilles", "sautées", "poulet"]
+  },
+  {
+    "id": 3,
+    "name": "Nouilles sautées viande de boeuf",
+    "description": "",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées à la viande",
+    "price": "14,90 €",
+    "tags": ["Nouilles", "Boeuf"],
+    "searchTag": ["nouilles", "sautées", "viande", "Boeuf"]
+  },
+  {
+    "id": 4,
+    "name": "Nouilles sautées scampis",
+    "description": "",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées aux scampis",
+    "price": "15,90 €",
+    "tags": ["Nouilles", "Océan"],
+    "searchTag": ["nouilles", "sautées", "scampis"]
+  },
+  {
+    "id": 5,
+    "name": "Nouilles sautées mixte",
+    "description": "",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées mixtes",
+    "price": "16,90 €",
+    "tags": ["Nouilles", "Mixte"],
+    "searchTag": ["nouilles", "sautées", "mixte"]
+  },
+  {
+    "id": 6,
+    "name": "Nouilles sautées énergie",
+    "description": "Riz aux légumes frais, protéines et sauce au choix",
+    "href": "/menu/nouilles",
+    "imageSrc": "/images/menu/nouilles.jpg",
+    "imageAlt": "Nouilles sautées mixtes",
+    "price": "14,90 €",
+    "tags": ["Nouilles", "Mixte"],
+    "searchTag": ["nouilles", "sautées", "mixte"]
+  }
+]

@@ -1,0 +1,189 @@
+[
+  {
+    "id": 1,
+    "name": "Ritchie Cola Natural",
+    "description": "Boisson Pétillante 100% Belge. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Ritchie Cola Natural",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Soda", "Pétillant"],
+    "searchTag": ["ritchie", "cola", "boisson", "belge"]
+  },
+  {
+    "id": 2,
+    "name": "Ritchie Cola Zéro",
+    "description": "Boisson Pétillante 100% Belge. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Ritchie Cola Zéro",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Cola","Soda", "Sans sucre", "Pétillant"],
+    "searchTag": ["ritchie", "cola", "zéro", "boisson", "belge"]
+  },
+  {
+    "id": 3,
+    "name": "Ritchie orange",
+    "description": "Boisson Pétillante 100% Belge. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Ritchie orange",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Orange", "Pétillant"],
+    "searchTag": ["ritchie", "orange", "boisson", "belge"]
+  },
+  {
+    "id": 4,
+    "name": "Ritchie Citron Framboise",
+    "description": "Boisson Pétillante 100% Belge. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Ritchie Citron Framboise",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Citron", "Framboise", "Pétillant"],
+    "searchTag": ["ritchie", "citron", "framboise"]
+  },
+  {
+    "id": 5,
+    "name": "Mangajo Citron Thé vert",
+    "description": "Boisson rafraîchissante healthy. 0,25l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Mangajo Citron Thé vert",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Thé", "Citron"],
+    "searchTag": ["mangajo", "citron", "thé vert", "healthy"]
+  },
+  {
+    "id": 6,
+    "name": "Mangajo Baie Açaí Thé vert",
+    "description": "Boisson rafraîchissante healthy. 0,25l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Mangajo Açaí",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Thé", "Açaí"],
+    "searchTag": ["mangajo", "açaí", "thé vert"]
+  },
+  {
+    "id": 7,
+    "name": "Mangajo Baie de Goji Thé vert",
+    "description": "Boisson rafraîchissante healthy. 0,25l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Mangajo Goji",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Thé", "Goji"],
+    "searchTag": ["mangajo", "goji", "thé vert"]
+  },
+  {
+    "id": 8,
+    "name": "Spa Framboise Pomme",
+    "description": "Eau plate Low calorie. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa Framboise Pomme",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Eau", "Framboise", "Pomme"],
+    "searchTag": ["spa", "framboise", "pomme"]
+  },
+  {
+    "id": 9,
+    "name": "Spa Citron gingembre",
+    "description": "Boisson rafraîchissante. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa Citron gingembre",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Eau", "Citron", "Gingembre"],
+    "searchTag": ["spa", "citron", "gingembre"]
+  },
+  {
+    "id": 10,
+    "name": "Spa Fraise Pastèque",
+    "description": "Boisson rafraîchissante. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa Fraise Pastèque",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Eau", "Fraise", "Pastèque"],
+    "searchTag": ["spa", "fraise", "pastèque"]
+  },
+  {
+    "id": 11,
+    "name": "Spa Citron Cactus",
+    "description": "Boisson Pétillante. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa Citron Cactus",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Citron","Eau", "Pétillant", "Cactus"],
+    "searchTag": ["spa", "citron", "cactus"]
+  },
+  {
+    "id": 12,
+    "name": "Spa Pamplemousse Framboise",
+    "description": "Boisson Pétillante. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa Pamplemousse Framboise",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Pamplemousse", "Framboise", "Eau", "Pétillant"],
+    "searchTag": ["spa", "pamplemousse", "framboise"]
+  },
+  {
+    "id": 13,
+    "name": "Oasis Tropical",
+    "description": "Boisson Pétillante. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Oasis Tropical",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Tropical", "Pétillant"],
+    "searchTag": ["oasis", "tropical"]
+  },
+  {
+    "id": 14,
+    "name": "Oasis Framboise Cassis",
+    "description": "Boisson rafraîchissante. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Oasis Framboise Cassis",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Cassis", "Framboise"],
+    "searchTag": ["oasis", "framboise", "cassis"]
+  },
+  {
+    "id": 15,
+    "name": "Oasis Pomme Poire",
+    "description": "Boisson rafraîchissante. 0,33l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Oasis Pomme Poire",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Pomme", "Poire"],
+    "searchTag": ["oasis", "pomme", "poire"]
+  },
+  {
+    "id": 16,
+    "name": "Spa pétillant",
+    "description": "Eau Pétillante. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa pétillant",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Eau", "Pétillant"],
+    "searchTag": ["spa", "pétillant"]
+  },
+  {
+    "id": 17,
+    "name": "Spa",
+    "description": "Eau minérale. 0,5l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/boissons.jpg",
+    "imageAlt": "Spa",
+    "price": "3,00 €",
+    "tags": ["Boissons", "Eau"],
+    "searchTag": ["spa", "eau"]
+  }
+]

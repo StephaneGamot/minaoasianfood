@@ -2,45 +2,45 @@
   {
     "id": 1,
     "name": "Yakitoris poulet",
-    "description": "2 pièces",
+    "description": "3 pièces",
     "href": "/menu/nouveautes",
-    "imageSrc": "/images/menu/nouveautes.jpg",
-    "imageAlt": "Photo des nouveautés Minao",
-    "price": "6,70 €",
+    "imageSrc": "/images/menu/yakitoris-poulet-halal.webp",
+    "imageAlt": "3 yakitoris au poulet halal",
+    "price": "6,90 €",
     "tags": ["Entrée", "Poulet", "Épicé"],
-    "searchTag": ["Entrée", "Poulet", "Épicé", "yakitori"]
+    "searchTag": ["Entrée", "Poulet", "Épicé", "yakitori", "brochette"]
   },
   {
     "id": 2,
     "name": "Karaag poulet",
     "description": "5 pièces",
     "href": "/menu/incontournables",
-    "imageSrc": "/images/menu/incontournables.jpg",
-    "imageAlt": "Plat iconique Minao",
-    "price": "7,40 €",
+    "imageSrc": "/images/menu/karaage.webp",
+    "imageAlt": "Poulet mariné frit - karaage",
+    "price": "7,90 €",
     "tags": ["Entrée", "Poulet"],
-    "searchTag": []
+    "searchTag": ["Entrée", "Poulet", "Épicé", "karaage", "japonais"]
   },
   {
     "id": 3,
     "name": "Tempuras scampis",
     "description": "3 pièces",
     "href": "/menu/entrees",
-    "imageSrc": "/images/menu/entrees.jpg",
-    "imageAlt": "Entrées asiatiques",
-    "price": "6,00 €",
+    "imageSrc": "/images/menu/tempura-scampi.webp",
+    "imageAlt": "Tempuras de scampis",
+    "price": "7,90 €",
     "tags": ["Entrée", "Océan"],
-    "searchTag": []
+    "searchTag": ["Entrée", "Fruit de mer", "Friture"]
   },
   {
     "id": 4,
     "name": "Nems veggie",
     "description": "4 pièces",
     "href": "/menu/bao",
-    "imageSrc": "/images/menu/bao.jpg",
-    "imageAlt": "Bao buns vapeur",
+    "imageSrc": "/images/menu/nem-vegetarien.webp",
+    "imageAlt": "Nems végétarien",
     "price": "6,00 €",
-    "tags": ["Entrée", "Végétarien"],
+    "tags": ["Entrée", "Végétarien","nem"],
     "searchTag": []
   },
   {
@@ -48,10 +48,10 @@
     "name": "Nems poulet",
     "description": "4 pièces",
     "href": "/menu/nouveautes",
-    "imageSrc": "/images/menu/nouveautes.jpg",
-    "imageAlt": "Photo des nouveautés Minao",
+    "imageSrc": "/images/menu/nem-poulet.webp",
+    "imageAlt": "Nems au poulets 4 pieces",
     "price": "6,50 €",
-    "tags": ["Entrée", "Poulet"],
+    "tags": ["Entrée", "Poulet", "nem"],
     "searchTag": []
   },
   {
@@ -59,65 +59,65 @@
     "name": "Gyozas veggie",
     "description": "4 pièces",
     "href": "/menu/incontournables",
-    "imageSrc": "/images/menu/incontournables.jpg",
-    "imageAlt": "Plat iconique Minao",
+    "imageSrc": "/images/menu/gyoza-vegetarien.webp",
+    "imageAlt": "Gyoza végétatien",
     "price": "6,00 €",
-    "tags": ["Entrée", "Végétarien"],
-    "searchTag": []
+    "tags": ["Entrée", "Végétarien","gyoza"],
+    "searchTag": ["Entrée", "Végétarien","gyoza"]
   },
   {
     "id": 7,
     "name": "Gyozas poulet",
     "description": "4 pièces",
     "href": "/menu/entrees",
-    "imageSrc": "/images/menu/entrees.jpg",
-    "imageAlt": "Entrées asiatiques",
-    "price": "6,50 €",
-    "tags": ["Entrée", "Poulet"],
-    "searchTag": []
+    "imageSrc": "/images/menu/gyoza-poulet.webp",
+    "imageAlt": "Gyoza poulet halal",
+    "price": "6,90 €",
+    "tags": ["Entrée", "Végétarien","gyoza"],
+    "searchTag": ["Entrée", "Végétarien","gyoza"]
   },
   {
     "id": 8,
     "name": "Gyozas scampi",
     "description": "4 pièces",
     "href": "/menu/bao",
-    "imageSrc": "/images/menu/bao.jpg",
-    "imageAlt": "Bao buns vapeur",
+    "imageSrc": "/images/menu/gyoza-scampi.webp",
+    "imageAlt": "Gyoza de scampi",
     "price": "6,90 €",
-    "tags": ["Entrée", "Océan"],
-    "searchTag": []
+    "tags": ["Entrée","Ocean"],
+    "searchTag": ["Entrée", "scampi","gyoza"]
   },
   {
     "id": 9,
     "name": "Salade poulet façon thaï",
     "description": "Poulet caramélisé, légumes pickles et vermicelles.",
     "href": "/menu/nouveautes",
-    "imageSrc": "/images/menu/nouveautes.jpg",
+    "imageSrc": "/images/menu/salade-poulet-thai.webp",
     "imageAlt": "Photo des nouveautés Minao",
-    "price": "11,90 €",
-    "tags": ["Entrée", "Poulet","Nouilles"],
-    "searchTag": []
+    "price": "10,50 €",
+    "tags": ["Entrée", "Poulet","Nouilles","salade"],
+    "searchTag": ["Entrée", "Poulet","Nouilles","salade"]
   },
   {
     "id": 10,
     "name": "Salade scampis façon thaï",
     "description": "Scampis saté, légumes pickles et vermicelles.",
     "href": "/menu/incontournables",
-    "imageSrc": "/images/menu/incontournables.jpg",
+    "imageSrc": "/images/menu/salade-scampi-thai.webp",
     "imageAlt": "Plat iconique Minao",
-    "price": "12,90 €",
+    "price": "10,90 €",
     "tags": ["Entrée", "Océan","Nouilles"],
-    "searchTag": []
+    "searchTag": ["Entrée", "Océan","Nouilles", "scampi", "salade"]
   },
   {
     "id": 11,
     "name": "Salade veggie façon thaï",
     "description": "Légumes saté, légumes pickles et vermicelles.",
     "href": "/menu/incontournables",
-    "imageSrc": "/images/menu/incontournables.jpg",
+    "imageSrc": "/images/menu/salade-vegetarien-thai.webp",
     "imageAlt": "Plat iconique Minao",
     "price": "10,50 €",
-    "tags": ["Entrée", "Végétarien","Nouilles"],
-    "searchTag": []
+    "tags": ["Entrée", "Végétarien","Nouilles","salade"],
+    "searchTag": ["Entrée", "Végétarien","Nouilles","salade"]
   }
 ]

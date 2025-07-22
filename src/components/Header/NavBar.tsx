@@ -5,11 +5,11 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "./../../../public/logos/Logo-Minao.png"
+import Logo from "./../../../public/logos/logo.webp"
 
 const navigation = [
-  { name: "Accueil", href: "/" },
   { name: "Menu", href: "/menu" },
+  { name: "Magasins", href: "/#" },
   { name: "Galerie", href: "/galerie" },
   { name: "Contact", href: "/contact" },
 ];
@@ -20,7 +20,7 @@ export default function NacBar() {
 
   return (
     <header className="bg-red-900 shadow">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
         
         {/* Logo */}
         <div className="flex lg:flex-1">
@@ -29,7 +29,7 @@ export default function NacBar() {
             <Image
               alt="Minao Asian Food Logo"
               src={Logo}
-              className="h-8 w-auto"
+              className="h-15 w-auto"
               priority
             />
           </Link>
@@ -84,7 +84,7 @@ export default function NacBar() {
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-red-900 p-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
             <Link href="/" className="-m-1.5 p-1.5">
-              <Image src={Logo} alt="Minao" className="h-8 w-auto" />
+              <Image src={Logo} alt="Minao" className="h-15 w-auto" />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}

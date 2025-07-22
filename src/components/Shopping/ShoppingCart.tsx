@@ -1,4 +1,5 @@
 import { CheckIcon, ClockIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image'
 
 const products = [
   {
@@ -85,7 +86,7 @@ export default function Example() {
                         <span>{product.inStock ? 'In stock' : `Will ship in ${product.leadTime}`}</span>
                       </p>
                       <div className="ml-4">
-                        <button type="button" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        <button type="button" className="text-sm font-medium text-red-900 hover:text-red-800">
                           <span>Remove</span>
                         </button>
                       </div>
@@ -115,7 +116,7 @@ export default function Example() {
             <div className="mt-10">
               <button
                 type="submit"
-                className="w-full rounded-md border border-transparent bg-red-900 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                className="w-full rounded-md border border-transparent bg-red-900 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-900 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Checkout
               </button>
@@ -124,7 +125,7 @@ export default function Example() {
             <div className="mt-6 text-center text-sm">
               <p>
                 or{' '}
-                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <a href="#" className="font-medium text-red-900 hover:text-red-800">
                   Continue Shopping
                   <span aria-hidden="true"> &rarr;</span>
                 </a>

@@ -6,17 +6,23 @@ import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outl
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./../../../public/logos/logo.webp"
+import { useTranslations } from 'next-intl';
 
-const navigation = [
-  { name: "Menu", href: "/menu" },
-  { name: "Magasins", href: "/#" },
-  { name: "Galerie", href: "/galerie" },
-  { name: "Contact", href: "/contact" },
-];
+
 
 export default function NacBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const cartItemCount = 2;
+const t = useTranslations('nav');
+
+
+const navigation = [
+  { name: t('menu'), href: '/menu' },
+  { name: t('shops'), href: '/#' },
+  { name: t('gallery'), href: '/galerie' },
+  { name: t('contact'), href: '/contact' },
+];
+
 
   return (
     <header className="bg-red-900 shadow">

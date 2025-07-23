@@ -34,15 +34,23 @@ export function generateStaticParams() {
 }
 
 // Layout principal multilingue
-export default async function LocaleLayout(props: LocaleLayoutProps) {
-  const { children } = props;
-  const params = await Promise.resolve(props.params); // ✅ forcer async context
-  const { locale } = params;
-
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { locale } = await Promise.resolve(params); // 👈 Ajoute ce `await`
   const safeLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
   setRequestLocale(safeLocale);
 
-  const messages = (await import(`@/messages/${safeLocale}.json`)).default;
+  // ✅ Chargement modulaire des namespaces (nav, footer, etc.)
+ const namespaces = ['nav', 'footer', 'homePageHero', 'witchRestaurant','menuCategoriesSection']; // ou ['footer'] si c'est tout
+
+const messages = Object.fromEntries(
+  await Promise.all(
+    namespaces.map(async (ns) => {
+ const mod = await import(`../../messages/${safeLocale}/${ns}.json`);
+
+      return [ns, mod.default];
+    })
+  )
+);
 
 
   return (

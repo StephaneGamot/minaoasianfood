@@ -1,7 +1,8 @@
-import LangSwitcher from "../LangSwitcher/LangSwitcher";
+"use client";
+
 import Link from "next/link";
-
-
+import { useTranslations } from "next-intl";
+import LangSwitcher from "../LangSwitcher/LangSwitcher";
 
 
 const navigation = {
@@ -10,7 +11,6 @@ const navigation = {
     { name: "Menu", href: "#" },
     { name: "Gallerie", href: "#" },
     { name: "Contact", href: "#" },
-
   ],
   social: [
     {
@@ -52,85 +52,69 @@ const navigation = {
 };
 
 export default function Footer() {
+  const t = useTranslations("footer");
+
   return (
     <footer className="bg-zinc-900 text-zinc-300">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* NAVIGATION */}
         <nav className="mb-10 flex justify-center gap-x-8 text-sm font-medium">
-          <Link href="#" className="hover:text-white">Accueil</Link>
-          <Link href="#" className="hover:text-white">Menu</Link>
-          <Link href="#" className="hover:text-white">Galerie</Link>
-          <Link href="#" className="hover:text-white">Contact</Link>
-          <Link href="#" className="hover:text-white">Faq</Link>
+          <Link href="/" className="hover:text-white">{t("nav.home")}</Link>
+          <Link href="/menu" className="hover:text-white">{t("nav.menu")}</Link>
+          <Link href="/galerie" className="hover:text-white">{t("nav.gallery")}</Link>
+          <Link href="/contact" className="hover:text-white">{t("nav.contact")}</Link>
+          <Link href="/faq" className="hover:text-white">{t("nav.faq")}</Link>
         </nav>
 
         {/* GRID COLONNES CENTRÉES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm text-center md:text-left max-w-5xl mx-auto">
           {/* Horaires */}
           <div>
-            <h3 className="text-white  font-semibold mb-3">Heures d’ouverture</h3>
+            <h3 className="text-white font-semibold mb-3">{t("hours.title")}</h3>
             <ul className="space-y-1">
-              <li>Lundi : Fermé</li>
-              <li>Mardi : 16:00–23:00</li>
-              <li>Mercredi : 16:00–23:00</li>
-              <li>Jeudi : 16:00–23:00</li>
-              <li>Vendredi : 16:00–01:00</li>
-              <li>Samedi : 16:00–01:00</li>
-              <li>Dimanche : 16:00–23:00</li>
+              <li>{t("hours.monday")}</li>
+              <li>{t("hours.tuesday")}</li>
+              <li>{t("hours.wednesday")}</li>
+              <li>{t("hours.thursday")}</li>
+              <li>{t("hours.friday")}</li>
+              <li>{t("hours.saturday")}</li>
+              <li>{t("hours.sunday")}</li>
             </ul>
           </div>
 
-         {/* Particularités */}
+          {/* Particularités */}
           <div>
-            <h3 className="text-white font-semibold mb-3">Particularités</h3>
+            <h3 className="text-white font-semibold mb-3">{t("features.title")}</h3>
             <ul className="space-y-2">
-              <li className="flex items-center justify-center md:justify-start gap-2">
-           
-                🛵 Livraison sur Bruxelles et alentours
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-2">
-     
-                💳 Cartes de crédit acceptées
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-2">
-                🥡 À emporter
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-2">
-              
-                📅  Réservation
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-2">
-                
-               🍽️ Sur place
-              </li>
+              <li className="flex items-center justify-center md:justify-start gap-2">🛵 {t("features.delivery")}</li>
+              <li className="flex items-center justify-center md:justify-start gap-2">💳 {t("features.cards")}</li>
+              <li className="flex items-center justify-center md:justify-start gap-2">🥡 {t("features.takeaway")}</li>
+              <li className="flex items-center justify-center md:justify-start gap-2">📅 {t("features.booking")}</li>
+              <li className="flex items-center justify-center md:justify-start gap-2">🍽️ {t("features.onsite")}</li>
             </ul>
           </div>
 
           {/* Contact & Adresse */}
           <div>
-            <h3 className="text-white font-semibold mb-3">Contact</h3>
+            <h3 className="text-white font-semibold mb-3">{t("contact.title")}</h3>
             <ul className="space-y-2">
               <li className="flex items-center justify-center md:justify-start gap-2">
-                
                 <a href="tel:+32499123456" className="hover:underline">📞 +32 499 12 34 56</a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2">
-
-                <a href="mailto:contact@minaoasianfood.com" className="hover:underline">
-                  📧  contact@minaoasianfood.com
-                </a>
+                <a href="mailto:contact@minaoasianfood.com" className="hover:underline">📧 contact@minaoasianfood.com</a>
               </li>
             </ul>
-            <h3 className="text-white font-semibold mt-5 mb-2">Adresse</h3>
+            <h3 className="text-white font-semibold mt-5 mb-2">{t("address.title")}</h3>
             <address className="not-italic leading-6">
-              🚉 Gare de Bruxelles-Nord<br />
-              📍 Rue Général Eenens 20<br />
-              Schaerbeek, Bruxelles, Belgique
+              🚉 {t("address.station")}<br />
+              📍 {t("address.street")}<br />
+              {t("address.city")}
             </address>
           </div>
         </div>
 
-        {/* RESEAUX + LANGSWITCHER */}
+        {/* RÉSEAUX + LANGSWITCHER */}
         <div className="mt-12 flex flex-col md:flex-row items-center justify-around gap-6 text-sm text-gray-300 max-w-5xl mx-auto">
           <div className="flex gap-5">
             {navigation.social.map((item) => (
@@ -144,9 +128,7 @@ export default function Footer() {
         </div>
 
         {/* COPYRIGHT */}
-        <p className="mt-6 text-center text-sm text-gray-400">
-          &copy; 2025 Minao Asian Food. Tous droits réservés.
-        </p>
+        <p className="mt-6 text-center text-sm text-gray-400">&copy; 2025 Minao Asian Food. {t("copyright")}</p>
       </div>
     </footer>
   );

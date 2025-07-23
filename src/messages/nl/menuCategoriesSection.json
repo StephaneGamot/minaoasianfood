@@ -1,0 +1,45 @@
+{
+  "title": "Ontdek ons menu",
+  "categories": [
+    {
+      "name": "Voorgerechten",
+      "description": "Dumplings, loempia’s, gyoza’s… Azië op z’n best.",
+      "alt": "Aziatische voorgerechten: loempia’s, dumplings, gyoza’s."
+    },
+    {
+      "name": "Bao",
+      "description": "Zacht, gestoomd en boordevol smaak.",
+      "alt": "Gestoomde bao’s met heerlijke vulling."
+    },
+    {
+      "name": "Gerechten met saus",
+      "description": "Stoofgerechten vol geur en karakter.",
+      "alt": "Aziatische gerechten met rijke sauzen."
+    },
+    {
+      "name": "Gebakken rijst",
+      "description": "Geparfumeerd, rijkelijk gegarneerd en smakelijk.",
+      "alt": "Gebakken rijst met groenten en eiwitten."
+    },
+    {
+      "name": "Gebakken noedels",
+      "description": "Gebakken in de wok met een krachtige smaak.",
+      "alt": "Gebakken Aziatische noedels uit de wok."
+    },
+    {
+      "name": "Pad Thai",
+      "description": "Een Thaise klassieker, zacht en verslavend.",
+      "alt": "Pad Thai met garnalen en pinda’s."
+    },
+    {
+      "name": "Desserts",
+      "description": "Mango, kokos, sesam… Azië als zoete afsluiter.",
+      "alt": "Aziatische desserts: mango, kokos, zoete lekkernijen."
+    },
+    {
+      "name": "Dranken",
+      "description": "Bubble tea, ijsthee en exotische frisdranken.",
+      "alt": "Verfrissende of warme Aziatische dranken."
+    }
+  ]
+}

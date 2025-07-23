@@ -1,0 +1,45 @@
+{
+  "title": "Explore our menu",
+  "categories": [
+    {
+      "name": "Starters",
+      "description": "Dumplings, spring rolls, gyozas… A taste of Asia to begin.",
+      "alt": "Asian starters: dumplings, spring rolls, gyozas."
+    },
+    {
+      "name": "Bao",
+      "description": "Soft, steamed, and full of flavor.",
+      "alt": "Steamed bao buns filled with delight."
+    },
+    {
+      "name": "Saucy dishes",
+      "description": "Slow-cooked classics with bold aromas.",
+      "alt": "Saucy Asian dishes with rich flavors."
+    },
+    {
+      "name": "Fried rice",
+      "description": "Aromatic and generous, full of toppings.",
+      "alt": "Asian fried rice with veggies and proteins."
+    },
+    {
+      "name": "Stir-fried noodles",
+      "description": "Wok-seared with bold taste and texture.",
+      "alt": "Asian noodles stir-fried in a wok."
+    },
+    {
+      "name": "Pad Thai",
+      "description": "Thailand’s iconic dish, sweet and addictive.",
+      "alt": "Authentic Pad Thai with shrimp and peanuts."
+    },
+    {
+      "name": "Desserts",
+      "description": "Mango, coconut, sesame… Sweet Asian delights.",
+      "alt": "Asian desserts: mango, coconut, sweet treats."
+    },
+    {
+      "name": "Drinks",
+      "description": "Bubble tea, iced teas, and exotic sodas.",
+      "alt": "Asian-style drinks, cold or hot."
+    }
+  ]
+}

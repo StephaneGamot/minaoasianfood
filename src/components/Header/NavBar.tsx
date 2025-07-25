@@ -6,22 +6,24 @@ import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outl
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./../../../public/logos/logo.webp"
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 
 
-export default function NacBar() {
+
+export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const cartItemCount = 2;
 const t = useTranslations('nav');
 
+const locale = useLocale();
 
-const navigation = [
-  { name: t('menu'), href: '/menu' },
-  { name: t('shops'), href: '/#' },
-  { name: t('gallery'), href: '/galerie' },
-  { name: t('contact'), href: '/contact' },
-];
+  const navigation = [
+    { name: t('menu'), href: `/${locale}/menu` },
+    { name: t('shops'), href: `/${locale}/#` }, 
+    { name: t('gallery'), href: `/${locale}/galerie` },
+    { name: t('contact'), href: `/${locale}/contact` },
+  ];
 
 
   return (

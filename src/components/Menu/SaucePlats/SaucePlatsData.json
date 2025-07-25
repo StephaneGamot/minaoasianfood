@@ -1,16 +1,5 @@
 [
-  {
-    "id": 1,
-    "name": "Plat veggie",
-    "description": "Curry rouge coco, soja et saté.",
-    "href": "/menu/plats-sauces",
-    "imageSrc": "/images/menu/plats-sauce.jpg",
-    "imageAlt": "Plat veggie en sauce",
-    "price": "11,50 €",
-    "tags": ["Plats", "Végétarien"],
-    "searchTag": ["plat", "veggie", "végétarien", "curry", "sauce"]
-  },
-  {
+   {
     "id": 2,
     "name": "Plat poulet",
     "description": "Curry rouge coco, soja et saté.",

@@ -70,7 +70,7 @@ const locale = useLocale();
         {/* Cart + login */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
           <Link
-            href="/panier"
+            href="/${locale}/panier"
             className="relative text-stone-100 hover:text-white transition"
           >
             <ShoppingCartIcon className="h-6 w-6" />

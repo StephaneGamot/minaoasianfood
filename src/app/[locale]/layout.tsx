@@ -2,6 +2,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { routing } from "@/i18n/routing";
 import { Cormorant_Garamond, Open_Sans } from 'next/font/google';
+import { CartProvider } from "@/context/CartContext";
 // import { Analytics } from '@vercel/analytics/next';
 import Header from '@/components/Header/NavBar';
 import Footer from '@/components/Footer/Footer';
@@ -66,11 +67,13 @@ const messages = Object.fromEntries(
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
       </head>
       <body className={`${cormorant.variable} ${openSans.variable} bg-light text-dark font-body`}>
+        <CartProvider>
         <NextIntlClientProvider locale={safeLocale} messages={messages}>
           <Header />
           {children}
-          <Footer />
+          <Footer />       
         </NextIntlClientProvider>
+       </CartProvider>
       </body>
     </html>
   );

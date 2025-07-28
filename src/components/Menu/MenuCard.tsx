@@ -17,14 +17,49 @@ type Category = {
   searchTag?: string[];
 };
 
+type CartItem = {
+  id: number;
+  name: string;
+  price?: string;
+  quantity: number;
+  imageSrc: string;
+};
+
 interface MenuCardProps {
   categories: Category[];
 }
 
 export default function MenuCard({ categories }: MenuCardProps) {
   const [selected, setSelected] = useState<Category | null>(null);
-const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
 
+  const handleAddToCart = () => {
+    if (!selected) return;
+
+    const item = {
+      id: selected.id,
+      name: selected.name,
+      price: selected.price,
+      quantity: quantity,
+      imageSrc: selected.imageSrc,
+    };
+
+    const existingCart: CartItem[] = JSON.parse(
+      localStorage.getItem("cart") || "[]"
+    );
+    const existingIndex = existingCart.findIndex((i) => i.id === item.id);
+
+    if (existingIndex !== -1) {
+      existingCart[existingIndex].quantity += quantity;
+    } else {
+      existingCart.push(item);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+
+    setSelected(null);
+    setQuantity(1);
+  };
 
   return (
     <>
@@ -35,7 +70,7 @@ const [quantity, setQuantity] = useState(1);
             onClick={() => setSelected(cat)}
             className="group relative block cursor-pointer overflow-hidden rounded-xl border border-gray-100 shadow-sm transition hover:shadow-md bg-white"
           >
-            <div className="aspect-[3/2] overflow-hidden">
+            <div className="aspect-[3/2] overflow-hidden relative">
               <Image
                 src={cat.imageSrc}
                 alt={cat.imageAlt}
@@ -56,7 +91,7 @@ const [quantity, setQuantity] = useState(1);
 
               {cat.tags && cat.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-0">
-                  {cat.tags?.slice(0, 2).map((tag, i) => {
+                  {cat.tags.slice(0, 2).map((tag, i) => {
                     const style = tagStyles[tag] || {
                       color: "bg-gray-200 text-gray-800",
                       icon: "🔖",
@@ -78,71 +113,79 @@ const [quantity, setQuantity] = useState(1);
         ))}
       </div>
 
-      <Modal isOpen={!!selected} onClose={() => { setSelected(null); setQuantity(1); }}>
-  {selected && (
-    <div>
-      <div className="aspect-[3/2] mb-4 overflow-hidden rounded-md">
-        <Image
-          src={selected.imageSrc}
-          alt={selected.imageAlt}
-          width={600}
-          height={400}
-          className="w-full h-auto object-cover"
-        />
-      </div>
+      <Modal
+        isOpen={!!selected}
+        onClose={() => {
+          setSelected(null);
+          setQuantity(1);
+        }}
+      >
+        {selected && (
+          <div>
+            <div className="aspect-[3/2] mb-4 overflow-hidden rounded-md">
+              <Image
+                src={selected.imageSrc}
+                alt={selected.imageAlt}
+                width={600}
+                height={400}
+                className="w-full h-auto object-cover"
+              />
+            </div>
 
-      <h2 className="text-xl font-bold mb-2">{selected.name}</h2>
-      <p className="text-sm text-gray-600 mb-2">{selected.description}</p>
+            <h2 className="text-xl font-bold mb-2">{selected.name}</h2>
+            <p className="text-sm text-gray-600 mb-4">{selected.description}</p>
 
-      <div className="flex flex-wrap gap-2 mb-4">
-        {selected.tags?.map((tag, i) => {
-          const style = tagStyles[tag] || { color: "bg-gray-200 text-gray-800", icon: "🔖" };
-          return (
-            <span
-              key={i}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${style.color}`}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selected.tags?.map((tag, i) => {
+                const style = tagStyles[tag] || {
+                  color: "bg-gray-200 text-gray-800",
+                  icon: "🔖",
+                };
+                return (
+                  <span
+                    key={i}
+                    className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${style.color}`}
+                  >
+                    <span>{style.icon}</span>
+                    {tag}
+                  </span>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-between mb-4">
+              {selected.price && (
+                <p className="text-lg font-semibold text-red-800">
+                  {selected.price}
+                </p>
+              )}
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="h-8 w-8 flex items-center justify-center rounded bg-gray-200 text-lg font-bold"
+                >
+                  –
+                </button>
+                <span className="min-w-[24px] text-center">{quantity}</span>
+                <button
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="h-8 w-8 flex items-center justify-center rounded bg-gray-200 text-lg font-bold"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <button
+              onClick={handleAddToCart}
+              className="mt-2 w-full rounded-lg bg-red-900 text-white py-2 hover:bg-red-800 transition"
             >
-              <span>{style.icon}</span>
-              {tag}
-            </span>
-          );
-        })}
-     
-      </div>
-
-      <div className="flex items-center justify-between mb-4">
-        {selected.price && (
-          <p className="text-lg font-semibold text-red-800">
-            {selected.price}
-          </p>
+              Ajouter {quantity > 1 ? `${quantity}` : ""} au panier
+            </button>
+          </div>
         )}
-
-        {/* Sélecteur de quantité */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="h-8 w-8 flex items-center justify-center rounded bg-gray-200 text-lg font-bold"
-          >
-            –
-          </button>
-          <span className="min-w-[24px] text-center">{quantity}</span>
-          <button
-            onClick={() => setQuantity((q) => q + 1)}
-            className="h-8 w-8 flex items-center justify-center rounded bg-gray-200 text-lg font-bold"
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      <button className="mt-2 w-full rounded-lg bg-red-900 text-white py-2 hover:bg-red-800 transition">
-        Ajouter {quantity > 1 ? `${quantity}` : ""} au panier
-      </button>
-    </div>
-  )}
-</Modal>
-
+      </Modal>
     </>
   );
 }
-

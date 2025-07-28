@@ -1,33 +1,45 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 
-// 🛒 Type d’un article du panier
 export type CartItem = {
-  id: number;
+  id: string;
   name: string;
-  price: string;
+  price: number;
   quantity: number;
   imageSrc: string;
 };
 
-// 🎁 Type du contexte
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
 };
 
-// 📦 Contexte initial vide (sera rempli plus bas)
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// 📂 Props pour le Provider
-type CartProviderProps = {
-  children: ReactNode;
-};
-
-// ✅ Composant Provider
-export function CartProvider({ children }: CartProviderProps) {
+export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+
+  // Charger le panier depuis localStorage au démarrage
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+
+  // Sauvegarder dans localStorage à chaque mise à jour
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item: CartItem) => {
     setCart((prev) => {
@@ -43,18 +55,33 @@ export function CartProvider({ children }: CartProviderProps) {
     });
   };
 
+  const removeFromCart = (id: string) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // ✅ On passe bien toutes les fonctions dans le context
+  const value: CartContextType = {
+    cart,
+    addToCart,
+    removeFromCart,
+    clearCart,
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );
 }
 
-// ✅ Hook personnalisé avec vérification
 export function useCart(): CartContextType {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
+    throw new Error('useCart must be used within a CartProvider');
   }
   return context;
 }

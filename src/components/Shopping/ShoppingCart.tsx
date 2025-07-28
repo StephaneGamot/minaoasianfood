@@ -10,7 +10,7 @@ const products = [
     color: 'Mint',
     size: 'Medium',
     inStock: true,
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/checkout-page-03-product-04.jpg',
+    imageSrc: '/images/restaurant1.jpg',
     imageAlt: 'Front side of mint cotton t-shirt with wavey lines pattern.',
   },
   {
@@ -22,7 +22,7 @@ const products = [
     inStock: false,
     leadTime: '7-8 years',
     size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-02.jpg',
+    imageSrc: '/images/restaurant1.jpg',
     imageAlt: 'Front side of charcoal cotton t-shirt.',
   },
   {
@@ -33,12 +33,14 @@ const products = [
     color: 'Sienna',
     inStock: true,
     size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-01.jpg',
+    imageSrc: '/images/restaurant1.jpg',
     imageAlt: 'Front side of sienna cotton t-shirt.',
   },
 ]
 
-export default function Example() {
+export default function ShoppingCart() {
+
+  
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:px-0">
@@ -54,10 +56,12 @@ export default function Example() {
               {products.map((product) => (
                 <li key={product.id} className="flex py-6">
                   <div className="shrink-0">
-                    <img
+                    <Image
                       alt={product.imageAlt}
                       src={product.imageSrc}
                       className="size-24 rounded-md object-cover sm:size-32"
+                      width={200}
+                      height={200}
                     />
                   </div>
 

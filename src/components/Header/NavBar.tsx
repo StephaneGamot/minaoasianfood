@@ -7,16 +7,18 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "./../../../public/logos/logo.webp"
 import { useTranslations, useLocale } from 'next-intl';
-
-
+import { useCart } from '@/context/CartContext';
 
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const cartItemCount = 2;
 const t = useTranslations('nav');
-
 const locale = useLocale();
+const { cart } = useCart();
+const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+console.log("Cart in NavBar:", cart);
+
 
   const navigation = [
     { name: t('menu'), href: `/${locale}/menu` },
@@ -70,7 +72,7 @@ const locale = useLocale();
         {/* Cart + login */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
           <Link
-            href="/${locale}/panier"
+            href={`/${locale}/panier`}
             className="relative text-stone-100 hover:text-white transition"
           >
             <ShoppingCartIcon className="h-6 w-6" />
@@ -119,7 +121,7 @@ const locale = useLocale();
               </div>
               <div className="py-6">
                 <Link
-                  href="/panier"
+                 href={`/${locale}/panier`}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
                 >

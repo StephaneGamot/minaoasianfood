@@ -7,6 +7,7 @@
     "imageSrc": "/images/menu/riz-saute-vegetarien.webp",
     "imageAlt": "Riz sauté végétarien",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Riz", "Végétarien"],
     "searchTag": ["riz", "veggie", "végétarien"]
   },
@@ -18,6 +19,7 @@
     "imageSrc": "/images/menu/riz-saute-poulet.webp",
     "imageAlt": "Riz sauté au poulet",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Riz", "Poulet"],
     "searchTag": ["riz", "poulet"]
   },
@@ -29,6 +31,7 @@
     "imageSrc": "/images/menu/riz-saute-boeuf.webp",
     "imageAlt": "Riz sauté à la viande",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Riz", "Boeuf"],
     "searchTag": ["riz", "viande", "bœuf"]
   },
@@ -40,8 +43,9 @@
     "imageSrc": "/images/menu/riz-saute-scampi.webp",
     "imageAlt": "Riz sauté aux scampis",
     "price": "15,90 €",
+    "priceNumber": 15.9,
     "tags": ["Riz", "Océan"],
-    "searchTag": ["riz", "scampi", "Océan", "Océan"]
+    "searchTag": ["riz", "scampi", "océan"]
   },
   {
     "id": 5,
@@ -51,6 +55,7 @@
     "imageSrc": "/images/menu/riz-saute-mixte.webp",
     "imageAlt": "Riz sauté mixte",
     "price": "16,90 €",
+    "priceNumber": 16.9,
     "tags": ["Riz", "Mixte"],
     "searchTag": ["riz", "mixte", "poulet", "viande", "scampi"]
   },
@@ -62,6 +67,7 @@
     "imageSrc": "/images/menu/riz-saute-proteine.webp",
     "imageAlt": "Riz sauté mixte",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Riz", "Mixte"],
     "searchTag": ["riz", "mixte", "poulet", "viande", "scampi"]
   }

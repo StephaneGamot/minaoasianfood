@@ -7,6 +7,7 @@
     "imageSrc": "/images/menu/nouilles-sautees-vegetarien.webp",
     "imageAlt": "Nouilles sautées végétariennes",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Nouilles", "Végétarien"],
     "searchTag": ["nouilles", "sautées", "veggie", "végétarien"]
   },
@@ -18,6 +19,7 @@
     "imageSrc": "/images/menu/nouilles-sautees-poulet.webp",
     "imageAlt": "Nouilles sautées au poulet",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Nouilles", "Poulet"],
     "searchTag": ["nouilles", "sautées", "poulet"]
   },
@@ -29,8 +31,9 @@
     "imageSrc": "/images/menu/nouilles-sautees-boeuf.webp",
     "imageAlt": "Nouilles sautées à la viande",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Nouilles", "Boeuf"],
-    "searchTag": ["nouilles", "sautées", "viande", "Boeuf"]
+    "searchTag": ["nouilles", "sautées", "viande", "boeuf"]
   },
   {
     "id": 4,
@@ -40,6 +43,7 @@
     "imageSrc": "/images/menu/nouilles-sautees-scampis.webp",
     "imageAlt": "Nouilles sautées aux scampis",
     "price": "15,90 €",
+    "priceNumber": 15.9,
     "tags": ["Nouilles", "Océan"],
     "searchTag": ["nouilles", "sautées", "scampis"]
   },
@@ -51,6 +55,7 @@
     "imageSrc": "/images/menu/nouilles-sautees-mixte.webp",
     "imageAlt": "Nouilles sautées mixtes",
     "price": "16,90 €",
+    "priceNumber": 16.9,
     "tags": ["Nouilles", "Mixte"],
     "searchTag": ["nouilles", "sautées", "mixte"]
   },
@@ -60,8 +65,9 @@
     "description": "Riz aux légumes frais, protéines et sauce au choix",
     "href": "/menu/nouilles",
     "imageSrc": "/images/menu/nouilles-sautees-proteine.webp",
-    "imageAlt": "Nouilles sautées mixtes",
+    "imageAlt": "Nouilles sautées énergie",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Nouilles", "Mixte"],
     "searchTag": ["nouilles", "sautées", "mixte"]
   }

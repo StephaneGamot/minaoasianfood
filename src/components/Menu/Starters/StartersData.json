@@ -7,8 +7,9 @@
     "imageSrc": "/images/menu/yakitoris-poulet-halal.webp",
     "imageAlt": "3 yakitoris au poulet halal",
     "price": "6,90 €",
+    "priceNumber": 6.9,
     "tags": ["Entrée", "Poulet", "Épicé"],
-    "searchTag": ["Entrée", "Poulet", "Épicé", "yakitori", "brochette"]
+    "searchTag": ["entrée", "poulet", "épicé", "yakitori", "brochette"]
   },
   {
     "id": 2,
@@ -18,8 +19,9 @@
     "imageSrc": "/images/menu/karaage.webp",
     "imageAlt": "Poulet mariné frit - karaage",
     "price": "7,90 €",
+    "priceNumber": 7.9,
     "tags": ["Entrée", "Poulet"],
-    "searchTag": ["Entrée", "Poulet", "Épicé", "karaage", "japonais"]
+    "searchTag": ["entrée", "poulet", "épicé", "karaage", "japonais"]
   },
   {
     "id": 3,
@@ -29,8 +31,9 @@
     "imageSrc": "/images/menu/tempura-scampi.webp",
     "imageAlt": "Tempuras de scampis",
     "price": "7,90 €",
+    "priceNumber": 7.9,
     "tags": ["Entrée", "Océan"],
-    "searchTag": ["Entrée", "Fruit de mer", "Friture"]
+    "searchTag": ["entrée", "fruit de mer", "friture"]
   },
   {
     "id": 4,
@@ -40,8 +43,9 @@
     "imageSrc": "/images/menu/nem-vegetarien.webp",
     "imageAlt": "Nems végétarien",
     "price": "6,00 €",
-    "tags": ["Entrée", "Végétarien","nem"],
-    "searchTag": []
+    "priceNumber": 6.0,
+    "tags": ["Entrée", "Végétarien", "Nem"],
+    "searchTag": ["entrée", "végétarien", "nem"]
   },
   {
     "id": 5,
@@ -49,10 +53,11 @@
     "description": "4 pièces",
     "href": "/menu/nouveautes",
     "imageSrc": "/images/menu/nem-poulet.webp",
-    "imageAlt": "Nems au poulets 4 pieces",
+    "imageAlt": "Nems au poulet 4 pièces",
     "price": "6,50 €",
-    "tags": ["Entrée", "Poulet", "nem"],
-    "searchTag": []
+    "priceNumber": 6.5,
+    "tags": ["Entrée", "Poulet", "Nem"],
+    "searchTag": ["entrée", "poulet", "nem"]
   },
   {
     "id": 6,
@@ -60,10 +65,11 @@
     "description": "4 pièces",
     "href": "/menu/incontournables",
     "imageSrc": "/images/menu/gyoza-vegetarien.webp",
-    "imageAlt": "Gyoza végétatien",
+    "imageAlt": "Gyoza végétarien",
     "price": "6,00 €",
-    "tags": ["Entrée", "Végétarien","gyoza"],
-    "searchTag": ["Entrée", "Végétarien","gyoza"]
+    "priceNumber": 6.0,
+    "tags": ["Entrée", "Végétarien", "Gyoza"],
+    "searchTag": ["entrée", "végétarien", "gyoza"]
   },
   {
     "id": 7,
@@ -73,8 +79,9 @@
     "imageSrc": "/images/menu/gyoza-poulet.webp",
     "imageAlt": "Gyoza poulet halal",
     "price": "6,90 €",
-    "tags": ["Entrée", "Végétarien","gyoza"],
-    "searchTag": ["Entrée", "Végétarien","gyoza"]
+    "priceNumber": 6.9,
+    "tags": ["Entrée", "Poulet", "Gyoza"],
+    "searchTag": ["entrée", "poulet", "gyoza"]
   },
   {
     "id": 8,
@@ -84,8 +91,9 @@
     "imageSrc": "/images/menu/gyoza-scampi.webp",
     "imageAlt": "Gyoza de scampi",
     "price": "6,90 €",
-    "tags": ["Entrée","Ocean"],
-    "searchTag": ["Entrée", "scampi","gyoza"]
+    "priceNumber": 6.9,
+    "tags": ["Entrée", "Océan", "Gyoza"],
+    "searchTag": ["entrée", "scampi", "gyoza"]
   },
   {
     "id": 9,
@@ -93,10 +101,11 @@
     "description": "Poulet caramélisé, légumes pickles et vermicelles.",
     "href": "/menu/nouveautes",
     "imageSrc": "/images/menu/salade-poulet-thai.webp",
-    "imageAlt": "Photo des nouveautés Minao",
+    "imageAlt": "Salade poulet façon thaï",
     "price": "10,50 €",
-    "tags": ["Entrée", "Poulet","Nouilles","salade"],
-    "searchTag": ["Entrée", "Poulet","Nouilles","salade"]
+    "priceNumber": 10.5,
+    "tags": ["Entrée", "Poulet", "Nouilles", "Salade"],
+    "searchTag": ["entrée", "poulet", "nouilles", "salade"]
   },
   {
     "id": 10,
@@ -104,10 +113,11 @@
     "description": "Scampis saté, légumes pickles et vermicelles.",
     "href": "/menu/incontournables",
     "imageSrc": "/images/menu/salade-scampi-thai.webp",
-    "imageAlt": "Plat iconique Minao",
+    "imageAlt": "Salade scampis façon thaï",
     "price": "10,90 €",
-    "tags": ["Entrée", "Océan","Nouilles"],
-    "searchTag": ["Entrée", "Océan","Nouilles", "scampi", "salade"]
+    "priceNumber": 10.9,
+    "tags": ["Entrée", "Océan", "Nouilles", "Salade"],
+    "searchTag": ["entrée", "océan", "nouilles", "scampi", "salade"]
   },
   {
     "id": 11,
@@ -115,9 +125,10 @@
     "description": "Légumes saté, légumes pickles et vermicelles.",
     "href": "/menu/incontournables",
     "imageSrc": "/images/menu/salade-vegetarien-thai.webp",
-    "imageAlt": "Plat iconique Minao",
+    "imageAlt": "Salade veggie façon thaï",
     "price": "10,50 €",
-    "tags": ["Entrée", "Végétarien","Nouilles","salade"],
-    "searchTag": ["Entrée", "Végétarien","Nouilles","salade"]
+    "priceNumber": 10.5,
+    "tags": ["Entrée", "Végétarien", "Nouilles", "Salade"],
+    "searchTag": ["entrée", "végétarien", "nouilles", "salade"]
   }
 ]

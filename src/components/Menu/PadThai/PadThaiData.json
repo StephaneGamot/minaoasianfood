@@ -7,6 +7,7 @@
     "imageSrc": "/images/menu/pad-thai-vegetarien.webp",
     "imageAlt": "Pad thaï végétarien",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Pad", "Végétarien"],
     "searchTag": ["pad", "veggie", "végétarien"]
   },
@@ -18,6 +19,7 @@
     "imageSrc": "/images/menu/pad-thai-boeuf-poulet.webp",
     "imageAlt": "Pad thaï au poulet",
     "price": "13,90 €",
+    "priceNumber": 13.9,
     "tags": ["Pad", "Poulet"],
     "searchTag": ["pad", "poulet"]
   },
@@ -29,6 +31,7 @@
     "imageSrc": "/images/menu/pad-thai-boeuf.webp",
     "imageAlt": "Pad thaï à la viande",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Pad", "Boeuf"],
     "searchTag": ["pad", "viande", "bœuf"]
   },
@@ -40,8 +43,9 @@
     "imageSrc": "/images/menu/pad-thai-scampis.webp",
     "imageAlt": "Pad thaï aux scampis",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Pad", "Océan"],
-    "searchTag": ["pad", "scampi", "Océan", "Océan"]
+    "searchTag": ["pad", "scampi", "océan"]
   },
   {
     "id": 5,
@@ -51,6 +55,7 @@
     "imageSrc": "/images/menu/pad-thai-mixte-boeuf-poulet-scampi.webp",
     "imageAlt": "Pad thaï mixte",
     "price": "16,90 €",
+    "priceNumber": 16.9,
     "tags": ["Pad", "Mixte"],
     "searchTag": ["pad", "mixte", "poulet", "viande", "scampi"]
   },
@@ -62,6 +67,7 @@
     "imageSrc": "/images/menu/pad-thai-boeuf-poulet.webp",
     "imageAlt": "Pad thaï mixte",
     "price": "14,90 €",
+    "priceNumber": 14.9,
     "tags": ["Pad", "Mixte"],
     "searchTag": ["pad", "mixte", "poulet", "viande", "scampi"]
   }

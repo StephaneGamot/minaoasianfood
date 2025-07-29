@@ -8,20 +8,23 @@ import {
   ReactNode,
 } from 'react';
 
-export type CartItem = {
-  id: string;
+type CartItem = {
+  id: number;
   name: string;
-  price: number;
+  price: string;
+  priceNumber: number; 
   quantity: number;
   imageSrc: string;
 };
 
+
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (id: string) => void;
+  removeFromCart: (id: number) => void; // ✅ ici on passe de string → number
   clearCart: () => void;
 };
+
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -55,9 +58,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  const removeFromCart = (id: number) => {
+  setCart((prev) => prev.filter((item) => item.id !== id));
+};
 
   const clearCart = () => {
     setCart([]);

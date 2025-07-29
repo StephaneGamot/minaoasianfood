@@ -31,8 +31,10 @@ type LocaleLayoutProps = {
 };
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  const safeLocale = hasLocale(routing.locales, params.locale)
-    ? params.locale
+  const { locale } = await Promise.resolve(params);
+
+  const safeLocale = hasLocale(routing.locales, locale)
+    ? locale
     : routing.defaultLocale;
 
   setRequestLocale(safeLocale);

@@ -33,33 +33,34 @@ export default function MenuCard({ categories }: MenuCardProps) {
   const [selected, setSelected] = useState<Category | null>(null);
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = () => {
-    if (!selected) return;
+const handleAddToCart = () => {
+  if (!selected) return;
 
-    const item = {
-      id: selected.id,
-      name: selected.name,
-      price: selected.price,
-      quantity: quantity,
-      imageSrc: selected.imageSrc,
-    };
-
-    const existingCart: CartItem[] = JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
-    const existingIndex = existingCart.findIndex((i) => i.id === item.id);
-
-    if (existingIndex !== -1) {
-      existingCart[existingIndex].quantity += quantity;
-    } else {
-      existingCart.push(item);
-    }
-
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-
-    setSelected(null);
-    setQuantity(1);
+  const item = {
+    id: selected.id,
+    name: selected.name,
+    price: selected.price || "",
+    priceNumber: parseFloat(
+      (selected.price || "").replace(",", ".").replace(/[^\d.]/g, "")
+    ), // ✅ convertit "6,90 €" en 6.9
+    quantity: quantity,
+    imageSrc: selected.imageSrc,
   };
+
+  const existingCart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
+  const existingIndex = existingCart.findIndex((i) => i.id === item.id);
+
+  if (existingIndex !== -1) {
+    existingCart[existingIndex].quantity += quantity;
+  } else {
+    existingCart.push(item);
+  }
+
+  localStorage.setItem("cart", JSON.stringify(existingCart));
+  setSelected(null);
+  setQuantity(1);
+};
+
 
   return (
     <>

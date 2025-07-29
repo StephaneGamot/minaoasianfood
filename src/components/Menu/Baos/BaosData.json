@@ -7,6 +7,7 @@
     "imageSrc": "/images/menu/bao-vegetarien-falafel.webp",
     "imageAlt": "Duo de bao veggie",
     "price": "11,50 €",
+    "priceNumber": 11.5,
     "tags": ["Baos", "Végétarien"],
     "searchTag": ["bao", "veggie", "falafel", "guacamole", "végétarien"]
   },
@@ -18,6 +19,7 @@
     "imageSrc": "/images/menu/bao-poulet-fume.webp",
     "imageAlt": "Duo de bao poulet fumé",
     "price": "11,70 €",
+    "priceNumber": 11.7,
     "tags": ["Baos", "Poulet"],
     "searchTag": ["bao", "niwatori", "poulet", "fumé", "pickles"]
   },
@@ -29,6 +31,7 @@
     "imageSrc": "/images/menu/bao-boeuf.webp",
     "imageAlt": "Duo de bao viande",
     "price": "11,90 €",
+    "priceNumber": 11.9,
     "tags": ["Baos", "Viande"],
     "searchTag": ["bao", "niku", "viande", "soja", "miel", "sésame"]
   },
@@ -40,6 +43,7 @@
     "imageSrc": "/images/menu/bao-boeuf.webp",
     "imageAlt": "Duo de bao scampis",
     "price": "11,90 €",
+    "priceNumber": 11.9,
     "tags": ["Baos", "Océan"],
     "searchTag": ["bao", "sukanpi", "scampis", "saté", "cream cheese"]
   },
@@ -51,6 +55,7 @@
     "imageSrc": "/images/menu/bao-poulet-fume.webp",
     "imageAlt": "Duo de bao poulet sucré-salé",
     "price": "11,70 €",
+    "priceNumber": 11.7,
     "tags": ["Baos", "Poulet"],
     "searchTag": ["bao", "sweet", "poulet", "sucré", "salé"]
   },
@@ -62,6 +67,7 @@
     "imageSrc": "/images/menu/bao-boeuf.webp",
     "imageAlt": "Duo de bao poulet sucré-salé",
     "price": "11,70 €",
+    "priceNumber": 11.7,
     "tags": ["Baos", "Poulet"],
     "searchTag": ["bao", "sweet", "poulet", "sucré", "salé"]
   }

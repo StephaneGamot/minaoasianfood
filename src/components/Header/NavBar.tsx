@@ -1,47 +1,44 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react';
+import { Dialog, DialogPanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "./../../../public/logos/logo.webp"
+import Logo from "./../../../public/logos/logo.webp";
 import { useTranslations, useLocale } from 'next-intl';
 import { useCart } from '@/context/CartContext';
-
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function NavBar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-const t = useTranslations('nav');
-const locale = useLocale();
-const { cart } = useCart();
-const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useTranslations('nav');
+  const locale = useLocale();
+  const router = useRouter();
+  const { cart } = useCart();
+  const { user, logout } = useAuth();
+  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-console.log("Cart in NavBar:", cart);
-
+  const handleLogout = () => {
+    logout();
+    router.push(`/${locale}/login`);
+  };
 
   const navigation = [
     { name: t('menu'), href: `/${locale}/menu` },
-    { name: t('shops'), href: `/${locale}/#` }, 
+    { name: t('shops'), href: `/${locale}/#` },
     { name: t('gallery'), href: `/${locale}/galerie` },
     { name: t('contact'), href: `/${locale}/contact` },
   ];
 
-
   return (
     <header className="bg-red-900 shadow">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
-        
         {/* Logo */}
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Minao Asian Food</span>
-            <Image
-              alt="Minao Asian Food Logo"
-              src={Logo}
-              className="h-15 w-auto"
-              priority
-            />
+            <Image alt="Minao Asian Food Logo" src={Logo} className="h-15 w-auto" priority />
           </Link>
         </div>
 
@@ -69,8 +66,9 @@ console.log("Cart in NavBar:", cart);
           ))}
         </div>
 
-        {/* Cart + login */}
+        {/* Cart + login/logout */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
+          {/* Panier */}
           <Link
             href={`/${locale}/panier`}
             className="relative text-stone-100 hover:text-white transition"
@@ -82,13 +80,36 @@ console.log("Cart in NavBar:", cart);
               </span>
             )}
           </Link>
-          <Link href="#" className="text-sm font-semibold text-stone-100 hover:text-white transition">
-            Connexion <span aria-hidden="true">→</span>
-          </Link>
+
+          {/* Auth section */}
+          {!user ? (
+            <Link href={`/${locale}/login`} className="text-sm font-semibold text-stone-100 hover:text-white transition">
+              Connexion <span aria-hidden="true">→</span>
+            </Link>
+          ) : (
+            <>
+              {user.role === 'admin' && (
+                <Link href={`/${locale}/admin`} className="text-sm font-semibold text-stone-100 hover:text-white">
+                  Admin
+                </Link>
+              )}
+              {user.role === 'dashboard' && (
+                <Link href={`/${locale}/dashboard`} className="text-sm font-semibold text-stone-100 hover:text-white">
+                  Tableau de bord
+                </Link>
+              )}
+              <Link href={`/${locale}/me`} className="text-sm font-semibold text-stone-100 hover:text-white">
+                Mon compte
+              </Link>
+              <button onClick={handleLogout} className="text-sm font-semibold text-stone-100 hover:text-white">
+                Déconnexion
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
-      {/* Menu mobile */}
+      {/* Menu mobile (Drawer) */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-red-900 p-6 sm:max-w-sm">
@@ -119,25 +140,66 @@ console.log("Cart in NavBar:", cart);
                   </Link>
                 ))}
               </div>
-              <div className="py-6">
+              <div className="py-6 space-y-2">
                 <Link
-                 href={`/${locale}/panier`}
+                  href={`/${locale}/panier`}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
                 >
                   🛒 Panier ({cartItemCount})
                 </Link>
-                <Link
-                  href="#"
-                  className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
-                >
-                  Connexion
-                </Link>
+
+                {!user ? (
+                  <Link
+                    href={`/${locale}/login`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
+                  >
+                    Connexion →
+                  </Link>
+                ) : (
+                  <>
+                    {user.role === 'admin' && (
+                      <Link
+                        href={`/${locale}/admin`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                      >
+                        Admin
+                      </Link>
+                    )}
+                    {user.role === 'dashboard' && (
+                      <Link
+                        href={`/${locale}/dashboard`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                      >
+                        Tableau de bord
+                      </Link>
+                    )}
+                    <Link
+                      href={`/${locale}/me`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                    >
+                      Mon compte
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="block w-full text-left rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                    >
+                      Déconnexion
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </DialogPanel>
       </Dialog>
     </header>
-  )
+  );
 }

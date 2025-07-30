@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 import { CartProvider } from '@/context/CartContext';
+import { AuthProvider } from '@/context/AuthContext'; 
 import { NextIntlClientProvider } from 'next-intl';
 import type { AbstractIntlMessages } from 'next-intl';
 
@@ -13,8 +14,10 @@ type ProvidersProps = {
 
 export default function Providers({ children, locale, messages }: ProvidersProps) {
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <CartProvider>{children}</CartProvider>
-    </NextIntlClientProvider>
+    <AuthProvider> 
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <CartProvider>{children}</CartProvider>
+      </NextIntlClientProvider>
+    </AuthProvider>
   );
 }

@@ -1,4 +1,4 @@
-'use client';
+
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,6 @@ import {
   Money,
   CheckCircle
 } from 'phosphor-react';
-import clsx from 'clsx';
 
 const paymentOptions = [
   {

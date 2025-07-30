@@ -1,16 +1,21 @@
-// src/app/api/checkout/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16' as any, // évite le conflit si tu as des types mal déclarés
+apiVersion: '2025-06-30.basil'
+
 });
 
+type CartItem = {
+  name: string;
+  priceNumber: number;
+  quantity: number;
+};
 
 export async function POST(req: Request) {
-  const { cart } = await req.json();
+  const { cart }: { cart: CartItem[] } = await req.json();
 
-  const line_items = cart.map((item: any) => ({
+  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.map((item) => ({
     price_data: {
       currency: 'eur',
       product_data: {

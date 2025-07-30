@@ -10,7 +10,15 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  // Config de base pour Next.js et TypeScript
+{
+    ignores: [
+      "**/node_modules/**",
+      ".next/",
+      "dist/",
+      "public/",
+      "**/*.config.js", // (si tu veux ignorer tes fichiers de config)
+    ],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 
   // ✅ Règle spécifique aux fichiers générés par Prisma

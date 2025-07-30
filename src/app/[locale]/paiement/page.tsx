@@ -2,15 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckIcon } from 'lucide-react';
-
 import {
   CreditCard,
   AppleLogo,
   GoogleLogo,
   Bank,
   QrCode,
-  Money
+  Money,
+  CheckCircle
 } from 'phosphor-react';
 import clsx from 'clsx';
 
@@ -59,11 +58,12 @@ export default function PaiementPage() {
 
   const handleConfirm = () => {
     if (!selected) return;
+
     switch (selected) {
       case 'bancontact':
       case 'applepay':
       case 'googlepay':
-        router.push('/paiement/stripe'); // page de redirection Stripe
+        router.push('/paiement/stripe');
         break;
       case 'virement':
         router.push('/paiement/virement');
@@ -79,7 +79,9 @@ export default function PaiementPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">Choisissez votre mode de paiement</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">
+        Choisissez votre mode de paiement
+      </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {paymentOptions.map((option) => (
@@ -94,7 +96,9 @@ export default function PaiementPage() {
           >
             {option.icon}
             <span className="font-semibold">{option.label}</span>
-            {selected === option.id && <CheckIcon className="text-red-700 w-5 h-5" />}
+            {selected === option.id && (
+              <CheckCircle size={20} className="text-red-700" />
+            )}
           </button>
         ))}
       </div>

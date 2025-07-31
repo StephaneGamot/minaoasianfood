@@ -23,7 +23,7 @@ export default function LangSwitcher({ direction = 'down' }: LangSwitcherProps) 
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
+console.log(isPending)
   const currentLocale = pathname.split('/')[1] as keyof typeof flags;
 
   const handleLocaleChange = (newLocale: string) => {

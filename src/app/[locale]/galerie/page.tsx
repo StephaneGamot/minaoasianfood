@@ -34,15 +34,15 @@ export async function generateMetadata({ params }: GenerateMetadataProps): Promi
 
   return {
     title: {
-      fr: "Galerie Minao – Plats asiatiques halal à Bruxelles",
-      en: "Minao Gallery – Halal Asian Dishes in Brussels",
-      nl: "Galerij Minao – Halal Aziatische Gerechten in Brussel",
+      fr: "Gallerie Minao – Cuisine asiatique halal à Bruxelles",
+      en: "Gallery Menu – Halal Asian Cuisine in Brussels",
+      nl: "Gal Minao – Halal Aziatische Keuken in Brussel",
     }[locale],
 
     description: {
-      fr: "Explorez notre galerie photo : plats faits maison, ambiance chaleureuse et détails de notre restaurant asiatique halal à Bruxelles.",
-      en: "Browse our photo gallery: homemade dishes, cozy atmosphere, and details of our halal Asian restaurant in Brussels.",
-      nl: "Ontdek onze fotogalerij: huisgemaakte gerechten, warme sfeer en beelden van ons halal Aziatisch restaurant in Brussel.",
+      fr: "Découvrez Minao : pad thaï, nouilles sautées, riz parfumé, desserts maison... Une cuisine asiatique savoureuse à Bruxelles.",
+      en: "Explore Minao's pad Thai, stir-fried noodles, fragrant rice, homemade desserts... Tasty Asian cuisine in Brussels.",
+      nl: "Ontdek het halal menu van Minao, geurige rijst, huisgemaakte desserts... Heerlijke Aziatische keuken in Brussel.",
     }[locale],
 
     alternates: {
@@ -53,53 +53,6 @@ export async function generateMetadata({ params }: GenerateMetadataProps): Promi
         nl: `${siteUrl}/nl/galerie`,
         "x-default": `${siteUrl}/fr/galerie`,
       },
-    },
-
-    openGraph: {
-      title: {
-        fr: "Galerie Minao – Plats asiatiques halal à Bruxelles",
-        en: "Minao Gallery – Halal Asian Dishes in Brussels",
-        nl: "Galerij Minao – Halal Aziatische Gerechten in Brussel",
-      }[locale],
-      description: {
-        fr: "Images de nos plats asiatiques halal, de notre décoration et de l’ambiance conviviale de notre restaurant à Bruxelles.",
-        en: "Photos of our halal Asian dishes, decoration and the warm atmosphere of our Brussels restaurant.",
-        nl: "Beelden van onze halal Aziatische gerechten, decoratie en gezellige sfeer in ons restaurant in Brussel.",
-      }[locale],
-      url: `${siteUrl}/${locale}/galerie`,
-      siteName: "Minao Asian Food",
-      locale: `${locale}_BE`,
-      type: "website",
-      images: [
-        {
-          url: `${siteUrl}/Images/OpenGraph/minao-gallery.webp`,
-          secureUrl: `${siteUrl}/Images/OpenGraph/minao-gallery.webp`,
-          width: 1200,
-          height: 627,
-          alt: {
-            fr: "Photos des plats et du cadre du restaurant Minao Asian Food",
-            en: "Pictures of dishes and decor from Minao Asian Food restaurant",
-            nl: "Foto’s van gerechten en sfeer van Minao Asian Food restaurant",
-          }[locale],
-          type: "image/webp",
-        },
-      ],
-    },
-
-    twitter: {
-      card: "summary_large_image",
-      site: "@minaobrussels",
-      title: {
-        fr: "Galerie Minao – Plats asiatiques halal à Bruxelles",
-        en: "Minao Gallery – Halal Asian Dishes in Brussels",
-        nl: "Galerij Minao – Halal Aziatische Gerechten in Brussel",
-      }[locale],
-      description: {
-        fr: "Images de nos plats asiatiques halal, de notre décoration et de l’ambiance conviviale de notre restaurant à Bruxelles.",
-        en: "Photos of our halal Asian dishes, decoration and the warm atmosphere of our Brussels restaurant.",
-        nl: "Beelden van onze halal Aziatische gerechten, decoratie en gezellige sfeer in ons restaurant in Brussel.",
-      }[locale],
-      images: [`${siteUrl}/Images/OpenGraph/minao-gallery.webp`],
     },
   };
 }

@@ -9,6 +9,34 @@ import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
 import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+	title: "Massage relaxant à Halle - Bruxelles | La voie du bien-être",
+	description: "Massage relaxant à Halle - Bruxelles. Découvrez nos soins personnalisés et retrouvez harmonie, bien-être et sérénité dans un cadre apaisant.",
+	alternates: {
+		canonical: "https://lavoiedubienetre.be/massage/relaxant",
+	},
+	openGraph: {
+		title: "Massage relaxant à Halle - Bruxelles | La voie du bien-être",
+		description: "Massage relaxant à Halle - Bruxelles. Découvrez nos soins personnalisés et retrouvez harmonie, bien-être et sérénité dans un cadre apaisant.",
+		url: "https://lavoiedubienetre.be/massage/relaxant",
+		type: "website",
+		siteName: 'La voie du bien-être - massage relaxant',
+    locale: 'fr_BE',
+		images: [
+			{
+				url: "https://www.lavoiedubienetre.be/Images/hero/massage-tao-a-domicile-massotherapeuthe-halle-bruxelles-brabant-wallon.webp",
+				width: 1200,
+				height: 627,
+				alt: "Une longue séance de massage lui permetant de tout oublier",
+			},
+		],
+	},
+};
+
+
+
+
+/*
 type GenerateMetadataProps = {
   params: { locale?: string };
 };
@@ -88,7 +116,7 @@ export async function generateMetadata({ params }: GenerateMetadataProps): Promi
     },
   };
 }
-
+*/
 
 export default function page() {
   return (

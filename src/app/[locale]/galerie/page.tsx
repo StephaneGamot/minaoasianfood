@@ -22,40 +22,7 @@ import img20 from "./../../../../public/images/menu/nouilles-sautees-scampis.web
 import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
-import type { Metadata } from "next";
 
-type GenerateMetadataProps = {
-  params: { locale?: string };
-};
-
-export async function generateMetadata({ params }: GenerateMetadataProps): Promise<Metadata> {
-  const locale = params.locale ?? "fr";
-  const siteUrl = "https://www.minaoasianfood.com";
-
-  return {
-    title: {
-      fr: "Gallerie Minao – Cuisine asiatique halal à Bruxelles",
-      en: "Gallery Menu – Halal Asian Cuisine in Brussels",
-      nl: "Gal Minao – Halal Aziatische Keuken in Brussel",
-    }[locale],
-
-    description: {
-      fr: "Découvrez Minao : pad thaï, nouilles sautées, riz parfumé, desserts maison... Une cuisine asiatique savoureuse à Bruxelles.",
-      en: "Explore Minao's pad Thai, stir-fried noodles, fragrant rice, homemade desserts... Tasty Asian cuisine in Brussels.",
-      nl: "Ontdek het halal menu van Minao, geurige rijst, huisgemaakte desserts... Heerlijke Aziatische keuken in Brussel.",
-    }[locale],
-
-    alternates: {
-      canonical: `${siteUrl}/${locale}/galerie`,
-      languages: {
-        fr: `${siteUrl}/fr/galerie`,
-        en: `${siteUrl}/en/galerie`,
-        nl: `${siteUrl}/nl/galerie`,
-        "x-default": `${siteUrl}/fr/galerie`,
-      },
-    },
-  };
-}
 
 export default function GalleryPage() {
   const images = [

@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: GenerateMetadataProps): Promi
 export default function Homepage() {
   return (
     <div>
-    <head>
+ <head>
   <meta charSet="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
   <meta name="robots" content="index, follow" />
@@ -164,6 +164,7 @@ export default function Homepage() {
   <meta name="twitter:description" content="Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux." />
   <meta name="twitter:image" content="https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp" />
 </head>
+
 
     <main className='bg-stone-100'>
 

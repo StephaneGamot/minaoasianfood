@@ -7,37 +7,32 @@ import SaucePlats from "@/components/Menu/SaucePlats/SaucePlats";
 import Baos from "@/components/Menu/Baos/Baos";
 import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
- import type { Metadata } from "next";
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  const locale = params.locale ?? "fr";
-  const siteUrl = "https://www.minaoasianfood.com";
+import type { Metadata } from "next";
 
-  return {
-    title: {
-      fr: "Carte Minao – Plats asiatiques halal à Bruxelles",
-      en: "Minao Menu – Halal Asian Dishes in Brussels",
-      nl: "Minao Menu – Halal Aziatische Gerechten in Brussel",
-    }[locale],
-    description: {
-      fr: "Découvrez notre carte complète : entrées, plats sautés, pad thaï, baos et desserts. Le meilleur de la cuisine asiatique halal à Bruxelles.",
-      en: "Discover our full menu: starters, wok dishes, pad thai, baos and desserts. The best halal Asian cuisine in Brussels.",
-      nl: "Ontdek ons volledige menu: voorgerechten, wokgerechten, pad thai, baos en desserts. De beste halal Aziatische keuken in Brussel.",
-    }[locale],
-    alternates: {
-      canonical: `${siteUrl}/${locale}/menu`,
-      languages: {
-        fr: `${siteUrl}/fr/menu`,
-        en: `${siteUrl}/en/menu`,
-        nl: `${siteUrl}/nl/menu`,
-        "x-default": `${siteUrl}/fr/menu`,
-      },
-    },
-  };
-}
-
-
-
+export const metadata: Metadata = {
+	title: "Minao Asian Food – Nos menus asiatiques halal à Bruxelles",
+	description: "Menu d'une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
+	alternates: {
+		canonical: "https://www.minaoasianfood.com/fr/menu",
+	},
+	openGraph: {
+		title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
+		description: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
+		url: "https://www.minaoasianfood.com",
+		type: "website",
+		siteName: 'Minao Asian Food',
+    locale: 'fr_BE',
+		images: [
+			{
+				url: "https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp",
+				width: 500,
+				height: 500,
+				alt: "cuisine asiatique halal authentique à Bruxelles",
+			},
+		],
+	},
+};
 
 /*
 type GenerateMetadataProps = {

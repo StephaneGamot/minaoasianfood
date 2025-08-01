@@ -4,29 +4,33 @@ import WitchRestaurant from '@/components/WitchRestaurant/WitchRestaurant'
 import MenuCategoriesSection from '../../components/Menu/MenuCategoriesSection'
 import type { Metadata } from "next";
 
+
 export const metadata: Metadata = {
-	title: "Massage relaxant à Halle - Bruxelles | La voie du bien-être",
-	description: "Massage relaxant à Halle - Bruxelles. Découvrez nos soins personnalisés et retrouvez harmonie, bien-être et sérénité dans un cadre apaisant.",
+	title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
+	description: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
 	alternates: {
-		canonical: "https://lavoiedubienetre.be/massage/relaxant",
+		canonical: "https://www.minaoasianfood.com",
 	},
 	openGraph: {
-		title: "Massage relaxant à Halle - Bruxelles | La voie du bien-être",
-		description: "Massage relaxant à Halle - Bruxelles. Découvrez nos soins personnalisés et retrouvez harmonie, bien-être et sérénité dans un cadre apaisant.",
-		url: "https://lavoiedubienetre.be/massage/relaxant",
+		title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
+		description: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
+		url: "https://www.minaoasianfood.com",
 		type: "website",
-		siteName: 'La voie du bien-être - massage relaxant',
+		siteName: 'Minao Asian Food',
     locale: 'fr_BE',
 		images: [
 			{
-				url: "https://www.lavoiedubienetre.be/Images/hero/massage-tao-a-domicile-massotherapeuthe-halle-bruxelles-brabant-wallon.webp",
-				width: 1200,
-				height: 627,
-				alt: "Une longue séance de massage lui permetant de tout oublier",
+				url: "https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp",
+				width: 500,
+				height: 500,
+				alt: "cuisine asiatique halal authentique à Bruxelles",
 			},
 		],
 	},
 };
+
+
+
 
 /*
 type GenerateMetadataProps = {

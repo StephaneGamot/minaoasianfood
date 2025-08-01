@@ -7,27 +7,36 @@ import SaucePlats from "@/components/Menu/SaucePlats/SaucePlats";
 import Baos from "@/components/Menu/Baos/Baos";
 import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 
-export async function generateMetadata({
-  params,
-}: {
+type Props = {
   params: { locale: string };
-}): Promise<Metadata> {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+// ✅ Fonction `generateMetadata` conforme aux docs Next.js  
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const locale = params.locale ?? "fr";
   const siteUrl = "https://www.creation-site-internet.dev";
 
+  // Si tu veux reprendre des parties du métadonné parent :
+  const parentMeta = await parent;
+  const previousImages = parentMeta.openGraph?.images || [];
+
   return {
     title: {
-      fr: "Création de site internet élégant & SEO – Stéphane Gamot",
-      en: "Elegant & SEO-Optimized Website Creation – Stéphane Gamot",
-      nl: "Elegante & SEO-geoptimaliseerde websitecreatie – Stéphane Gamot",
+      fr: "Carte Minao – Plats halal & asiatiques",
+      en: "Minao Menu – Halal Asian Dishes",
+      nl: "Minao Menu – Halal Aziatische Gerechten",
     }[locale],
 
     description: {
-      fr: "Développeur web & expert SEO, je crée des sites modernes, performants et optimisés pour Google. Création sur-mesure, responsive et orientée conversion.",
-      en: "Web developer & SEO expert crafting modern, high-performance websites optimized for Google. Offering bespoke, responsive designs that drive conversions.",
-      nl: "Webontwikkelaar & SEO-expert, ik maak moderne, snelle websites geoptimaliseerd voor Google. Maatwerk, responsive en conversiegericht.",
+      fr: "Découvrez nos entrées, nouilles, pad thaï, riz sauté, bao et desserts halal préparés maison.",
+      en: "Explore our starters, noodles, pad thai, fried rice, baos & desserts – all halal and homemade.",
+      nl: "Ontdek onze starters, noedels, pad thai, gebakken rijst, baos & desserts – allemaal halal en huisgemaakt.",
     }[locale],
 
     alternates: {
@@ -42,49 +51,49 @@ export async function generateMetadata({
 
     openGraph: {
       title: {
-        fr: "Création de site internet élégant & SEO – Stéphane Gamot",
-        en: "Elegant & SEO-Optimized Website Creation – Stéphane Gamot",
-        nl: "Elegante & SEO-geoptimaliseerde websitecreatie – Stéphane Gamot",
+        fr: "Carte Minao – Plats halal & asiatiques",
+        en: "Minao Menu – Halal Asian Dishes",
+        nl: "Minao Menu – Halal Aziatische Gerechten",
       }[locale],
       description: {
-        fr: "Un site pensé pour votre image, votre audience et votre référencement. Ensemble, créons votre vitrine digitale idéale.",
-        en: "A website designed around your brand, your audience, and your online visibility. Together, let’s create your ideal digital showcase.",
-        nl: "Een site ontworpen voor uw imago, uw doelgroep en uw online vindbaarheid. Laten we samen uw ideale digitale etalage creëren.",
+        fr: "Sélection halal maison : nouilles, pad thaï, riz sauté, bao et desserts gourmands.",
+        en: "House-made halal selection: noodles, pad thai, fried rice, baos, and decadent desserts.",
+        nl: "Huisgemaakte halal selectie: noedels, pad thai, gebakken rijst, baos en decadente desserts.",
       }[locale],
       url: `${siteUrl}/${locale}/menu`,
-      siteName: "Création Site Internet",
+      siteName: "Minao Asian Food",
       locale: `${locale}_BE`,
       type: "website",
       images: [
         {
-          url: `${siteUrl}/Images/OpenGraph/webDevAtWork.webp`,
-          secureUrl: `${siteUrl}/Images/OpenGraph/webDevAtWork.webp`,
+          url: `${siteUrl}/Images/OpenGraph/minao-menu.webp`,
           width: 1200,
           height: 627,
           alt: {
-            fr: "Site web fluide et responsive affiché sur écran",
-            en: "A sleek, responsive website displayed on a screen",
-            nl: "Een flexibele, responsieve website weergegeven op een scherm",
+            fr: "Carte de plats Minao préparés maison",
+            en: "Minao menu dishes, homemade and halal",
+            nl: "Minao menugerechten, huisgemaakt en halal",
           }[locale],
           type: "image/webp",
         },
+        ...previousImages,
       ],
     },
 
     twitter: {
       card: "summary_large_image",
-      site: "@stephanegamot",
+      site: "@minaobrussels",
       title: {
-        fr: "Création de site internet élégant & SEO – Stéphane Gamot",
-        en: "Elegant & SEO-Optimized Website Creation – Stéphane Gamot",
-        nl: "Elegante & SEO-geoptimaliseerde websitecreatie – Stéphane Gamot",
+        fr: "Carte Minao – Plats halal & asiatiques",
+        en: "Minao Menu – Halal Asian Dishes",
+        nl: "Minao Menu – Halal Aziatische Gerechten",
       }[locale],
       description: {
-        fr: "Un site pensé pour votre image, votre audience et votre référencement. Ensemble, créons votre vitrine digitale idéale.",
-        en: "A website designed around your brand, your audience, and your online visibility. Together, let’s create your ideal digital showcase.",
-        nl: "Een site ontworpen voor uw imago, uw doelgroep en uw online vindbaarheid. Laten we samen uw ideale digitale etalage creëren.",
+        fr: "Nos plats maison halal : nouilles, pad thaï, riz, bao et desserts gourmands prêts à emporter.",
+        en: "Our homemade halal dishes: noodles, pad thai, rice, baos & desserts ready to order.",
+        nl: "Onze huisgemaakte halal gerechten: noedels, pad thai, rijst, baos & desserts klaar om te bestellen.",
       }[locale],
-      images: [`${siteUrl}/Images/OpenGraph/webDevAtWork.webp`],
+      images: [`${siteUrl}/Images/OpenGraph/minao-menu.webp`],
     },
   };
 }

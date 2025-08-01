@@ -11,9 +11,18 @@ type Props = {
 export default function CardDishes({ title, image, tags = [], description }: Props) {
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg w-full">
-      <div className="relative h-52 w-full">
-        <Image src={image} alt={title} fill className="object-cover" />
-      </div>
+   <div className="relative aspect-[3/2] w-full">
+  <Image
+    src={image}
+    alt={title}
+    fill
+    loading="lazy"
+    sizes="(max-width: 768px) 100vw, 33vw"
+    className="object-cover rounded-xl"
+  />
+</div>
+
+
       <div className="p-4">
         <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
 

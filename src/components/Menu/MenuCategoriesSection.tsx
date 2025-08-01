@@ -49,14 +49,17 @@ export default function MenuCategoriesSection() {
               href={`/menu/${cat.name.toLowerCase().replace(/ /g, "-")}`}
               className="group block rounded-xl overflow-hidden shadow hover:shadow-xl transition"
             >
-              <div className="aspect-[3/2] relative overflow-hidden">
-                <Image
-                  src={images[index as keyof typeof images]}
-                  alt={cat.alt}
-                  fill
-                  className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
+             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl">
+  <Image
+    src={images[index as keyof typeof images]}
+    alt={cat.alt}
+    fill
+    loading="lazy"
+    sizes="(max-width: 768px) 100vw, 33vw"
+    className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+  />
+</div>
+
 
               <div className="bg-white p-4">
                 <h3 className="text-lg font-semibold text-gray-900">

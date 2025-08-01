@@ -1,0 +1,31 @@
+User-agent: *
+Disallow:
+
+# Empêche l’indexation des fichiers système ou techniques
+Disallow: /api/
+Disallow: /_next/
+Disallow: /server/
+Disallow: /middleware/
+Disallow: /fonts/
+Disallow: /images/icons/
+Disallow: /static/
+
+Disallow: /fr/login
+Disallow: /en/login
+Disallow: /nl/login
+
+Disallow: /fr/register
+Disallow: /en/register
+Disallow: /nl/register
+
+Disallow: /fr/me
+Disallow: /en/me
+Disallow: /nl/me
+
+# Autorise l’exploration des pages importantes
+Allow: /fr/
+Allow: /en/
+Allow: /nl/
+
+# Sitemap multilingue
+Sitemap: https://www.minaoasianfood.com/sitemap.xml

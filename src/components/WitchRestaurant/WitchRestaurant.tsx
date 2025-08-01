@@ -33,12 +33,13 @@ export default function WitchRestaurant() {
           >
             <div className="relative w-full aspect-[3/2]">
               <Image
-                src={images[id]}
-                alt={t(`restaurants.${id}.name`)}
-                fill
-                className="object-cover"
-                priority
-              />
+    src={images[id]}
+    alt={t(`restaurants.${id}.name`)}
+    loading="lazy"
+    fill
+    sizes="(max-width: 768px) 100vw, 33vw"
+    className="object-cover"
+  />
               <span className="absolute top-3 left-3 bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                 {t(`restaurants.${id}.badge`)}
               </span>

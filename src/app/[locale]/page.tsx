@@ -3,6 +3,7 @@ import HomePageHero from '@/components/Heros/HomePageHero'
 import WitchRestaurant from '@/components/WitchRestaurant/WitchRestaurant'
 import MenuCategoriesSection from '../../components/Menu/MenuCategoriesSection'
 import type { Metadata } from "next";
+import Head from 'next/head';
 
 
 export const metadata: Metadata = {
@@ -119,6 +120,51 @@ export async function generateMetadata({ params }: GenerateMetadataProps): Promi
 
 export default function Homepage() {
   return (
+    <div>
+    <head>
+  <meta charSet="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="theme-color" content="#556B2F" />
+
+  <title>Minao Asian Food – Restaurant asiatique halal à Bruxelles</title>
+  <meta name="description" content="Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux." />
+
+  {/* Canonical */}
+  <link rel="canonical" href="https://www.minaoasianfood.com/fr" />
+
+  {/* Multilingual hreflang */}
+  <link rel="alternate" hrefLang="fr" href="https://www.minaoasianfood.com/fr" />
+  <link rel="alternate" hrefLang="en" href="https://www.minaoasianfood.com/en" />
+  <link rel="alternate" hrefLang="nl" href="https://www.minaoasianfood.com/nl" />
+  <link rel="alternate" hrefLang="x-default" href="https://www.minaoasianfood.com/fr" />
+
+  {/* Favicon */}
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  {/* Open Graph */}
+  <meta property="og:title" content="Minao Asian Food – Restaurant asiatique halal à Bruxelles" />
+  <meta property="og:description" content="Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux." />
+  <meta property="og:url" content="https://www.minaoasianfood.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Minao Asian Food" />
+  <meta property="og:locale" content="fr_BE" />
+  <meta property="og:image" content="https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp" />
+  <meta property="og:image:alt" content="cuisine asiatique halal authentique à Bruxelles" />
+  <meta property="og:image:width" content="500" />
+  <meta property="og:image:height" content="500" />
+
+  {/* Twitter Card */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@minaobrussels" />
+  <meta name="twitter:title" content="Minao Asian Food – Restaurant asiatique halal à Bruxelles" />
+  <meta name="twitter:description" content="Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux." />
+  <meta name="twitter:image" content="https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp" />
+</head>
+
     <main className='bg-stone-100'>
 
 
@@ -127,5 +173,6 @@ export default function Homepage() {
       <MenuCategoriesSection />
 
     </main>
+    </div>
   )
 }

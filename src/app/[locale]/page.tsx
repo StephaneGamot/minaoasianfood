@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 	title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
 	description: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
 	alternates: {
-		canonical: "https://www.minaoasianfood.com",
+		canonical: "https://www.minaoasianfood.com/fr",
 	},
 	openGraph: {
 		title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",

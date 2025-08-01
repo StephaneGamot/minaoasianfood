@@ -21,17 +21,15 @@ export function generateMetadata({ params }: Props): Metadata {
 
   return {
     title: {
-      fr: "Carte Minao – Plats halal & asiatiques",
-      en: "Minao Menu – Halal Asian Dishes",
-      nl: "Minao Menu – Halal Aziatische Gerechten",
+      fr: "Carte Minao – Plats asiatiques halal à Bruxelles",
+      en: "Minao Menu – Halal Asian Dishes in Brussels",
+      nl: "Minao Menu – Halal Aziatische Gerechten in Brussel",
     }[locale],
-
     description: {
-      fr: "Découvrez nos entrées, nouilles, pad thaï, riz sauté, bao et desserts halal préparés maison.",
-      en: "Explore our starters, noodles, pad thai, fried rice, baos & desserts – all halal and homemade.",
-      nl: "Ontdek onze starters, noedels, pad thai, gebakken rijst, baos & desserts – allemaal halal en huisgemaakt.",
+      fr: "Découvrez notre carte complète : entrées, plats sautés, pad thaï, baos et desserts. Le meilleur de la cuisine asiatique halal à Bruxelles.",
+      en: "Discover our full menu: starters, wok dishes, pad thai, baos and desserts. The best halal Asian cuisine in Brussels.",
+      nl: "Ontdek ons volledige menu: voorgerechten, wokgerechten, pad thai, baos en desserts. De beste halal Aziatische keuken in Brussel.",
     }[locale],
-
     alternates: {
       canonical: `${siteUrl}/${locale}/menu`,
       languages: {
@@ -41,55 +39,8 @@ export function generateMetadata({ params }: Props): Metadata {
         "x-default": `${siteUrl}/fr/menu`,
       },
     },
-
-    openGraph: {
-      title: {
-        fr: "Carte Minao – Plats halal & asiatiques",
-        en: "Minao Menu – Halal Asian Dishes",
-        nl: "Minao Menu – Halal Aziatische Gerechten",
-      }[locale],
-      description: {
-        fr: "Sélection halal maison : nouilles, pad thaï, riz sauté, bao et desserts gourmands.",
-        en: "House-made halal selection: noodles, pad thai, fried rice, baos, and decadent desserts.",
-        nl: "Huisgemaakte halal selectie: noedels, pad thai, gebakken rijst, baos en decadente desserts.",
-      }[locale],
-      url: `${siteUrl}/${locale}/menu`,
-      siteName: "Minao Asian Food",
-      locale: `${locale}_BE`,
-      type: "website",
-      images: [
-        {
-          url: `${siteUrl}/Images/OpenGraph/minao-menu.webp`,
-          width: 1200,
-          height: 627,
-          alt: {
-            fr: "Carte de plats Minao préparés maison",
-            en: "Minao menu dishes, homemade and halal",
-            nl: "Minao menugerechten, huisgemaakt en halal",
-          }[locale],
-          type: "image/webp",
-        },
-      ],
-    },
-
-    twitter: {
-      card: "summary_large_image",
-      site: "@minaobrussels",
-      title: {
-        fr: "Carte Minao – Plats halal & asiatiques",
-        en: "Minao Menu – Halal Asian Dishes",
-        nl: "Minao Menu – Halal Aziatische Gerechten",
-      }[locale],
-      description: {
-        fr: "Nos plats maison halal : nouilles, pad thaï, riz, bao et desserts gourmands prêts à emporter.",
-        en: "Our homemade halal dishes: noodles, pad thai, rice, baos & desserts ready to order.",
-        nl: "Onze huisgemaakte halal gerechten: noedels, pad thai, rijst, baos & desserts klaar om te bestellen.",
-      }[locale],
-      images: [`${siteUrl}/Images/OpenGraph/minao-menu.webp`],
-    },
   };
 }
-
 
 
 

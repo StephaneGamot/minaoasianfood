@@ -9,9 +9,13 @@ import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
 import type { Metadata } from "next";
 
-export async function generateMetadata(
-  { params }: { params: { locale: string } }
-): Promise<Metadata> {
+type Props = {
+  params: {
+    locale: string;
+  };
+};
+
+export function generateMetadata({ params }: Props): Metadata {
   const locale = params.locale ?? "fr";
   const siteUrl = "https://www.creation-site-internet.dev";
 

@@ -7,24 +7,13 @@ import SaucePlats from "@/components/Menu/SaucePlats/SaucePlats";
 import Baos from "@/components/Menu/Baos/Baos";
 import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 
-type Props = {
-  params: { locale: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-// ✅ Fonction `generateMetadata` conforme aux docs Next.js  
 export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
+  { params }: { params: { locale: string } }
 ): Promise<Metadata> {
   const locale = params.locale ?? "fr";
   const siteUrl = "https://www.creation-site-internet.dev";
-
-  // Si tu veux reprendre des parties du métadonné parent :
-  const parentMeta = await parent;
-  const previousImages = parentMeta.openGraph?.images || [];
 
   return {
     title: {
@@ -76,7 +65,6 @@ export async function generateMetadata(
           }[locale],
           type: "image/webp",
         },
-        ...previousImages,
       ],
     },
 

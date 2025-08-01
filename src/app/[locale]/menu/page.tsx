@@ -11,28 +11,29 @@ import Boissons from "@/components/Menu/Boissons/Boissons";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Minao Asian Food – Nos menus asiatiques halal à Bruxelles",
-	description: "Menu d'une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
-	alternates: {
-		canonical: "https://www.minaoasianfood.com/fr/menu",
-	},
-	openGraph: {
-		title: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
-		description: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
-		url: "https://www.minaoasianfood.com",
-		type: "website",
-		siteName: 'Minao Asian Food',
-    locale: 'fr_BE',
-		images: [
-			{
-				url: "https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp",
-				width: 500,
-				height: 500,
-				alt: "cuisine asiatique halal authentique à Bruxelles",
-			},
-		],
-	},
+  title: "Carte Minao – Plats halal & asiatiques à Bruxelles",
+  description: "Découvrez nos entrées, nouilles, pad thaï, riz sauté, baos et desserts halal préparés maison dans notre restaurant à Bruxelles.",
+  alternates: {
+    canonical: "https://www.minaoasianfood.com/fr/menu",
+  },
+  openGraph: {
+    title: "Carte Minao – Plats halal & asiatiques à Bruxelles",
+    description: "Nos plats faits maison : pad thaï, riz sauté, nouilles, bao et desserts halal pour régaler vos papilles.",
+    url: "https://www.minaoasianfood.com/fr/menu",
+    type: "website",
+    siteName: "Minao Asian Food",
+    locale: "fr_BE",
+    images: [
+      {
+        url: "https://www.minaoasianfood.com/fr/images/menu/nouilles-sautees-boeuf.webp",
+        width: 1200,
+        height: 630,
+        alt: "Nouilles sautées au bœuf dans un bol asiatique",
+      },
+    ],
+  },
 };
+
 
 /*
 type GenerateMetadataProps = {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Gallery from "@/components/Gallery/Gallery";
 import img1 from "./../../../../public/images/menu/gyoza-scampi.webp";
 import img2 from "./../../../../public/images/menu/yakitoris-poulet-halal.webp";
@@ -22,6 +23,29 @@ import img20 from "./../../../../public/images/menu/nouilles-sautees-scampis.web
 import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
+export const metadata: Metadata = {
+  title: "Galerie – Minao Asian Food à Bruxelles",
+  description: "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
+  alternates: {
+    canonical: "https://www.minaoasianfood.com/fr/galerie",
+  },
+  openGraph: {
+    title: "Galerie – Minao Asian Food à Bruxelles",
+    description: "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
+    url: "https://www.minaoasianfood.com/fr/galerie",
+    type: "website",
+    siteName: "Minao Asian Food",
+    locale: "fr_BE",
+    images: [
+      {
+        url: "https://www.minaoasianfood.com/fr/images/gallery/gallery-preview.webp",
+        width: 1200,
+        height: 630,
+        alt: "Galerie photo du restaurant et des plats Minao",
+      },
+    ],
+  },
+};
 
 
 export default function GalleryPage() {

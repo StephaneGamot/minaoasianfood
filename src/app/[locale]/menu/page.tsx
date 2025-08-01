@@ -7,17 +7,11 @@ import SaucePlats from "@/components/Menu/SaucePlats/SaucePlats";
 import Baos from "@/components/Menu/Baos/Baos";
 import Desserts from "@/components/Menu/Desserts/Desserts"
 import Boissons from "@/components/Menu/Boissons/Boissons";
-import type { Metadata } from "next";
+ import type { Metadata } from "next";
 
-type Props = {
-  params: {
-    locale: string;
-  };
-};
-
-export function generateMetadata({ params }: Props): Metadata {
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   const locale = params.locale ?? "fr";
-  const siteUrl = "https://www.creation-site-internet.dev";
+  const siteUrl = "https://www.minaoasianfood.com";
 
   return {
     title: {
@@ -41,6 +35,7 @@ export function generateMetadata({ params }: Props): Metadata {
     },
   };
 }
+
 
 
 

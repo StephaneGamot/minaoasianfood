@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from 'next-intl';
 
 import Entrees from "./../../../public/images/menu/entrees.jpg"
 import Riz     from "./../../../public/images/menu/riz.jpg"
@@ -30,11 +30,12 @@ const images = {
 export default function MenuCategoriesSection() {
   const t = useTranslations('menuCategoriesSection');
   const categories = t.raw('categories') as {
+     id: string;
     name: string;
     description: string;
     alt: string;
   }[];
-
+  const locale = useLocale();
   return (
     <section className="bg-stone-100 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -45,8 +46,8 @@ export default function MenuCategoriesSection() {
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {categories.map((cat, index) => (
             <Link
-              key={index}
-              href={`/menu/${cat.name.toLowerCase().replace(/ /g, "-")}`}
+            key={cat.id}
+  href={`/${locale}/menu#${cat.id}`} 
               className="group block rounded-xl overflow-hidden shadow hover:shadow-xl transition"
             >
              <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl">

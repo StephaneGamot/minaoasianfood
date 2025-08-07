@@ -1,0 +1,7 @@
+module.exports = {
+
+"[project]/src/messages/fr/witchRestaurant.json (json)": ((__turbopack_context__) => {
+
+__turbopack_context__.v(JSON.parse("{\"title\":\"Nos restaurants\",\"description\":\"Retrouvez-nous à Bruxelles et Dilbeek pour une expérience asiatique inoubliable.\",\"map\":\"📍 Voir sur la carte\",\"restaurants\":{\"1\":{\"name\":\"Minao Schaerbeek\",\"address\":\"Rue Général Eenens 20, 1030 Schaerbeek\",\"phone\":\"+32 472 123 456\",\"hours\":\"Tous les jours • 11h30–22h\",\"badge\":\"Schaerbeek\"},\"2\":{\"name\":\"Minao Dilbeek\",\"address\":\"Ninoofsesteenweg 170, 1700 Dilbeek\",\"phone\":\"+32 472 789 012\",\"hours\":\"Tous les jours • 12h–22h\",\"badge\":\"Dilbeek\"}}}"));}),
+
+};

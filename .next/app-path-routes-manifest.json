@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/[locale]/(auth)/register/page": "/[locale]/register",
+  "/[locale]/(auth)/login/page": "/[locale]/login",
+  "/[locale]/dashboard/page": "/[locale]/dashboard",
+  "/[locale]/commande/[id]/page": "/[locale]/commande/[id]",
+  "/[locale]/me/page": "/[locale]/me",
+  "/[locale]/paiement/page": "/[locale]/paiement",
+  "/[locale]/panier/page": "/[locale]/panier",
+  "/[locale]/galerie/page": "/[locale]/galerie",
+  "/[locale]/menu/page": "/[locale]/menu",
+  "/[locale]/admin/page": "/[locale]/admin",
+  "/[locale]/page": "/[locale]"
+}

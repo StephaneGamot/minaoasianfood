@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Duo de bao veggie",
+    "description": "Guacamole cream et falafel.",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-vegetarien-falafel.webp",
+    "imageAlt": "Duo de bao veggie",
+    "price": "11,50 €",
+    "priceNumber": 11.5,
+    "tags": ["Baos", "Végétarien"],
+    "searchTag": ["bao", "veggie", "falafel", "guacamole", "végétarien"]
+  },
+  {
+    "id": 2,
+    "name": "Duo de bao niwatori",
+    "description": "Poulet fumé et légumes pickles.",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-poulet-fume.webp",
+    "imageAlt": "Duo de bao poulet fumé",
+    "price": "11,70 €",
+    "priceNumber": 11.7,
+    "tags": ["Baos", "Poulet"],
+    "searchTag": ["bao", "niwatori", "poulet", "fumé", "pickles"]
+  },
+  {
+    "id": 3,
+    "name": "Duo de bao niku",
+    "description": "Viande laquée, soja miel et sésame.",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-boeuf.webp",
+    "imageAlt": "Duo de bao viande",
+    "price": "11,90 €",
+    "priceNumber": 11.9,
+    "tags": ["Baos", "Viande"],
+    "searchTag": ["bao", "niku", "viande", "soja", "miel", "sésame"]
+  },
+  {
+    "id": 4,
+    "name": "Duo de bao sukanpi",
+    "description": "Scampis saté et cream cheese.",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-boeuf.webp",
+    "imageAlt": "Duo de bao scampis",
+    "price": "11,90 €",
+    "priceNumber": 11.9,
+    "tags": ["Baos", "Océan"],
+    "searchTag": ["bao", "sukanpi", "scampis", "saté", "cream cheese"]
+  },
+  {
+    "id": 5,
+    "name": "Duo de bao sweet",
+    "description": "Poulet sucré et salé.",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-poulet-fume.webp",
+    "imageAlt": "Duo de bao poulet sucré-salé",
+    "price": "11,70 €",
+    "priceNumber": 11.7,
+    "tags": ["Baos", "Poulet"],
+    "searchTag": ["bao", "sweet", "poulet", "sucré", "salé"]
+  },
+  {
+    "id": 6,
+    "name": "Duo de bao mixte",
+    "description": "Servi avec chips aux crevettes",
+    "href": "/menu/baos",
+    "imageSrc": "/images/menu/bao-boeuf.webp",
+    "imageAlt": "Duo de bao poulet sucré-salé",
+    "price": "11,70 €",
+    "priceNumber": 11.7,
+    "tags": ["Baos", "Poulet"],
+    "searchTag": ["bao", "sweet", "poulet", "sucré", "salé"]
+  }
+]

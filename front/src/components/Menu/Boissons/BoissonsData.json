@@ -1,0 +1,109 @@
+[
+  {
+    "id": 1,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/ritchie-cola.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 2,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/ritchie-cola-zero.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 3,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/ritchie-orange-vanille.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 4,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/ritchie-citron-framboise.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 5,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/mangajo-citron-vert-the-vert.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 6,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/mangajo-the-vert-baie-acaie.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 7,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/mangajo-the-vert-baie-goji.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 8,
+    "name": "Mangajo citron yuzu",
+    "description": "Boisson rafraîchissante healthy. 0,25l",
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/mangajo-citron-yuzu.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 9,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/spa-framboise-pomme.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 11,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/spa-citron-cactus.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 14,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/spa-petillante.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 15,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/spa-eau-plate.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 16,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/oasis-cassis-framboise.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 17,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/oasis-pomme-poire.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  },
+  {
+    "id": 18,
+    "href": "/menu/boissons",
+    "imageSrc": "/images/menu/oasis-tropical.webp",
+    "price": "3,00 €",
+    "priceNumber": 3.0
+  }
+]

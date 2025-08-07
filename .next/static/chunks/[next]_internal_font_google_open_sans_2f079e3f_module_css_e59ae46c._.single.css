@@ -1,0 +1,20 @@
+/* [next]/internal/font/google/open_sans_2f079e3f.module.css [app-client] (css) */
+@font-face {
+  font-family: Open Sans Fallback;
+  src: local(Arial);
+  ascent-override: 101.65%;
+  descent-override: 27.86%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.open_sans_2f079e3f-module__0SiUQG__className {
+  font-family: Open Sans, Open Sans Fallback;
+  font-style: normal;
+}
+
+.open_sans_2f079e3f-module__0SiUQG__variable {
+  --font-body: "Open Sans", "Open Sans Fallback";
+}
+
+/*# sourceMappingURL=%5Bnext%5D_internal_font_google_open_sans_2f079e3f_module_css_e59ae46c._.single.css.map*/

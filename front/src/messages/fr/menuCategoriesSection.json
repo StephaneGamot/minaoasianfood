@@ -1,0 +1,53 @@
+{
+  "title": "Explorez notre carte",
+  "categories": [
+    {
+      "id": "starters",
+      "name": "Entrées",
+      "description": "Raviolis, nems, gyozas… L’Asie s’ouvre en apéritif.",
+      "alt": "Entrées asiatiques : nems, raviolis, gyozas."
+    },
+    {
+      "id": "baos",
+      "name": "Bao",
+      "description": "Moelleux, vapeur et 100 % de plaisir en bouche.",
+      "alt": "Bao vapeur moelleux et farcis."
+    },
+    {
+      "id": "dishes",
+      "name": "Plats en sauce",
+      "description": "Des classiques mijotés aux parfums d’Orient.",
+      "alt": "Plats en sauce asiatique aux saveurs riches."
+    },
+    {
+      "id": "rice",
+      "name": "Riz sautés",
+      "description": "Un riz parfumé et généreux avec sa garniture.",
+      "alt": "Riz sauté asiatique aux légumes et protéines."
+    },
+    {
+      "id": "noodles",
+      "name": "Nouilles sautées",
+      "description": "Saisies au wok, pleines de saveur & de caractère.",
+      "alt": "Nouilles asiatiques sautées au wok."
+    },
+    {
+      "id": "pad",
+      "name": "Pad Thaï",
+      "description": "L’icône thaïlandaise, douce et addictive.",
+      "alt": "Pad Thaï aux crevettes et cacahuètes grillées."
+    },
+    {
+      "id": "sweets",
+      "name": "Desserts",
+      "description": "Mangue, coco, sésame : l’Asie version sucrée.",
+      "alt": "Desserts asiatiques : mangue, coco, douceurs sucrées."
+    },
+    {
+      "id": "drinks",
+      "name": "Boissons",
+      "description": "Bubble tea, thés glacés, sodas exotiques.",
+      "alt": "Boissons asiatiques fraîches et exotiques."
+    }
+  ]
+}

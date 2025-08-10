@@ -1,4 +1,5 @@
 package com.minaobackend.entity;
 
-public class CartItem {
+public enum Role {
+    USER, ADMIN
 }

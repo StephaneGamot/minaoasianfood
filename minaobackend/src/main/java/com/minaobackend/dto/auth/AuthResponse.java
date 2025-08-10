@@ -1,9 +1,9 @@
-package com.minaobackend.dto;
+package com.minaobackend.dto.auth;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class AuthResponse {
     private String token;

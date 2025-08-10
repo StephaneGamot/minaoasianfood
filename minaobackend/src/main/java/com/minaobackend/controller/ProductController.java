@@ -1,4 +1,4 @@
 package com.minaobackend.controller;
 
-public class PaymentController {
+public class ProductController {
 }

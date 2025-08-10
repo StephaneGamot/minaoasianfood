@@ -1,4 +1,4 @@
 package com.minaobackend.config;
 
-public class StripeConfig {
+public class SwaggerConfig {
 }

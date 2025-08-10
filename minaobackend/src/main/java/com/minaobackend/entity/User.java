@@ -3,28 +3,27 @@ package com.minaobackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "users")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String password; // Hashed
+    private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role; // Ex: "USER", "ADMIN"
+    private Role role;   // plus de valeur par défaut ici: on la fixe avant save
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
+    private String fullName;
+
+    @PrePersist
+    void ensureRole() {
+        if (role == null) role = Role.USER;
+    }
 }

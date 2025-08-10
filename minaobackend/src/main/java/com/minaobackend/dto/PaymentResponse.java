@@ -1,4 +1,4 @@
 package com.minaobackend.dto;
 
-public class AuthRequest {
+public class PaymentResponse {
 }

@@ -1,4 +1,4 @@
 package com.minaobackend.repository;
 
-public class CartItemRepository {
+public class ProductRepository {
 }

@@ -1,4 +1,4 @@
 package com.minaobackend.entity;
 
-public class CartItem {
+public class Cart {
 }

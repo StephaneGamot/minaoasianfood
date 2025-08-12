@@ -18,9 +18,12 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;   // plus de valeur par défaut ici: on la fixe avant save
+    private Role role;
 
     private String fullName;
+
+    @Column(nullable = false)
+    private boolean active = true;
 
     @PrePersist
     void ensureRole() {

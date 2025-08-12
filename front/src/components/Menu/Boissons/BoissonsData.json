@@ -1,109 +1,182 @@
 [
   {
     "id": 1,
+    "name": "Ritchie Cola Natural",
+    "description": "Soda pétillant 100 % belge au goût authentique de cola. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/ritchie-cola.webp",
+    "imageAlt": "Bouteille de Ritchie Cola Natural",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Soda", "Pétillant"],
+    "searchTag": ["ritchie", "cola", "boisson", "belge", "pétillant"]
   },
   {
     "id": 2,
+    "name": "Ritchie Cola Zéro",
+    "description": "Soda pétillant 100 % belge, sans sucre. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/ritchie-cola-zero.webp",
+    "imageAlt": "Bouteille de Ritchie Cola Zéro",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Soda", "Sans sucre", "Pétillant"],
+    "searchTag": ["ritchie", "cola", "zéro", "sans sucre", "pétillant"]
   },
   {
     "id": 3,
+    "name": "Ritchie Orange Vanille",
+    "description": "Soda pétillant au mariage gourmand d'orange et de vanille. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/ritchie-orange-vanille.webp",
+    "imageAlt": "Bouteille de Ritchie Orange Vanille",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Soda", "Orange", "Vanille", "Pétillant"],
+    "searchTag": ["ritchie", "orange", "vanille", "soda", "pétillant"]
   },
   {
     "id": 4,
+    "name": "Ritchie Citron Framboise",
+    "description": "Soda pétillant fruité au citron et à la framboise. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/ritchie-citron-framboise.webp",
+    "imageAlt": "Bouteille de Ritchie Citron Framboise",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Soda", "Citron", "Framboise", "Pétillant"],
+    "searchTag": ["ritchie", "citron", "framboise", "soda", "pétillant"]
   },
   {
     "id": 5,
+    "name": "Mangajo Citron Vert Thé Vert",
+    "description": "Boisson infusée au thé vert et citron vert, désaltérante et légère. 0,25l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/mangajo-citron-vert-the-vert.webp",
+    "imageAlt": "Bouteille de Mangajo Citron Vert Thé Vert",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Thé vert", "Citron vert"],
+    "searchTag": ["mangajo", "citron vert", "thé vert", "boisson"]
   },
   {
     "id": 6,
+    "name": "Mangajo Thé Vert Baie d'Açaï",
+    "description": "Boisson infusée au thé vert et baies d'açaï, riche en antioxydants. 0,25l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/mangajo-the-vert-baie-acaie.webp",
+    "imageAlt": "Bouteille de Mangajo Thé Vert Baie d'Açaï",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Thé vert", "Baies", "Açaï"],
+    "searchTag": ["mangajo", "thé vert", "açaï", "boisson", "antioxydant"]
   },
   {
     "id": 7,
+    "name": "Mangajo Thé Vert Baie de Goji",
+    "description": "Boisson infusée au thé vert et baies de goji, douce et fruitée. 0,25l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/mangajo-the-vert-baie-goji.webp",
+    "imageAlt": "Bouteille de Mangajo Thé Vert Baie de Goji",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Thé vert", "Baies", "Goji"],
+    "searchTag": ["mangajo", "thé vert", "goji", "boisson"]
   },
   {
     "id": 8,
-    "name": "Mangajo citron yuzu",
-    "description": "Boisson rafraîchissante healthy. 0,25l",
+    "name": "Mangajo Citron Yuzu",
+    "description": "Boisson rafraîchissante healthy au citron et yuzu. 0,25l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/mangajo-citron-yuzu.webp",
+    "imageAlt": "Bouteille de Mangajo Citron Yuzu",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Thé vert", "Citron", "Yuzu"],
+    "searchTag": ["mangajo", "citron", "yuzu", "boisson"]
   },
   {
     "id": 9,
+    "name": "Spa Framboise Pomme",
+    "description": "Eau pétillante aromatisée framboise et pomme. 0,5l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/spa-framboise-pomme.webp",
+    "imageAlt": "Bouteille de Spa Framboise Pomme",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Eau pétillante", "Fruitée"],
+    "searchTag": ["spa", "framboise", "pomme", "eau pétillante"]
   },
   {
     "id": 11,
+    "name": "Spa Citron Cactus",
+    "description": "Eau pétillante aromatisée au citron et cactus. 0,5l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/spa-citron-cactus.webp",
+    "imageAlt": "Bouteille de Spa Citron Cactus",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Eau pétillante", "Citron"],
+    "searchTag": ["spa", "citron", "cactus", "eau pétillante"]
   },
   {
     "id": 14,
+    "name": "Spa Pétillante",
+    "description": "Eau minérale pétillante pure et rafraîchissante. 0,5l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/spa-petillante.webp",
+    "imageAlt": "Bouteille de Spa Pétillante",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Eau pétillante"],
+    "searchTag": ["spa", "pétillante", "eau gazeuse"]
   },
   {
     "id": 15,
+    "name": "Spa Eau Plate",
+    "description": "Eau minérale plate, pure et légère. 0,5l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/spa-eau-plate.webp",
+    "imageAlt": "Bouteille de Spa Eau Plate",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Eau plate"],
+    "searchTag": ["spa", "eau plate", "naturelle"]
   },
   {
     "id": 16,
+    "name": "Oasis Cassis Framboise",
+    "description": "Boisson fruitée sans bulles au cassis et framboise. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/oasis-cassis-framboise.webp",
+    "imageAlt": "Bouteille d'Oasis Cassis Framboise",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Fruité", "Sans bulles"],
+    "searchTag": ["oasis", "cassis", "framboise", "boisson fruitée"]
   },
   {
     "id": 17,
+    "name": "Oasis Pomme Poire",
+    "description": "Boisson fruitée sans bulles à la pomme et à la poire. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/oasis-pomme-poire.webp",
+    "imageAlt": "Bouteille d'Oasis Pomme Poire",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Fruité", "Sans bulles"],
+    "searchTag": ["oasis", "pomme", "poire", "boisson fruitée"]
   },
   {
     "id": 18,
+    "name": "Oasis Tropical",
+    "description": "Boisson fruitée sans bulles aux saveurs tropicales. 0,33l",
     "href": "/menu/boissons",
     "imageSrc": "/images/menu/oasis-tropical.webp",
+    "imageAlt": "Bouteille d'Oasis Tropical",
     "price": "3,00 €",
-    "priceNumber": 3.0
+    "priceNumber": 3.0,
+    "tags": ["Boissons", "Fruité", "Sans bulles", "Tropical"],
+    "searchTag": ["oasis", "tropical", "mangue", "ananas", "fruit de la passion"]
   }
 ]

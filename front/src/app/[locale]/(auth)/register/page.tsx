@@ -1,69 +1,12 @@
-"use client";
+import RegisterForm from "@/components/Auth/RegisterForm";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import Link from "next/link";
-
-export default function RegisterPage() {
-  const { register } = useAuth();
-  const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas");
-      return;
-    }
-    const success = await register(email, password);
-    if (success) {
-      router.push("/login");
-    } else {
-      setError("Échec de l'inscription. Réessayez.");
-    }
-  };
-
-  return (
-    <main className="max-w-md mx-auto py-12 px-6">
-      <h1 className="text-3xl font-bold mb-6">Créer un compte</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border px-4 py-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-4 py-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Confirmer le mot de passe"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full border px-4 py-2 rounded"
-          required
-        />
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        <button type="submit" className="w-full bg-red-900 text-white py-2 rounded hover:bg-red-800">
-          Sinscrire
-        </button>
-        <p className="text-sm mt-2 text-center">
-          Déjà inscrit ? <Link href="/login" className="text-red-700 hover:underline">Se connecter</Link>
-        </p>
-      </form>
-    </main>
-  );
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirectTo?: string }>;
+}) {
+  const { redirectTo } = await searchParams; // Next 15: on "await" searchParams
+  // Après inscription, tu peux choisir de rediriger vers /login si tu ne fais pas d'auto-login :
+  // return <RegisterForm redirectTo={redirectTo ?? "/login"} />;
+  return <RegisterForm redirectTo={redirectTo ?? "/dashboard"} />;
 }

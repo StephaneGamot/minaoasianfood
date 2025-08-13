@@ -46,6 +46,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     "homePageHero",
     "witchRestaurant",
     "menuCategoriesSection",
+      "registerForm",
   ];
 
   const messages = Object.fromEntries(

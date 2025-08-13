@@ -61,13 +61,13 @@ public class AuthController {
         return appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax";
     }
 
-    // --- REGISTER
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest req) {
-        User u = userService.register(req.getFullName(), req.getEmail(), req.getPassword());
+        User u = userService.register(req.getLastName(), req.getEmail(), req.getPassword());
         u.setPassword(null);
         return ResponseEntity.ok(u);
     }
+
 
     // --- LOGIN: renvoie access token en JSON + place un cookie HttpOnly pour le refresh
     @PostMapping("/login")

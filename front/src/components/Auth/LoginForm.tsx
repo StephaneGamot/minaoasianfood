@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslations, useLocale } from 'next-intl';
 
 type LoginFormProps = {
   redirectTo?: string; // ex: "/dashboard"
@@ -23,6 +24,8 @@ export default function LoginForm({
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+    const locale = useLocale();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -146,7 +149,7 @@ export default function LoginForm({
 
           <p className="text-sm mt-2 text-center">
             Pas encore de compte ?{" "}
-            <Link href="/register" className="text-red-700 hover:underline">
+            <Link href={`/${locale}/register`} className="text-red-700 hover:underline">
               Créer un compte
             </Link>
           </p>

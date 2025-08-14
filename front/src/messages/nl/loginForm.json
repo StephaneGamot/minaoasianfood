@@ -1,0 +1,22 @@
+{
+  "title": "Inloggen",
+  "creating": "Bezig met inloggen…",
+  "fillAll": "Vul alle velden in.",
+  "invalid": "Onjuist e-mailadres of wachtwoord.",
+  "unavailableAuth": "Authenticatiedienst niet beschikbaar.",
+  "error": "Fout tijdens het inloggen.",
+  "email": "E-mailadres",
+  "emailPh": "jij@voorbeeld.com",
+  "password": "Wachtwoord",
+  "passwordPh": "Je wachtwoord",
+  "showPwd": "Wachtwoord tonen",
+  "hidePwd": "Wachtwoord verbergen",
+  "show": "Tonen",
+  "hide": "Verbergen",
+  "remember": "Onthoud mij",
+  "forgot": "Wachtwoord vergeten?",
+  "submit": "Inloggen",
+  "already": "Nog geen account?",
+  "register": "Account aanmaken",
+  "ariaForm": "Inlogformulier"
+}

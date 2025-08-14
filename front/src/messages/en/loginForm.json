@@ -1,0 +1,22 @@
+{
+  "title": "Log in",
+  "creating": "Signing you in…",
+  "fillAll": "Please fill out all fields.",
+  "invalid": "Incorrect email or password.",
+  "unavailableAuth": "Authentication service unavailable.",
+  "error": "Error during login.",
+  "email": "Email address",
+  "emailPh": "you@example.com",
+  "password": "Password",
+  "passwordPh": "Your password",
+  "showPwd": "Show password",
+  "hidePwd": "Hide password",
+  "show": "Show",
+  "hide": "Hide",
+  "remember": "Remember me",
+  "forgot": "Forgot password?",
+  "submit": "Log in",
+  "already": "Don’t have an account?",
+  "register": "Create an account",
+  "ariaForm": "Login form"
+}

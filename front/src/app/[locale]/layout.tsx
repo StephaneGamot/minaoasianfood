@@ -2,6 +2,9 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { Cormorant_Garamond, Open_Sans } from "next/font/google";
+import localFont from 'next/font/local';
+
+
 // import { notFound } from "next/navigation";
 import Providers from "@/components/Providers";
 import Header from "@/components/Header/NavBar";
@@ -47,6 +50,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     "witchRestaurant",
     "menuCategoriesSection",
       "registerForm",
+      "loginForm",
   ];
 
   const messages = Object.fromEntries(

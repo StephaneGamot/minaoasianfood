@@ -1,232 +1,239 @@
-"use client";
+// src/context/AuthContext.tsx
+'use client';
 
 import {
   createContext,
   useContext,
-  useState,
   useEffect,
-  ReactNode,
-} from "react";
+  useState,
+  ReactNode
+} from 'react';
 
-type ServerRole = "USER" | "ADMIN" | "DASHBOARD" | "GUEST";
-type Role = "guest" | "user" | "dashboard" | "admin";
+type ServerRole = 'USER' | 'ADMIN' | 'DASHBOARD' | 'GUEST';
+type Role = 'guest' | 'user' | 'dashboard' | 'admin';
 
 type User = {
   id: number | string;
-  // côté back, on a firstName/lastName ; tu stockais name: je le reconstitue
-  name: string;
+  name: string;      
   email: string;
   role: Role;
-  // tu peux ajouter d’autres champs de /me si tu veux (profilePicUrl, etc.)
 };
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (
-    email: string,
-    password: string,
-    lastName?: string
-  ) => Promise<boolean>; // <- ajoute lastName
+  register: (email: string, password: string, lastName?: string) => Promise<boolean>;
   logout: () => Promise<void>;
-  // facultatif: fetch qui auto-refresh le token
-  authedFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+  authedFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080";
+const API = process.env.NEXT_PUBLIC_API_BASE || '/api';
+const HAD_SESSION_KEY = 'authHadSession'; 
 
-// mappe les rôles du back vers tes rôles front
+// --- helpers ---
 function normalizeRole(role?: ServerRole): Role {
   switch (role) {
-    case "ADMIN":
-      return "admin";
-    case "DASHBOARD":
-      return "dashboard";
-    case "USER":
-      return "user";
-    default:
-      return "guest";
+    case 'ADMIN': return 'admin';
+    case 'DASHBOARD': return 'dashboard';
+    case 'USER': return 'user';
+    default: return 'guest';
   }
 }
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null); // token en mémoire uniquement
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ---- Helpers ----
   async function fetchMe(token: string): Promise<User | null> {
-    const res = await fetch(`${API}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const me = await res.json();
-    const u: User = {
-      id: me.id,
-      name:
-        [me.firstName, me.lastName].filter(Boolean).join(" ").trim() ||
+    try {
+      const res = await fetch(`${API}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+        credentials: 'include'
+      });
+      if (!res.ok) return null;
+      const me = await res.json();
+      const name =
+        [me.firstName, me.lastName].filter(Boolean).join(' ').trim() ||
         me.lastName ||
-        me.email,
-      email: me.email,
-      role: normalizeRole(me.role),
-    };
-    return u;
+        me.email;
+      return {
+        id: me.id,
+        name,
+        email: me.email,
+        role: normalizeRole(me.role as ServerRole)
+      };
+    } catch {
+      return null;
+    }
   }
 
   async function refresh(): Promise<string | null> {
-    const res = await fetch(`${API}/auth/refresh`, {
-      method: "POST",
-      credentials: "include", // indispensable pour envoyer le cookie HttpOnly
-    });
-    if (!res.ok) return null;
-    const data = await res.json(); // { accessToken }
-    return data?.accessToken ?? null;
+    try {
+      const res = await fetch(`${API}/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      // Pas de cookie / cookie invalide : session anonyme, c'est OK
+      if (res.status === 401 || res.status === 403) return null;
+      if (!res.ok) return null;
+
+      // Certaines implémentations renvoient 204 : protège le parse
+      const text = await res.text();
+      if (!text) return null;
+      const data = JSON.parse(text);
+      return data?.accessToken ?? null;
+    } catch {
+      return null;
+    }
   }
 
-  // Restaure la session au premier rendu : tente un refresh, puis /me
-  useEffect(() => {
+  // Bootstrap session au montage
+useEffect(() => {
     (async () => {
       try {
+        // ⛔️ si aucune session précédente, ne PAS appeler /refresh
+        const hadSession = typeof window !== 'undefined' && localStorage.getItem(HAD_SESSION_KEY) === '1';
+        if (!hadSession) {
+          setUser(null);
+          setAccessToken(null);
+          return;
+        }
+
         const token = await refresh();
         if (token) {
           setAccessToken(token);
           const u = await fetchMe(token);
-          if (u) setUser(u);
+          if (u) {
+            setUser(u);
+            localStorage.setItem('authUser', JSON.stringify(u));
+          } else {
+            setUser(null);
+            localStorage.removeItem('authUser');
+          }
         } else {
           setUser(null);
-          setAccessToken(null);
+          localStorage.removeItem('authUser');
         }
-      } catch {
-        setUser(null);
-        setAccessToken(null);
       } finally {
-        setLoading(false);
+        setLoading(false); // toujours débloquer le rendu
       }
     })();
   }, []);
 
-  // ---- API ----
-  // AuthContext – version sûre avec logs
 
-
-const register = async (
-  email: string,
-  password: string,
-  lastName = "User"
-): Promise<boolean> => {
-  try {
-    const payload = { lastName: lastName.trim(), email: email.trim(), password };
-    console.debug("[register] POST", `${API}/auth/register`, payload);
-
-    const res = await fetch(`${API}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(payload),
-    });
-
-    const bodyText = await res.text();
-    console.debug("[register] status:", res.status, "body:", bodyText);
-
-    // ✅ on considère l’inscription réussie si HTTP 200/201
-    return res.ok;
-  } catch (e) {
-    console.error("[register] error:", e);
-    return false;
-  }
-};
-
-  const login = async (email: string, password: string): Promise<boolean> => {
+  // Option: restaurer l’UI rapidement (si tu veux)
+  useEffect(() => {
     try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // reçoit le cookie refresh
-        body: JSON.stringify({ email, password }),
+      const stored = localStorage.getItem('authUser');
+      if (stored) setUser(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  // --- API exposée ---
+  const register = async (email: string, password: string, lastName = 'User'): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lastName: lastName.trim(),
+          email: email.trim(),
+          password
+        })
       });
       if (!res.ok) return false;
 
-      const data = await res.json(); // { accessToken }
-      const token = data?.accessToken;
-      if (!token) return false;
-
-      setAccessToken(token);
-      const u = await fetchMe(token);
-      if (!u) return false;
-
-      // on stocke uniquement l'utilisateur (pas le token)
-      localStorage.setItem("authUser", JSON.stringify(u));
-      setUser(u);
+      // pas d’auto-login → retourne true
       return true;
-    } catch (e) {
-      console.error("Erreur de connexion :", e);
+    } catch {
       return false;
     }
   };
 
+  // AuthContext.tsx (dans AuthProvider)
+const login = async (email: string, password: string): Promise<boolean> => {
+  try {
+    const res = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    // 👇 capture la réponse brute pour debug
+    const text = await res.text();
+
+    let token: string | null = null;
+    try {
+      const data = JSON.parse(text);
+      console.debug('[login] status =', res.status, 'body =', data);
+      token = data?.accessToken ?? null;
+    } catch {
+      console.debug('[login] raw body was not JSON:', text);
+    }
+
+    if (!res.ok || !token) return false;
+
+    setAccessToken(token);
+    const u = await fetchMe(token);
+    if (!u) return false;
+
+    localStorage.setItem('authUser', JSON.stringify(u));
+    setUser(u);
+    return true;
+  } catch (e) {
+    console.error('[login] error:', e);
+    return false;
+  }
+};
+
+
   const logout = async (): Promise<void> => {
     try {
-      await fetch(`${API}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (e) {
-      // ignore
-    } finally {
-      localStorage.removeItem("authUser");
-      setUser(null);
-      setAccessToken(null);
-    }
+      await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
+    } catch {}
+    // ✅ effacer le marqueur de session
+    localStorage.removeItem(HAD_SESSION_KEY);
+    localStorage.removeItem('authUser');
+    setUser(null);
+    setAccessToken(null);
   };
 
-  // fetch avec auto-Authorization + tentative d’auto-refresh si 401
-  const authedFetch = async (input: RequestInfo, init: RequestInit = {}) => {
+  const authedFetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
     const token = accessToken ?? (await refresh());
     if (token && token !== accessToken) setAccessToken(token);
 
     const headers = new Headers(init.headers || {});
-    if (token) headers.set("Authorization", `Bearer ${token}`);
+    if (token) headers.set('Authorization', `Bearer ${token}`);
 
-    let res = await fetch(input, { ...init, headers, credentials: "include" });
+    let res = await fetch(input, { ...init, headers, credentials: 'include' });
     if (res.status === 401) {
       const newToken = await refresh();
       if (newToken) {
         setAccessToken(newToken);
-        headers.set("Authorization", `Bearer ${newToken}`);
-        res = await fetch(input, { ...init, headers, credentials: "include" });
+        headers.set('Authorization', `Bearer ${newToken}`);
+        res = await fetch(input, { ...init, headers, credentials: 'include' });
       }
     }
     return res;
   };
 
-  // Option: si tu veux restaurer l’utilisateur depuis localStorage pour l’UI instantanée
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("authUser");
-      if (stored) {
-        const parsed = JSON.parse(stored) as User;
-        setUser(parsed);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
+  // ✅ on REND TOUJOURS les children (pas de !loading && children)
   return (
-    <AuthContext.Provider
-      value={{ user, loading, login, register, logout, authedFetch }}
-    >
-      {!loading && children}
+    <AuthContext.Provider value={{ user, loading, login, register, logout, authedFetch }}>
+      {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => {
+export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
   return ctx;
-};
+}

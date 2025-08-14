@@ -4,18 +4,20 @@ import com.minaobackend.config.AppProperties;
 import com.minaobackend.dto.auth.*;
 import com.minaobackend.entity.PasswordResetToken;
 import com.minaobackend.entity.User;
+import com.minaobackend.entity.RefreshToken;
 import com.minaobackend.exception.BadRequestException;
 import com.minaobackend.repository.PasswordResetTokenRepository;
 import com.minaobackend.repository.UserRepository;
 import com.minaobackend.security.CookieUtils;
 import com.minaobackend.security.JwtService;
-import com.minaobackend.service.impl.RefreshTokenService;
+import com.minaobackend.service.interfaces.RefreshTokenService;
 import com.minaobackend.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.servlet.http.Cookie;
+import lombok.var;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -165,21 +167,25 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- REFRESH (via cookie HttpOnly) + rotation stricte
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(HttpServletRequest request,
                                                 HttpServletResponse response) {
-        String cookieName = appProps.getAuth().getRefreshCookieName();
-        String refreshPlain = extractCookie(request, cookieName);
-        if (refreshPlain == null || refreshPlain.isEmpty()) {
+        final String cookieName = appProps.getAuth().getRefreshCookieName(); // "rt"
+        final String refreshPlain = extractCookie(request, cookieName);
+
+        // Pas de cookie => 401 (et on nettoie côté client)
+        if (refreshPlain == null || refreshPlain.trim().isEmpty()) {
             CookieUtils.clearCookie(response, cookieName,
                     appProps.getAuth().getRefreshCookieDomain(),
                     appProps.getAuth().isRefreshCookieSecure(),
                     appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax");
-            return ResponseEntity.status(401).build();        // <-- pas 500
+            return ResponseEntity.status(401).build();
         }
 
-        Optional<com.minaobackend.entity.RefreshToken> rtOpt = refreshTokenService.validatePlain(refreshPlain);
+        Optional<com.minaobackend.entity.RefreshToken> rtOpt =
+                refreshTokenService.validatePlain(refreshPlain);
+
+        // Cookie invalide/expiré => 401, pas d’exception
         if (!rtOpt.isPresent()) {
             CookieUtils.clearCookie(response, cookieName,
                     appProps.getAuth().getRefreshCookieDomain(),
@@ -188,12 +194,11 @@ public class AuthController {
             return ResponseEntity.status(401).build();
         }
 
+        // Rotation stricte (révoquer l’ancien + en émettre un nouveau)
         com.minaobackend.entity.RefreshToken oldRt = rtOpt.get();
-        User user = oldRt.getUser();
-
-        // rotation stricte
-        refreshTokenService.revoke(oldRt);
-        String newRefreshPlain = refreshTokenService.issue(user);
+        com.minaobackend.entity.User user = oldRt.getUser();
+        refreshTokenService.revoke(oldRt);               // doit être non-throwing
+        String newRefreshPlain = refreshTokenService.issue(user); // génère le *raw*
         int maxAge = appProps.getAuth().getRefreshTtlDays() * 24 * 60 * 60;
 
         CookieUtils.addHttpOnlyCookie(response, cookieName, newRefreshPlain,
@@ -202,13 +207,16 @@ public class AuthController {
                 maxAge,
                 appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax");
 
-        Map<String,Object> claims = new java.util.HashMap<String,Object>();
+        // Access token fraîchement généré
+        Map<String, Object> claims = new HashMap<>();
         claims.put("uid", user.getId());
         claims.put("role", user.getRole().name());
         String newAccessToken = jwtService.generateToken(user.getEmail(), claims);
 
         return ResponseEntity.ok(new AuthResponse(newAccessToken));
     }
+
+
 
 
     // --- LOGOUT : révoque tous les RT + efface cookie

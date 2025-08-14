@@ -2,25 +2,46 @@
 package com.minaobackend.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name = "refresh_token")
+@Getter @Setter
+@NoArgsConstructor
 public class RefreshToken {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    // relation vers User
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // ⚠️ On mappe 'tokenHash' sur la colonne existante 'token'
+    // ⚠️ On mappe tokenHash sur la colonne existante 'token'
     @Column(name = "token", nullable = false, unique = true, length = 64)
     private String tokenHash;
 
-    @Column(nullable = false)
+    @Column(name = "revoked", nullable = false)
+    private boolean revoked = false;
+
+    @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
-    @Column(nullable = false)
-    private boolean revoked = false;
+    // petite fabrique pratique
+    public static RefreshToken of(User user, String tokenHash, Instant expiresAt) {
+        RefreshToken rt = new RefreshToken();
+        rt.setUser(user);
+        rt.setTokenHash(tokenHash);
+        rt.setRevoked(false);
+        rt.setExpiresAt(expiresAt);
+        return rt;
+    }
 }
+
+

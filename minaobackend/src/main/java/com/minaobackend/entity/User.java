@@ -48,7 +48,7 @@ public class User {
     @Column(nullable = false)
     private String postalCode;
 
-    @Column(nullable = false, length = 15)
+    @Column(name = "phone_number", length = 32) // laisse nullable par défaut
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)

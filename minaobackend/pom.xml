@@ -169,6 +169,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
+
             <!-- Tests unitaires -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

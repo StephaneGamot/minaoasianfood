@@ -83,6 +83,7 @@ export default function NavBar() {
           </Link>
 
           {/* Auth section */}
+          {/*
           {!user ? (
             <Link href={`/${locale}/login`} className="text-sm font-semibold text-stone-100 hover:text-white transition">
               Connexion <span aria-hidden="true">→</span>
@@ -99,14 +100,14 @@ export default function NavBar() {
                   Tableau de bord
                 </Link>
               )}
-              <Link href={`/${locale}/me`} className="text-sm font-semibold text-stone-100 hover:text-white">
+              <Link href={`/${locale}/profile`} className="text-sm font-semibold text-stone-100 hover:text-white">
                 Mon compte
               </Link>
               <button onClick={handleLogout} className="text-sm font-semibold text-stone-100 hover:text-white">
                 Déconnexion
               </button>
             </>
-          )}
+          )}*/}
         </div>
       </nav>
 
@@ -149,7 +150,7 @@ export default function NavBar() {
                 >
                   🛒 Panier ({cartItemCount})
                 </Link>
-
+{/*
                 {!user ? (
                   <Link
                     href={`/${locale}/login`}
@@ -179,7 +180,7 @@ export default function NavBar() {
                       </Link>
                     )}
                     <Link
-                      href={`/${locale}/me`}
+                      href={`/${locale}/profile`}
                       onClick={() => setMobileMenuOpen(false)}
                       className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
                     >
@@ -195,7 +196,7 @@ export default function NavBar() {
                       Déconnexion
                     </button>
                   </>
-                )}
+                )} */}
               </div>
             </div>
           </div>

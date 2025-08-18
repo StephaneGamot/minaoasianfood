@@ -1,72 +1,69 @@
 // src/context/AuthContext.tsx
-'use client';
+"use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode
-} from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-type ServerRole = 'USER' | 'ADMIN' | 'DASHBOARD' | 'GUEST';
-type Role = 'guest' | 'user' | 'dashboard' | 'admin';
-
-type User = {
-  id: number | string;
-  name: string;      
-  email: string;
-  role: Role;
-};
+type ServerRole = "USER" | "ADMIN" | "DASHBOARD" | "GUEST";
+type Role = "guest" | "user" | "dashboard" | "admin";
+type User = { id: number | string; name: string; email: string; role: Role };
 
 type AuthContextType = {
   user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  loading: boolean; // chargeur local (utilisé surtout par ensureSession)
+  isAuthenticated: boolean;
+  /** À appeler SEULEMENT sur pages protégées (ou avant d’appeler une API sensible) */
+  ensureSession: () => Promise<boolean>;
+  login: (email: string, password: string, remember?: boolean) => Promise<boolean>;
   register: (email: string, password: string, lastName?: string) => Promise<boolean>;
   logout: () => Promise<void>;
+  /** fetch qui ajoute le Bearer et tente un refresh sur 401 */
   authedFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API = process.env.NEXT_PUBLIC_API_BASE || '/api';
-const HAD_SESSION_KEY = 'authHadSession'; 
+// Base API (reverse-proxy Next: /api, sinon ex: http://localhost:8080)
+const API = process.env.NEXT_PUBLIC_API_BASE ?? "/api";
+const HAD_SESSION_KEY = "authHadSession"; // marque qu’une session a existé sur ce device
 
-// --- helpers ---
-function normalizeRole(role?: ServerRole): Role {
-  switch (role) {
-    case 'ADMIN': return 'admin';
-    case 'DASHBOARD': return 'dashboard';
-    case 'USER': return 'user';
-    default: return 'guest';
+function normalizeRole(r?: ServerRole): Role {
+  switch (r) {
+    case "ADMIN": return "admin";
+    case "DASHBOARD": return "dashboard";
+    case "USER": return "user";
+    default: return "guest";
   }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState<string | null>(null); // non persisté
+  const [loading, setLoading] = useState(false); // ❗️on ne bloque plus l’UI globale
+
+  // Hydrate rapide depuis localStorage (aucun appel réseau au mount)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("authUser");
+      if (stored) setUser(JSON.parse(stored));
+    } catch {
+      // noop
+    }
+  }, []);
 
   async function fetchMe(token: string): Promise<User | null> {
     try {
       const res = await fetch(`${API}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-        credentials: 'include'
+        credentials: "include",
+        cache: "no-store",
       });
       if (!res.ok) return null;
       const me = await res.json();
       const name =
-        [me.firstName, me.lastName].filter(Boolean).join(' ').trim() ||
+        [me.firstName, me.lastName].filter(Boolean).join(" ").trim() ||
         me.lastName ||
         me.email;
-      return {
-        id: me.id,
-        name,
-        email: me.email,
-        role: normalizeRole(me.role as ServerRole)
-      };
+      return { id: me.id, name, email: me.email, role: normalizeRole(me.role as ServerRole) };
     } catch {
       return null;
     }
@@ -75,165 +72,170 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function refresh(): Promise<string | null> {
     try {
       const res = await fetch(`${API}/auth/refresh`, {
-        method: 'POST',
-        credentials: 'include'
+        method: "POST",
+        credentials: "include",
       });
-      // Pas de cookie / cookie invalide : session anonyme, c'est OK
-      if (res.status === 401 || res.status === 403) return null;
       if (!res.ok) return null;
 
-      // Certaines implémentations renvoient 204 : protège le parse
-      const text = await res.text();
+      const text = await res.text(); // plus robuste que res.json() si vide
       if (!text) return null;
-      const data = JSON.parse(text);
-      return data?.accessToken ?? null;
+      let token: string | null = null;
+      try {
+        const data = JSON.parse(text);
+        token = data?.accessToken ?? null;
+      } catch {
+        token = null;
+      }
+      return token;
     } catch {
       return null;
     }
   }
 
-  // Bootstrap session au montage
-useEffect(() => {
-    (async () => {
-      try {
-        // ⛔️ si aucune session précédente, ne PAS appeler /refresh
-        const hadSession = typeof window !== 'undefined' && localStorage.getItem(HAD_SESSION_KEY) === '1';
-        if (!hadSession) {
-          setUser(null);
-          setAccessToken(null);
-          return;
-        }
+  // 🔒 À utiliser UNIQUEMENT sur pages protégées
+  const ensureSession = async (): Promise<boolean> => {
+    if (user) return true;
 
-        const token = await refresh();
-        if (token) {
-          setAccessToken(token);
-          const u = await fetchMe(token);
-          if (u) {
-            setUser(u);
-            localStorage.setItem('authUser', JSON.stringify(u));
-          } else {
-            setUser(null);
-            localStorage.removeItem('authUser');
-          }
-        } else {
-          setUser(null);
-          localStorage.removeItem('authUser');
-        }
-      } finally {
-        setLoading(false); // toujours débloquer le rendu
-      }
-    })();
-  }, []);
+    const had = typeof window !== "undefined" && localStorage.getItem(HAD_SESSION_KEY) === "1";
+    if (!had) return false; // aucune session connue -> pas la peine de tenter
 
-
-  // Option: restaurer l’UI rapidement (si tu veux)
-  useEffect(() => {
+    setLoading(true);
     try {
-      const stored = localStorage.getItem('authUser');
-      if (stored) setUser(JSON.parse(stored));
-    } catch {}
-  }, []);
+      const token = await refresh();
+      if (!token) return false;
+      setAccessToken(token);
 
-  // --- API exposée ---
-  const register = async (email: string, password: string, lastName = 'User'): Promise<boolean> => {
+      const u = await fetchMe(token);
+      if (!u) return false;
+
+      setUser(u);
+      localStorage.setItem("authUser", JSON.stringify(u));
+      return true;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = async (email: string, password: string, lastName = "User"): Promise<boolean> => {
     try {
       const res = await fetch(`${API}/auth/register`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lastName: lastName.trim(),
           email: email.trim(),
-          password
-        })
+          password,
+        }),
       });
-      if (!res.ok) return false;
+      return res.ok;
+    } catch {
+      return false;
+    }
+  };
 
-      // pas d’auto-login → retourne true
+  const login = async (email: string, password: string, remember = false): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        // ⚠️ rememberMe côté back = durée du cookie refresh (Max-Age)
+        body: JSON.stringify({ email, password, rememberMe: remember }),
+      });
+
+      const text = await res.text();
+      if (!res.ok || !text) return false;
+
+      let token: string | null = null;
+      try {
+        token = (JSON.parse(text))?.accessToken ?? null;
+      } catch {
+        token = null;
+      }
+      if (!token) return false;
+
+      setAccessToken(token);
+
+      const u = await fetchMe(token);
+      if (!u) return false;
+
+      localStorage.setItem("authUser", JSON.stringify(u));
+      localStorage.setItem(HAD_SESSION_KEY, "1"); // ✅ autorise un futur refresh paresseux
+      setUser(u);
       return true;
     } catch {
       return false;
     }
   };
 
-  // AuthContext.tsx (dans AuthProvider)
-const login = async (email: string, password: string): Promise<boolean> => {
-  try {
-    const res = await fetch(`${API}/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-
-    // 👇 capture la réponse brute pour debug
-    const text = await res.text();
-
-    let token: string | null = null;
-    try {
-      const data = JSON.parse(text);
-      console.debug('[login] status =', res.status, 'body =', data);
-      token = data?.accessToken ?? null;
-    } catch {
-      console.debug('[login] raw body was not JSON:', text);
-    }
-
-    if (!res.ok || !token) return false;
-
-    setAccessToken(token);
-    const u = await fetchMe(token);
-    if (!u) return false;
-
-    localStorage.setItem('authUser', JSON.stringify(u));
-    setUser(u);
-    return true;
-  } catch (e) {
-    console.error('[login] error:', e);
-    return false;
-  }
-};
-
-
   const logout = async (): Promise<void> => {
     try {
-      await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
-    } catch {}
-    // ✅ effacer le marqueur de session
-    localStorage.removeItem(HAD_SESSION_KEY);
-    localStorage.removeItem('authUser');
-    setUser(null);
-    setAccessToken(null);
+      await fetch(`${API}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      // noop
+    } finally {
+      localStorage.removeItem(HAD_SESSION_KEY);
+      localStorage.removeItem("authUser");
+      setUser(null);
+      setAccessToken(null);
+    }
   };
 
+  // 🔐 fetch avec tentative de refresh sur 401 (lazy)
   const authedFetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
-    const token = accessToken ?? (await refresh());
-    if (token && token !== accessToken) setAccessToken(token);
-
     const headers = new Headers(init.headers || {});
-    if (token) headers.set('Authorization', `Bearer ${token}`);
+    if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
-    let res = await fetch(input, { ...init, headers, credentials: 'include' });
+    let res = await fetch(input, { ...init, headers, credentials: "include" });
+
     if (res.status === 401) {
+      // Évite d’appeler /refresh si aucune session n’a jamais existé
+      const had = typeof window !== "undefined" && localStorage.getItem(HAD_SESSION_KEY) === "1";
+      if (!had) return res;
+
       const newToken = await refresh();
       if (newToken) {
         setAccessToken(newToken);
-        headers.set('Authorization', `Bearer ${newToken}`);
-        res = await fetch(input, { ...init, headers, credentials: 'include' });
+
+        // On tente aussi de resynchroniser le user (utile si onglet resté longtemps ouvert)
+        const me = await fetchMe(newToken);
+        if (me) {
+          setUser(me);
+          localStorage.setItem("authUser", JSON.stringify(me));
+        }
+
+        headers.set("Authorization", `Bearer ${newToken}`);
+        res = await fetch(input, { ...init, headers, credentials: "include" });
       }
     }
     return res;
   };
 
-  // ✅ on REND TOUJOURS les children (pas de !loading && children)
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, authedFetch }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        ensureSession,
+        login,
+        register,
+        logout,
+        authedFetch,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
+// Hook nommé — importer via:  import { useAuth } from "@/context/AuthContext";
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
   return ctx;
 }

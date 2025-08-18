@@ -28,7 +28,7 @@ export default function LoginForm({
   const [loading, setLoading] = useState(false);
 
   // Si aucune prop, on redirige vers /{locale}/dashboard
-  const finalRedirect = redirectTo ?? `/${locale}/dashboard`;
+  const finalRedirect = redirectTo ?? `/${locale}/menu`;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

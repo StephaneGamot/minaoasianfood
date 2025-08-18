@@ -1,18 +1,39 @@
 "use client";
 
-// import { CheckIcon } from '@heroicons/react/20/solid';
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { useMemo } from "react";
 import { useCart } from "@/context/CartContext";
 
 export default function ShoppingCart() {
   const { cart, removeFromCart } = useCart();
+  const router = useRouter();
+  const locale = useLocale();
+  const isDisabled = cart.length === 0;
+  const deliveryFee = 4.9;
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.priceNumber * item.quantity,
-    0
+  const subtotal = useMemo(
+    () => cart.reduce((sum, item) => sum + item.priceNumber * item.quantity, 0),
+    [cart]
   );
-const deliveryFee = 4.9;
-const total = subtotal + deliveryFee;
+
+  const total = useMemo(
+    () => (cart.length ? subtotal + deliveryFee : 0),
+    [subtotal, cart.length]
+  );
+
+  const EUR = useMemo(
+    () => new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }),
+    [locale]
+  );
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (!cart.length) return;
+    // 👉 Redirection vers la page de paiement locale (à créer)
+    router.push(`/${locale}/checkout`);
+  };
 
   return (
     <div className="bg-white">
@@ -21,7 +42,22 @@ const total = subtotal + deliveryFee;
           🛒 Panier
         </h1>
 
-        <form className="mt-12">
+        {/* Panier vide */}
+        {!cart.length && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-8 rounded-md border border-gray-200 p-6 text-center text-gray-700"
+          >
+            Votre panier est vide pour l’instant.
+          </div>
+        )}
+
+        <form
+          className="mt-12"
+          onSubmit={handleSubmit}
+          aria-describedby="order-summary"
+        >
           <ul
             role="list"
             className="divide-y divide-gray-200 border-b border-t border-gray-200"
@@ -43,7 +79,7 @@ const total = subtotal + deliveryFee;
                       {item.name}
                     </h4>
                     <p className="ml-4 text-sm text-gray-900">
-                      {(item.priceNumber * item.quantity).toFixed(2)} €
+                      {EUR.format(item.priceNumber * item.quantity)}
                     </p>
                   </div>
                   <p className="mt-1 text-sm text-gray-500">
@@ -63,25 +99,28 @@ const total = subtotal + deliveryFee;
             ))}
           </ul>
 
-          {/* Résumé */}
-          <div className="mt-10 space-y-4">
+          <div id="order-summary" className="mt-10 space-y-4">
             <div className="flex justify-between text-base font-medium text-gray-900">
               <span>Sous-total</span>
-              <span>{subtotal.toFixed(2)} €</span>
-            </div><div className="flex justify-between text-base text-gray-700">
-  <span>Frais de livraison</span>
-  <span>{deliveryFee.toFixed(2)} €</span>
-</div>
+              <span>{EUR.format(subtotal)}</span>
+            </div>
 
-<div className="flex justify-between text-lg font-bold text-gray-900">
-  <span>Total</span>
-  <span>{total.toFixed(2)} €</span>
-</div>
+            <div className="flex justify-between text-base text-gray-700">
+              <span>Frais de livraison</span>
+              <span>
+                {cart.length ? EUR.format(deliveryFee) : EUR.format(0)}
+              </span>
+            </div>
 
+            <div className="flex justify-between text-lg font-bold text-gray-900">
+              <span>Total</span>
+              <span>{EUR.format(total)}</span>
+            </div>
 
             <button
               type="submit"
-              className="mt-6 w-full rounded-md bg-red-900 px-4 py-3 text-white hover:bg-red-800"
+              disabled={isDisabled}
+              className="mt-6 w-full rounded-md bg-red-900 px-4 py-3 text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Valider la commande
             </button>

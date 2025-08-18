@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 :root {
-    --font-title: 'Cormorant Garamond', serif;
-    --font-body: 'Open Sans', sans-serif;
+  --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-title: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 }
 
-  h1, h2, h3 {
-    font-family: var(--font-title), Helvetica, sans-serif;
-  }
- 
+html, body { font-family: var(--font-body); }
+h1, h2, h3 .display, .font-title { font-family: var(--font-title); }
+
   
   a, button {
       font-family: var(--font-title), Helvetica, sans-serif;

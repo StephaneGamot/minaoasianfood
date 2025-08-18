@@ -1,10 +1,17 @@
 package com.minaobackend.controller;
 
 import com.minaobackend.config.AppProperties;
-import com.minaobackend.dto.auth.*;
+import com.minaobackend.dto.auth.AuthResponse;
+import com.minaobackend.dto.auth.ChangePasswordRequest;
+import com.minaobackend.dto.auth.ForgotPasswordRequest;
+import com.minaobackend.dto.auth.LoginRequest;
+import com.minaobackend.dto.auth.RegisterRequest;
+import com.minaobackend.dto.auth.ResetPasswordRequest;
+import com.minaobackend.dto.user.UpdateProfileRequest;
+import com.minaobackend.dto.user.UserProfileDto;
 import com.minaobackend.entity.PasswordResetToken;
-import com.minaobackend.entity.User;
 import com.minaobackend.entity.RefreshToken;
+import com.minaobackend.entity.User;
 import com.minaobackend.exception.BadRequestException;
 import com.minaobackend.repository.PasswordResetTokenRepository;
 import com.minaobackend.repository.UserRepository;
@@ -13,11 +20,10 @@ import com.minaobackend.security.JwtService;
 import com.minaobackend.service.interfaces.RefreshTokenService;
 import com.minaobackend.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.servlet.http.Cookie;
-import lombok.var;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +33,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
 
 @Tag(name = "Auth")
 @RestController
@@ -58,11 +63,11 @@ public class AuthController {
         this.appProps = appProps;
     }
 
-    // helper pour SameSite (prod: None si Secure=true, sinon Lax)
     private String sameSite() {
         return appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax";
     }
 
+    /* ---------------- REGISTER ---------------- */
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest req) {
         User u = userService.register(req.getLastName(), req.getEmail(), req.getPassword());
@@ -70,42 +75,103 @@ public class AuthController {
         return ResponseEntity.ok(u);
     }
 
-
-    // --- LOGIN: renvoie access token en JSON + place un cookie HttpOnly pour le refresh
+    /* ---------------- LOGIN ---------------- */
+    // Renvoie un accessToken en JSON + dépose un cookie HttpOnly de refresh
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest req,
                                               HttpServletResponse response) {
         String accessToken = userService.login(req.getEmail(), req.getPassword());
 
-        // Émettre le refresh token et le mettre en cookie
         User u = userService.me(req.getEmail().trim().toLowerCase());
         String refreshPlain = refreshTokenService.issue(u);
         int maxAge = appProps.getAuth().getRefreshTtlDays() * 24 * 60 * 60;
 
         CookieUtils.addHttpOnlyCookie(
                 response,
-                appProps.getAuth().getRefreshCookieName(),     // "rt"
+                appProps.getAuth().getRefreshCookieName(),          // ex: "rt"
                 refreshPlain,
-                appProps.getAuth().getRefreshCookieDomain(),   // "localhost" en dev
-                appProps.getAuth().isRefreshCookieSecure(),    // false en dev
+                appProps.getAuth().getRefreshCookieDomain(),        // "" en dev (pas "localhost")
+                appProps.getAuth().isRefreshCookieSecure(),         // false en dev
                 maxAge,
-                appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax"
+                sameSite()
         );
 
         return ResponseEntity.ok(new AuthResponse(accessToken));
     }
 
-
-    // --- ME
+    /* ---------------- ME (GET) ---------------- */
     @GetMapping("/me")
-    public ResponseEntity<User> me(@AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<UserProfileDto> me(@AuthenticationPrincipal UserDetails principal) {
         if (principal == null) throw new BadRequestException("Not authenticated");
         User u = userService.me(principal.getUsername());
-        u.setPassword(null);
-        return ResponseEntity.ok(u);
+        return ResponseEntity.ok(toDto(u));
     }
 
-    // --- CHANGE PASSWORD (protégé)
+    /* ---------------- ME (PUT) ---------------- */
+    @PutMapping("/me")
+    public ResponseEntity<UserProfileDto> updateMe(
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails principal,
+            @RequestBody UpdateProfileRequest req
+    ) {
+        if (principal == null) throw new BadRequestException("Not authenticated");
+        User updated = userService.updateMe(principal.getUsername(), req); // ✅
+        updated.setPassword(null);
+        return ResponseEntity.ok(toDto(updated));
+    }
+
+
+    private static UserProfileDto toDto(User u) {
+        UserProfileDto dto = new UserProfileDto();
+        dto.id = u.getId();
+        dto.firstName = u.getFirstName();
+        dto.lastName = u.getLastName();
+        dto.email = u.getEmail();
+        dto.address = u.getAddress();
+        dto.address2 = u.getAddress2();
+        dto.city = u.getCity();
+        dto.postalCode = u.getPostalCode();
+        dto.phoneNumber = u.getPhoneNumber();
+        dto.gender = u.getGender();
+        dto.profilePicUrl = u.getProfilePicUrl();
+        dto.role = u.getRole();
+        dto.active = u.isActive();
+        dto.createdAt = u.getCreatedAt();
+        dto.updatedAt = u.getUpdatedAt();
+        dto.preferences = u.getPreferences();
+        return dto;
+    }
+
+    @PostMapping(value = "/me/avatar", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserProfileDto> uploadAvatar(
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails principal,
+            @RequestPart("file") org.springframework.web.multipart.MultipartFile file
+    ) throws java.io.IOException {
+        if (principal == null) throw new BadRequestException("Not authenticated");
+        if (file == null || file.isEmpty()) return ResponseEntity.badRequest().build();
+
+        String original = file.getOriginalFilename();
+        String ext = (original != null && original.contains("."))
+                ? original.substring(original.lastIndexOf('.') + 1).toLowerCase()
+                : "jpg";
+        java.util.List<String> allowed = java.util.Arrays.asList("jpg","jpeg","png","webp");
+        if (!allowed.contains(ext)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String uploadRoot = System.getProperty("user.dir") + "/uploads/avatars";
+        java.nio.file.Files.createDirectories(java.nio.file.Path.of(uploadRoot));
+
+        String filename = java.util.UUID.randomUUID() + "." + ext;
+        java.nio.file.Path dest = java.nio.file.Path.of(uploadRoot, filename);
+        java.nio.file.Files.copy(file.getInputStream(), dest, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        String publicUrl = "/uploads/avatars/" + filename;
+
+        User updated = userService.updateProfilePic(principal.getUsername(), publicUrl);
+        updated.setPassword(null);
+        return ResponseEntity.ok(toDto(updated));
+    }
+    /* ---------------- CHANGE PASSWORD ---------------- */
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@AuthenticationPrincipal UserDetails principal,
                                             @Valid @RequestBody ChangePasswordRequest req) {
@@ -125,13 +191,13 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- FORGOT PASSWORD (public)
+    /* ---------------- FORGOT PASSWORD ---------------- */
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgot(@Valid @RequestBody ForgotPasswordRequest req) {
         String email = req.getEmail() == null ? null : req.getEmail().trim().toLowerCase();
         Optional<User> userOpt = userRepository.findByEmail(email);
 
-        // Toujours 204 pour éviter l'énumération d'emails
+        // Toujours 204 (pas d’énumération d’emails)
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             passwordResetTokenRepository.deleteByUserId(user.getId());
@@ -141,12 +207,12 @@ public class AuthController {
                     .expiresAt(Instant.now().plus(30, ChronoUnit.MINUTES))
                     .build();
             passwordResetTokenRepository.save(prt);
-            // TODO: envoyer prt.getToken() par email (lien front: /reset?token=...)
+            // TODO: envoyer l'email avec le lien de reset contenant prt.getToken()
         }
         return ResponseEntity.noContent().build();
     }
 
-    // --- RESET PASSWORD (public)
+    /* ---------------- RESET PASSWORD ---------------- */
     @PostMapping("/reset-password")
     public ResponseEntity<?> reset(@Valid @RequestBody ResetPasswordRequest req) {
         Optional<PasswordResetToken> tokenOpt = passwordResetTokenRepository.findByToken(req.getToken());
@@ -167,48 +233,53 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    /* ---------------- REFRESH ---------------- */
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(HttpServletRequest request,
                                                 HttpServletResponse response) {
-        final String cookieName = appProps.getAuth().getRefreshCookieName(); // "rt"
+        final String cookieName = appProps.getAuth().getRefreshCookieName(); // ex: "rt"
         final String refreshPlain = extractCookie(request, cookieName);
 
-        // Pas de cookie => 401 (et on nettoie côté client)
+        // Pas de cookie => 401 + clear côté client
         if (refreshPlain == null || refreshPlain.trim().isEmpty()) {
-            CookieUtils.clearCookie(response, cookieName,
+            CookieUtils.clearCookie(
+                    response, cookieName,
                     appProps.getAuth().getRefreshCookieDomain(),
                     appProps.getAuth().isRefreshCookieSecure(),
-                    appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax");
+                    sameSite()
+            );
             return ResponseEntity.status(401).build();
         }
 
-        Optional<com.minaobackend.entity.RefreshToken> rtOpt =
-                refreshTokenService.validatePlain(refreshPlain);
+        Optional<RefreshToken> rtOpt = refreshTokenService.validatePlain(refreshPlain);
 
-        // Cookie invalide/expiré => 401, pas d’exception
+        // Invalide/expiré => 401 + clear
         if (!rtOpt.isPresent()) {
-            CookieUtils.clearCookie(response, cookieName,
+            CookieUtils.clearCookie(
+                    response, cookieName,
                     appProps.getAuth().getRefreshCookieDomain(),
                     appProps.getAuth().isRefreshCookieSecure(),
-                    appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax");
+                    sameSite()
+            );
             return ResponseEntity.status(401).build();
         }
 
-        // Rotation stricte (révoquer l’ancien + en émettre un nouveau)
-        com.minaobackend.entity.RefreshToken oldRt = rtOpt.get();
-        com.minaobackend.entity.User user = oldRt.getUser();
-        refreshTokenService.revoke(oldRt);               // doit être non-throwing
-        String newRefreshPlain = refreshTokenService.issue(user); // génère le *raw*
+        // Rotation du refresh token
+        RefreshToken oldRt = rtOpt.get();
+        User user = oldRt.getUser();
+        refreshTokenService.revoke(oldRt);
+        String newRefreshPlain = refreshTokenService.issue(user);
         int maxAge = appProps.getAuth().getRefreshTtlDays() * 24 * 60 * 60;
 
-        CookieUtils.addHttpOnlyCookie(response, cookieName, newRefreshPlain,
+        CookieUtils.addHttpOnlyCookie(
+                response, cookieName, newRefreshPlain,
                 appProps.getAuth().getRefreshCookieDomain(),
                 appProps.getAuth().isRefreshCookieSecure(),
-                maxAge,
-                appProps.getAuth().isRefreshCookieSecure() ? "None" : "Lax");
+                maxAge, sameSite()
+        );
 
-        // Access token fraîchement généré
-        Map<String, Object> claims = new HashMap<>();
+        // Génère un nouvel access token
+        Map<String, Object> claims = new HashMap<String, Object>();
         claims.put("uid", user.getId());
         claims.put("role", user.getRole().name());
         String newAccessToken = jwtService.generateToken(user.getEmail(), claims);
@@ -216,17 +287,12 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(newAccessToken));
     }
 
-
-
-
-    // --- LOGOUT : révoque tous les RT + efface cookie
+    /* ---------------- LOGOUT ---------------- */
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails principal,
-            HttpServletResponse response
-    ) {
+    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetails principal,
+                                    HttpServletResponse response) {
         try {
-            // Efface le cookie de refresh quoi qu’il arrive
+            // Efface toujours le cookie
             CookieUtils.clearCookie(
                     response,
                     appProps.getAuth().getRefreshCookieName(),
@@ -235,36 +301,29 @@ public class AuthController {
                     sameSite()
             );
 
-            // Si on a un principal valide, tente de révoquer tous ses refresh tokens
+            // Révoque les RTs de l'utilisateur connecté si possible
             if (principal != null && principal.getUsername() != null) {
                 try {
                     User u = userService.me(principal.getUsername());
                     if (u != null && u.getId() != null) {
-                        refreshTokenService.revokeAllFor(u); // repo.deleteByUserId(...)
+                        refreshTokenService.revokeAllFor(u);
                     }
-                } catch (Exception ignored) {
-                    // On ignore toute erreur ici: logout doit rester idempotent et 204
-                }
+                } catch (Exception ignored) {}
             }
 
-            return ResponseEntity.noContent().build(); // 204 toujours
-
+            return ResponseEntity.noContent().build(); // 204
         } catch (Exception e) {
-            // En dernier recours, on renvoie quand même 204 (logout best-effort)
             return ResponseEntity.noContent().build();
         }
     }
 
-
+    /* ---------------- Utils ---------------- */
     private String extractCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
         for (Cookie c : cookies) {
-            if (name.equals(c.getName())) {
-                return c.getValue();
-            }
+            if (name.equals(c.getName())) return c.getValue();
         }
         return null;
     }
-
 }

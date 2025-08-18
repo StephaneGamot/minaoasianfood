@@ -136,7 +136,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           }}
         />
       </body>
-      <script src="https://analytics.ahrefs.com/analytics.js" data-key="KgwMqUpn51DW1+kAsoyITw" async></script>
+
     </html>
   );
 }

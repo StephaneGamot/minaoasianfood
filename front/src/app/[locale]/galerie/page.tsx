@@ -77,7 +77,7 @@ export default function GalleryPage() {
   return (
     <main aria-labelledby="gallery-heading" className="p-4">
       <h1 className="text-3xl text-center font-bold text-gray-900 mb-4">
-        Gallerie de Photos
+        Galerie de Photos
       </h1>
       <Gallery images={images} />
     </main>

@@ -34,25 +34,14 @@ export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
   const { locale } = await params;
-
-  // Domaine du site (sans slash final). Tombe par défaut sur le domaine prod.
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-    "https://www.minaoasianfood.com";
+  const base = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.minaoasianfood.com");
 
   return {
-    metadataBase: new URL(site),
+    metadataBase: base,
     applicationName: "Minao Asian Food",
     alternates: {
-      // ✅ canonical absolu pour éviter "http://localhost"
-      canonical: `${site}/${locale}`,
-      // ✅ hreflang absolus et cohérents
-      languages: {
-        fr: `${site}/fr`,
-        en: `${site}/en`,
-        nl: `${site}/nl`,
-        "x-default": `${site}/`
-      }
+      canonical: `/${locale}`,
+      languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
     robots: {
       index: true,
@@ -62,21 +51,16 @@ export async function generateMetadata(
         follow: true,
         "max-snippet": -1,
         "max-image-preview": "large",
-        "max-video-preview": -1
-      }
+        "max-video-preview": -1,
+      },
     },
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-        { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" }
-      ]
-    }
+        { url: "/app/favicon.ico", sizes: "any" },
+      ],
+    },
   };
 }
-
-
-
 
 type LocaleLayoutProps = {
   children: React.ReactNode;

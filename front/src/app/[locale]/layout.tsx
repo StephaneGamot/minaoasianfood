@@ -17,30 +17,25 @@ import Header from "@/components/Header/NavBar";
 import Footer from "@/components/Footer/Footer";
 import "./../globals.css";
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 type Locale = "fr" | "en" | "nl";
 type Params = { locale: Locale };
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  userScalable: true,
-};
 
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
   const { locale } = await params;
-  const base = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.minaoasianfood.com");
+
+  // Base absolue fiable (prod via NEXT_PUBLIC_SITE_URL, sinon dev)
+  const site =
+    (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "") ||
+    "http://localhost:3000";
 
   return {
-    metadataBase: base,
+    metadataBase: new URL(site),
     applicationName: "Minao Asian Food",
     alternates: {
-      canonical: `/${locale}`,
+      // ❗️ PAS de canonical au niveau layout
       languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
     robots: {
@@ -56,11 +51,14 @@ export async function generateMetadata(
     },
     icons: {
       icon: [
-        { url: "/app/favicon.ico", sizes: "any" },
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+        { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
       ],
     },
   };
 }
+
 
 type LocaleLayoutProps = {
   children: React.ReactNode;

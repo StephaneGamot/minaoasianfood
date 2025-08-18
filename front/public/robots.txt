@@ -18,9 +18,7 @@ Disallow: /fr/register
 Disallow: /en/register
 Disallow: /nl/register
 
-Disallow: /fr/me
-Disallow: /en/me
-Disallow: /nl/me
+
 
 # Autorise l’exploration des pages importantes
 Allow: /fr/

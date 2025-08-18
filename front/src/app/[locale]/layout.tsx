@@ -35,7 +35,6 @@ export async function generateMetadata(
     metadataBase: new URL(site),
     applicationName: "Minao Asian Food",
     alternates: {
-      // ❗️ PAS de canonical au niveau layout
       languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
     robots: {
@@ -137,6 +136,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           }}
         />
       </body>
+      <script src="https://analytics.ahrefs.com/analytics.js" data-key="KgwMqUpn51DW1+kAsoyITw" async></script>
     </html>
   );
 }

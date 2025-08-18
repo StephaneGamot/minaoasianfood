@@ -89,6 +89,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     "registerForm",
     "loginForm",
     "profile",
+    "contact",
   ] as const) {
     messages[ns] = (await import(`../../messages/${safeLocale}/${ns}.json`))
       .default as AbstractIntlMessages;

@@ -1,0 +1,11 @@
+{
+  "title": "Contact – Minao Asian Food",
+  "description": "Two locations to serve you in Brussels and Dilbeek.",
+  "labels": {
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "map": "Directions on Google Maps",
+    "hours": "Opening hours"
+  }
+}

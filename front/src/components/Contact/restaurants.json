@@ -1,0 +1,32 @@
+[
+  {
+    "id": "schaerbeek",
+    "name": "Minao Asian Food — Schaerbeek",
+    "address": "Rue Général Eenens 20, 1030 Schaerbeek",
+    "phone": "+32 2 000 00 00",
+    "email": "Abelfood.bxl@gmail.com",
+    "photos": [
+      "/images/restaurant1.jpg"
+    ],
+   "hours": {
+    "fr": "Lundi : Fermé\nMardi : 16:00–23:00\nMercredi : 16:00–23:00\nJeudi : 16:00–23:00\nVendredi : 16:00–01:00\nSamedi : 16:00–01:00\nDimanche : 16:00–23:00",
+    "en": "Monday: Closed\nTuesday: 16:00–23:00\nWednesday: 16:00–23:00\nThursday: 16:00–23:00\nFriday: 16:00–01:00\nSaturday: 16:00–01:00\nSunday: 16:00–23:00",
+    "nl": "Maandag: Gesloten\nDinsdag: 16:00–23:00\nWoensdag: 16:00–23:00\nDonderdag: 16:00–23:00\nVrijdag: 16:00–01:00\nZaterdag: 16:00–01:00\nZondag: 16:00–23:00"
+  }
+  },
+  {
+    "id": "dilbeek",
+    "name": "Minao Asian Food — Dilbeek",
+    "address": "Minao (Dilbeek) Ninoofsesteenweg 126, 1700 Dilbeek",
+    "phone": "+32 2 000 00 00",
+    "email": "Abelfood.dilbeek@gmail.com",
+    "photos": [
+      "/images/restaurant1.jpg"
+    ],
+ "hours": {
+    "fr": "Lundi : Fermé\nMardi : 16:00–23:00\nMercredi : 16:00–23:00\nJeudi : 16:00–23:00\nVendredi : 16:00–01:00\nSamedi : 16:00–01:00\nDimanche : 16:00–23:00",
+    "en": "Monday: Closed\nTuesday: 16:00–23:00\nWednesday: 16:00–23:00\nThursday: 16:00–23:00\nFriday: 16:00–01:00\nSaturday: 16:00–01:00\nSunday: 16:00–23:00",
+    "nl": "Maandag: Gesloten\nDinsdag: 16:00–23:00\nWoensdag: 16:00–23:00\nDonderdag: 16:00–23:00\nVrijdag: 16:00–01:00\nZaterdag: 16:00–01:00\nZondag: 16:00–23:00"
+  }
+  }
+]

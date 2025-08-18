@@ -24,16 +24,19 @@ export async function generateMetadata(
     nl: "Geniet van authentieke halal Aziatische keuken in Brussel. Thaise gerechten, noedels, gebakken rijst en huisgemaakte desserts in een warme sfeer.",
   } as const;
 
-  const base = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
+  // Base absolue fiable (prod via env, sinon domaine prod par défaut)
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+    "https://www.minaoasianfood.com";
+  const base = new URL(site);
 
   return {
-    // ✅ <title> dans <head>
     title: titles[locale],
-    // ✅ <meta name="description"> dans <head>
     description: descriptions[locale],
-    // ✅ <link rel="canonical"> et hreflang
+    // ✅ canonical spécifique à la home locale
     alternates: {
       canonical: `/${locale}`,
+      // hreflang (Next les rendra absolus avec metadataBase)
       languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
     openGraph: {
@@ -42,7 +45,9 @@ export async function generateMetadata(
       url: `/${locale}`,
       siteName: "Minao Asian Food",
       type: "website",
-      images: [{ url: "/images/menu/nouilles-sautees-boeuf.webp", alt: titles[locale] }],
+      images: [
+        { url: "/images/menu/nouilles-sautees-boeuf.webp", alt: titles[locale] }
+      ],
     },
     twitter: { card: "summary_large_image" },
     metadataBase: base,

@@ -26,59 +26,99 @@ import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
 
-export const metadata: Metadata = {
-  title: "Galerie – Minao Asian Food à Bruxelles",
-  description:
-    "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
-  alternates: {
-    canonical: "/fr/galerie",
-    languages: {
-      fr: "/fr/galerie",
-      en: "/en/galerie",
-      nl: "/nl/galerie",
-      "x-default": "/fr/galerie"
-    }
-  },
-  openGraph: {
-    title: "Galerie – Minao Asian Food à Bruxelles",
-    description:
-      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    url: "/fr/galerie",
-    type: "website",
-    siteName: "Minao Asian Food",
-    locale: "fr_BE",
-    images: [
-      {
-        url: "/images/menu/gyoza-poulet.webp",
-        width: 1200,
-        height: 630,
-        alt: "Galerie photo du restaurant et des plats Minao"
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Galerie – Minao Asian Food à Bruxelles",
-    description:
-      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    images: ["/images/menu/gyoza-poulet.webp"],
-    site: "@minaobrussels"
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+
+ 
+
+
+type Params = { locale: "fr" | "en" | "nl" };
+
+// ── Metadata localisé (même logique que /menu)
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { locale } = await params;
+
+  const TITLES = {
+    fr: "Galerie – Minao Asian Food à Bruxelles",
+    en: "Gallery – Minao Asian Food in Brussels",
+    nl: "Galerij – Minao Asian Food in Brussel",
+  } as const;
+
+  const DESCR = {
+    fr: "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
+    en: "Explore our gallery of homemade halal Asian dishes. Discover Minao’s visual universe through our specialties.",
+    nl: "Ontdek onze galerij met huisgemaakte halal Aziatische gerechten. Verken de visuele wereld van Minao via onze specialiteiten.",
+  } as const;
+
+  const OG_LOCALE = {
+    fr: "fr_BE",
+    en: "en_GB",
+    nl: "nl_BE",
+  } as const;
+
+  const site = "https://www.minaoasianfood.com";
+  const base = new URL(site);
+  const path = `/${locale}/galerie`;
+
+  return {
+    metadataBase: base,
+    applicationName: "Minao Asian Food",
+    title: TITLES[locale],
+    description: DESCR[locale],
+    alternates: {
+      canonical: path,
+      languages: {
+        fr: "/fr/galerie",
+        en: "/en/galerie",
+        nl: "/nl/galerie",
+        "x-default": "/fr/galerie",
+      },
+    },
+    openGraph: {
+      title: TITLES[locale],
+      description: DESCR[locale],
+      url: path,
+      type: "website",
+      siteName: "Minao Asian Food",
+      locale: OG_LOCALE[locale],
+      images: [
+        {
+          url: "/images/menu/gyoza-poulet.webp",
+          width: 1200,
+          height: 630,
+          alt: "Galerie photo du restaurant et des plats Minao",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: TITLES[locale],
+      description: DESCR[locale],
+      images: ["/images/menu/gyoza-poulet.webp"],
+      site: "@minaobrussels",
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-snippet": -1,
-      "max-image-preview": "large",
-      "max-video-preview": -1
-    }
-  }
-};
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
+    },
+  };
+}
 
 
 export default function GalleryPage() {
+
+    const HREF = {
+    fr: "https://www.minaoasianfood.com/fr/galerie",
+    en: "https://www.minaoasianfood.com/en/galerie",
+    nl: "https://www.minaoasianfood.com/nl/galerie",
+  } as const;
 
   const images = [
     { src: img1, alt: "Salle du restaurant" },
@@ -107,11 +147,11 @@ export default function GalleryPage() {
 
   return (
       <>
-      <Head>
-        <link rel="alternate" hrefLang="fr-BE" href="https://www.minaoasianfood.com/fr/galerie" />
-        <link rel="alternate" hrefLang="en-GB" href="https://www.minaoasianfood.com/en/galerie" />
-        <link rel="alternate" hrefLang="nl-BE" href="https://www.minaoasianfood.com/nl/galerie" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.minaoasianfood.com/fr/galerie" />
+     <Head>
+        <link rel="alternate" hrefLang="fr-BE" href={HREF.fr} />
+        <link rel="alternate" hrefLang="en-GB" href={HREF.en} />
+        <link rel="alternate" hrefLang="nl-BE" href={HREF.nl} />
+        <link rel="alternate" hrefLang="x-default" href={HREF.fr} />
       </Head>
     <main aria-labelledby="gallery-heading" className="p-4">
       <h1 className="text-3xl text-center font-bold text-gray-900 mb-4">

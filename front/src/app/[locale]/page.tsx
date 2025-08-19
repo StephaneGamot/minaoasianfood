@@ -31,7 +31,7 @@ export async function generateMetadata(
   } as const;
 
   const site = "https://www.minaoasianfood.com";
-  const path = `/${locale}/galerie`;
+  const path = `/${locale}`;
   const base = new URL(site);
 
  return {

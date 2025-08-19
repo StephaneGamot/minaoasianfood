@@ -11,21 +11,21 @@ type Params = { locale: Locale };
 
 
 const SLUG: Record<Locale, string> = {
-  fr: "galerie",
-  en: "galerie",
-  nl: "galerie",
+  fr: "",
+  en: "",
+  nl: "",
 };
 
 const TITLES: Record<Locale, string> = {
-  fr: "Galerie – Minao Asian Food à Bruxelles",
-  en: "Gallery – Minao Asian Food in Brussels",
-  nl: "Galerij – Minao Asian Food in Brussel",
+  fr: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
+  en: "Minao Asian Food – Halal Asian restaurant in Brussels",
+  nl: "Minao Asian Food – Halal Aziatisch restaurant in Brussel",
 };
 
 const DESCR: Record<Locale, string> = {
-  fr: "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
-  en: "Explore our gallery of homemade halal Asian dishes. Discover Minao’s visual universe through our specialties.",
-  nl: "Ontdek onze galerij met halal Aziatische huisgemaakte gerechten. Verken de visuele wereld van Minao via onze specialiteiten.",
+  fr: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
+  en: "Enjoy authentic halal Asian cuisine in Brussels. Thai dishes, noodles, fried rice and homemade desserts in a warm setting.",
+  nl: "Geniet van authentieke halal Aziatische keuken in Brussel. Thaise gerechten, noedels, gebakken rijst en huisgemaakte desserts in een warme sfeer.",
 };
 
 const OG_LOCALE: Record<Locale, string> = {

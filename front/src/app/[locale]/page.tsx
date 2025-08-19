@@ -32,9 +32,7 @@ export async function generateMetadata(
   } as const;
 
   // ✅ Ne JAMAIS retomber sur localhost en prod
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
-    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
+  const site = "https://www.minaoasianfood.com";
 
   const base = new URL(site);
 

@@ -5,6 +5,7 @@ import HomePageHero from "@/components/Heros/HomePageHero";
 import WitchRestaurant from "@/components/WitchRestaurant/WitchRestaurant";
 import MenuCategoriesSection from "@/components/Menu/MenuCategoriesSection";
 
+
 type Params = { locale: "fr" | "en" | "nl" };
 
 export async function generateMetadata(

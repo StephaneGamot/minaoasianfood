@@ -5,7 +5,7 @@ import { hasLocale, type AbstractIntlMessages } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
-// Polices locales (évite les 404 Google Fonts)
+// Polices locales (plus de Google Fonts)
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/cormorant-garamond/400.css";
@@ -17,15 +17,6 @@ import Header from "@/components/Header/NavBar";
 import Footer from "@/components/Footer/Footer";
 import "./../globals.css";
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  userScalable: true,
-};
 
 type Locale = "fr" | "en" | "nl";
 type Params = { locale: Locale };
@@ -35,15 +26,16 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale } = await params;
 
-  // ✅ Base absolue fiable (jamais localhost en prod)
+  // ✅ Ne JAMAIS retomber sur localhost en prod
   const site =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
     ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
 
+  const base = new URL(site);
+
   return {
-    metadataBase: new URL(site),
+    metadataBase: base,
     applicationName: "Minao Asian Food",
-    // ❗️PAS de canonical ici (chaque page définit le sien)
     alternates: {
       languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
@@ -68,10 +60,11 @@ export async function generateMetadata(
   };
 }
 
+
+
 type LocaleLayoutProps = {
   children: React.ReactNode;
-  // ✅ params est un Promise (App Router)
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string }>; // ✅ params est un Promise en app router
 };
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
@@ -83,7 +76,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   setRequestLocale(safeLocale);
 
-  // Charge les messages i18n (multi-namespaces)
+  // Charge les messages i18n
   const messages = {} as AbstractIntlMessages;
   for (const ns of [
     "nav",
@@ -100,14 +93,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       .default as AbstractIntlMessages;
   }
 
-  // ✅ Dans ta version, headers() renvoie Promise<ReadonlyHeaders> → on attend
+  // ✅ headers() est async sur ta version → il faut await
   const hdrs = await headers();
   const nonce = hdrs.get("x-nonce") ?? undefined;
-
-  // Base URL pour le JSON-LD
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "")
-    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
 
   return (
     <html lang={safeLocale}>
@@ -139,7 +127,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
               name: "Minao Asian Food",
               servesCuisine: "Asian",
               priceRange: "€€",
-              url: `${site}/${safeLocale}`,
+              url:
+                (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000") +
+                `/${safeLocale}`,
               address: {
                 "@type": "PostalAddress",
                 addressLocality: "Bruxelles",
@@ -149,6 +139,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           }}
         />
       </body>
+
     </html>
   );
 }

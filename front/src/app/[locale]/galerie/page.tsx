@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Head from "next/head";
+
 import Gallery from "@/components/Gallery/Gallery";
 import img1 from "./../../../../public/images/menu/gyoza-scampi.webp";
 import img2 from "./../../../../public/images/menu/yakitoris-poulet-halal.webp";
@@ -23,14 +25,13 @@ import img20 from "./../../../../public/images/menu/nouilles-sautees-scampis.web
 import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
+
 export const metadata: Metadata = {
   title: "Galerie – Minao Asian Food à Bruxelles",
   description:
     "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
   alternates: {
-    // ✅ chemin relatif ; Next l’absolutise avec `metadataBase`
     canonical: "/fr/galerie",
-    // ✅ hreflang
     languages: {
       fr: "/fr/galerie",
       en: "/en/galerie",
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
     locale: "fr_BE",
     images: [
       {
-        url: "/fr/images/gallery/gallery-preview.webp",
+        url: "/images/menu/gyoza-poulet.webp",
         width: 1200,
         height: 630,
         alt: "Galerie photo du restaurant et des plats Minao"
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
     title: "Galerie – Minao Asian Food à Bruxelles",
     description:
       "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    images: ["/fr/images/gallery/gallery-preview.webp"],
+    images: ["/images/menu/gyoza-poulet.webp"],
     site: "@minaobrussels"
   },
   robots: {
@@ -78,6 +79,7 @@ export const metadata: Metadata = {
 
 
 export default function GalleryPage() {
+
   const images = [
     { src: img1, alt: "Salle du restaurant" },
     { src: img2, alt: "Tiramisu crémeux" },
@@ -104,11 +106,19 @@ export default function GalleryPage() {
   ];
 
   return (
+      <>
+      <Head>
+        <link rel="alternate" hrefLang="fr-BE" href="https://www.minaoasianfood.com/fr/galerie" />
+        <link rel="alternate" hrefLang="en-GB" href="https://www.minaoasianfood.com/en/galerie" />
+        <link rel="alternate" hrefLang="nl-BE" href="https://www.minaoasianfood.com/nl/galerie" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.minaoasianfood.com/fr/galerie" />
+      </Head>
     <main aria-labelledby="gallery-heading" className="p-4">
       <h1 className="text-3xl text-center font-bold text-gray-900 mb-4">
         Galerie de Photos
       </h1>
       <Gallery images={images} />
     </main>
+    </>
   );
 }

@@ -31,47 +31,46 @@ export async function generateMetadata(
   } as const;
 
   const site = "https://www.minaoasianfood.com";
-
+  const path = `/${locale}/galerie`;
   const base = new URL(site);
 
-  return {
+ return {
     metadataBase: base,
     applicationName: "Minao Asian Food",
     title: TITLES[locale],
     description: DESCR[locale],
     alternates: {
-      canonical: `/${locale}`, 
+      canonical: path,
       languages: {
-        fr: "/fr",
-        en: "/en",
-        nl: "/nl",
-        "x-default": "/",
+        fr: "/fr/galerie",
+        en: "/en/galerie",
+        nl: "/nl/galerie",
+        "x-default": "/fr/galerie",
       },
     },
-
     openGraph: {
       title: TITLES[locale],
       description: DESCR[locale],
-      url: `/${locale}`,
+      url: path,
       type: "website",
       siteName: "Minao Asian Food",
       locale: OG_LOCALE[locale],
       images: [
         {
-          url: "/images/menu/nouilles-sautees-boeuf.webp", 
-          alt: TITLES[locale],
+          url: "/images/gallery/gallery-preview.webp",
+          width: 1200,
+          height: 630,
+          alt: "Galerie photo du restaurant et des plats Minao",
         },
       ],
     },
-
     twitter: {
       card: "summary_large_image",
       title: TITLES[locale],
       description: DESCR[locale],
-      images: ["/images/menu/nouilles-sautees-boeuf.webp"],
+      images: ["/images/gallery/gallery-preview.webp"],
       site: "@minaobrussels",
     },
-
     robots: {
       index: true,
       follow: true,
@@ -87,12 +86,18 @@ export async function generateMetadata(
 }
 
 export default function Homepage() {
+  const HREF = {
+    fr: "https://www.minaoasianfood.com/fr/galerie",
+    en: "https://www.minaoasianfood.com/en/galerie",
+    nl: "https://www.minaoasianfood.com/nl/galerie",
+  } as const;
+
   return (<>
       <Head>
-        <link rel="alternate" hrefLang="fr-BE" href="https://www.minaoasianfood.com/fr" />
-        <link rel="alternate" hrefLang="en-GB" href="https://www.minaoasianfood.com/fr" />
-        <link rel="alternate" hrefLang="nl-BE" href="https://www.minaoasianfood.com/fr" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.minaoasianfood.com/fr" />
+        <link rel="alternate" hrefLang="fr-BE" href={HREF.fr} />
+        <link rel="alternate" hrefLang="en-GB" href={HREF.en} />
+        <link rel="alternate" hrefLang="nl-BE" href={HREF.nl} />
+        <link rel="alternate" hrefLang="x-default" href={HREF.fr} />
       </Head>
     <main id="main" role="main" className="bg-stone-100">
       <HomePageHero />

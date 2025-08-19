@@ -5,7 +5,7 @@ import { hasLocale, type AbstractIntlMessages } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
-// Polices locales (plus de Google Fonts)
+// Polices locales (évite les 404 Google Fonts)
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/cormorant-garamond/400.css";
@@ -17,16 +17,62 @@ import Header from "@/components/Header/NavBar";
 import Footer from "@/components/Footer/Footer";
 import "./../globals.css";
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  userScalable: true,
+};
 
 type Locale = "fr" | "en" | "nl";
 type Params = { locale: Locale };
 
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { locale } = await params;
+
+  // ✅ Base absolue fiable (jamais localhost en prod)
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
+
+  return {
+    metadataBase: new URL(site),
+    applicationName: "Minao Asian Food",
+    // ❗️PAS de canonical ici (chaque page définit le sien)
+    alternates: {
+      languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
+    },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+        { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      ],
+    },
+  };
+}
+
 type LocaleLayoutProps = {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>; // ✅ params est un Promise en app router
+  // ✅ params est un Promise (App Router)
+  params: Promise<{ locale: string }>;
 };
-
-
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
@@ -37,7 +83,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   setRequestLocale(safeLocale);
 
-  // Charge les messages i18n
+  // Charge les messages i18n (multi-namespaces)
   const messages = {} as AbstractIntlMessages;
   for (const ns of [
     "nav",
@@ -54,9 +100,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       .default as AbstractIntlMessages;
   }
 
-  // ✅ headers() est async sur ta version → il faut await
+  // ✅ Dans ta version, headers() renvoie Promise<ReadonlyHeaders> → on attend
   const hdrs = await headers();
   const nonce = hdrs.get("x-nonce") ?? undefined;
+
+  // Base URL pour le JSON-LD
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "")
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
 
   return (
     <html lang={safeLocale}>
@@ -88,9 +139,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
               name: "Minao Asian Food",
               servesCuisine: "Asian",
               priceRange: "€€",
-              url:
-                (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000") +
-                `/${safeLocale}`,
+              url: `${site}/${safeLocale}`,
               address: {
                 "@type": "PostalAddress",
                 addressLocality: "Bruxelles",
@@ -100,7 +149,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           }}
         />
       </body>
-
     </html>
   );
 }

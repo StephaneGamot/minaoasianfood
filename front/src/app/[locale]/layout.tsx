@@ -26,13 +26,15 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale } = await params;
 
-  // Base absolue fiable (prod via NEXT_PUBLIC_SITE_URL, sinon dev)
+  // ✅ Ne JAMAIS retomber sur localhost en prod
   const site =
-    (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "") ||
-    "http://localhost:3000";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
+
+  const base = new URL(site);
 
   return {
-    metadataBase: new URL(site),
+    metadataBase: base,
     applicationName: "Minao Asian Food",
     alternates: {
       languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
@@ -57,6 +59,7 @@ export async function generateMetadata(
     },
   };
 }
+
 
 
 type LocaleLayoutProps = {

@@ -12,76 +12,56 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale } = await params;
 
-  const TITLES = {
+  const siteUrl = "https://www.minaoasianfood.com";
+
+  const titles = {
     fr: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
     en: "Minao Asian Food – Halal Asian restaurant in Brussels",
     nl: "Minao Asian Food – Halal Aziatisch restaurant in Brussel",
   } as const;
 
-  const DESCR = {
+  const descriptions = {
     fr: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
     en: "Enjoy authentic halal Asian cuisine in Brussels. Thai dishes, noodles, fried rice and homemade desserts in a warm setting.",
     nl: "Geniet van authentieke halal Aziatische keuken in Brussel. Thaise gerechten, noedels, gebakken rijst en huisgemaakte desserts in een warme sfeer.",
   } as const;
 
-  const OG_LOCALE = {
-    fr: "fr_BE",
-    en: "en_US",
-    nl: "nl_BE",
-  } as const;
-
-  // ✅ Ne JAMAIS retomber sur localhost en prod
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
-    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
-
-  const base = new URL(site);
-
   return {
-    metadataBase: base,
-    applicationName: "Minao Asian Food",
-
-    // ✅ Titre & description localisés
-    title: TITLES[locale],
-    description: DESCR[locale],
-
-    // ✅ Canonical spécifique à la home locale + hreflang
+    // Canonical absolu pour éviter toute fuite 'localhost'
     alternates: {
-      canonical: `/${locale}`, // sera absolutisé avec metadataBase
+      canonical: `${siteUrl}/${locale}`,
       languages: {
-        fr: "/fr",
-        en: "/en",
-        nl: "/nl",
-        "x-default": "/",
+        fr: `${siteUrl}/fr`,
+        en: `${siteUrl}/en`,
+        nl: `${siteUrl}/nl`,
+        "x-default": `${siteUrl}/fr`,
       },
     },
-
-    // ✅ Open Graph propre
+    title: titles[locale],
+    description: descriptions[locale],
     openGraph: {
-      title: TITLES[locale],
-      description: DESCR[locale],
-      url: `/${locale}`,
-      type: "website",
+      title: titles[locale],
+      description: descriptions[locale],
+      url: `${siteUrl}/${locale}`,
       siteName: "Minao Asian Food",
-      locale: OG_LOCALE[locale],
+      type: "website",
+      locale: locale === "fr" ? "fr_BE" : locale === "nl" ? "nl_BE" : "en_US",
       images: [
         {
-          url: "/images/menu/nouilles-sautees-boeuf.webp", // ⚠️ mets une image qui existe dans /public
-          alt: TITLES[locale],
+          url: `${siteUrl}/images/menu/nouilles-sautees-boeuf.webp`,
+          width: 1200,
+          height: 630,
+          alt: titles[locale],
         },
       ],
     },
-
-    // ✅ Twitter card
     twitter: {
       card: "summary_large_image",
-      title: TITLES[locale],
-      description: DESCR[locale],
-      images: ["/images/menu/nouilles-sautees-boeuf.webp"],
+      title: titles[locale],
+      description: descriptions[locale],
+      images: [`${siteUrl}/images/menu/nouilles-sautees-boeuf.webp`],
       site: "@minaobrussels",
     },
-
-    // (optionnel) robots
     robots: {
       index: true,
       follow: true,
@@ -95,7 +75,6 @@ export async function generateMetadata(
     },
   };
 }
-
 
 export default function Homepage() {
   return (

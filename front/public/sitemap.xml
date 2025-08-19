@@ -14,8 +14,8 @@
   <url>
     <loc>https://www.minaoasianfood.com/fr/galerie</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/galerie"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/gallery"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/galerij"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/galerie"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/galerie"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/galerie"/>
   </url>
 
@@ -32,8 +32,8 @@
   <url>
     <loc>https://www.minaoasianfood.com/fr/panier</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/panier"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/cart"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/winkelmand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/panier"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/panier"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/panier"/>
   </url>
 </urlset>

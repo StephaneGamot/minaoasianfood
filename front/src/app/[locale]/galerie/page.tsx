@@ -23,58 +23,48 @@ import img20 from "./../../../../public/images/menu/nouilles-sautees-scampis.web
 import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
-export const metadata: Metadata = {
-  title: "Galerie – Minao Asian Food à Bruxelles",
-  description:
-    "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
-  alternates: {
-    // ✅ chemin relatif ; Next l’absolutise avec `metadataBase`
-    canonical: "/fr/galerie",
-    // ✅ hreflang
-    languages: {
-      fr: "/fr/galerie",
-      en: "/en/galerie",
-      nl: "/nl/galerie",
-      "x-default": "/fr/galerie"
-    }
-  },
-  openGraph: {
-    title: "Galerie – Minao Asian Food à Bruxelles",
-    description:
-      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    url: "/fr/galerie",
-    type: "website",
-    siteName: "Minao Asian Food",
-    locale: "fr_BE",
-    images: [
-      {
-        url: "/fr/images/gallery/gallery-preview.webp",
-        width: 1200,
-        height: 630,
-        alt: "Galerie photo du restaurant et des plats Minao"
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Galerie – Minao Asian Food à Bruxelles",
-    description:
-      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    images: ["/fr/images/gallery/gallery-preview.webp"],
-    site: "@minaobrussels"
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+type Params = { locale: "fr" | "en" | "nl" };
+
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { locale } = await params;
+
+  // ✅ Ne JAMAIS retomber sur localhost en prod
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") // ex: https://www.minaoasianfood.com
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.minaoasianfood.com");
+
+  const base = new URL(site);
+
+  return {
+    metadataBase: base,
+    applicationName: "Minao Asian Food",
+    alternates: {
+      languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-snippet": -1,
-      "max-image-preview": "large",
-      "max-video-preview": -1
-    }
-  }
-};
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
+    },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+        { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      ],
+    },
+  };
+}
+
+
 
 
 export default function GalleryPage() {

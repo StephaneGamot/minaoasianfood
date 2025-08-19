@@ -5,98 +5,52 @@ import HomePageHero from "@/components/Heros/HomePageHero";
 import WitchRestaurant from "@/components/WitchRestaurant/WitchRestaurant";
 import MenuCategoriesSection from "@/components/Menu/MenuCategoriesSection";
 
+type Params = { locale: "fr" | "en" | "nl" };
 
-type Locale = "fr" | "en" | "nl";
-type Params = { locale: Locale };
-
-
-const SLUG: Record<Locale, string> = {
-  fr: "",
-  en: "",
-  nl: "",
-};
-
-const TITLES: Record<Locale, string> = {
-  fr: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
-  en: "Minao Asian Food – Halal Asian restaurant in Brussels",
-  nl: "Minao Asian Food – Halal Aziatisch restaurant in Brussel",
-};
-
-const DESCR: Record<Locale, string> = {
-  fr: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
-  en: "Enjoy authentic halal Asian cuisine in Brussels. Thai dishes, noodles, fried rice and homemade desserts in a warm setting.",
-  nl: "Geniet van authentieke halal Aziatische keuken in Brussel. Thaise gerechten, noedels, gebakken rijst en huisgemaakte desserts in een warme sfeer.",
-};
-
-const OG_LOCALE: Record<Locale, string> = {
-  fr: "fr_BE",
-  en: "en_US",
-  nl: "nl_BE",
-};
-
-// ⚠️ Cette page définit SON canonical ; le layout NE DOIT PAS définir de canonical.
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
   const { locale } = await params;
 
-  // Base site (utilisée par Next pour absolutiser les URLs relatives)
-  // En prod: définis NEXT_PUBLIC_SITE_URL=https://www.minaoasianfood.com
+  const titles = {
+    fr: "Minao Asian Food – Restaurant asiatique halal à Bruxelles",
+    en: "Minao Asian Food – Halal Asian restaurant in Brussels",
+    nl: "Minao Asian Food – Halal Aziatisch restaurant in Brussel",
+  } as const;
+
+  const descriptions = {
+    fr: "Savourez une cuisine asiatique halal authentique à Bruxelles. Plats thaï, nouilles, riz sautés et desserts maison dans un cadre chaleureux.",
+    en: "Enjoy authentic halal Asian cuisine in Brussels. Thai dishes, noodles, fried rice and homemade desserts in a warm setting.",
+    nl: "Geniet van authentieke halal Aziatische keuken in Brussel. Thaise gerechten, noedels, gebakken rijst en huisgemaakte desserts in een warme sfeer.",
+  } as const;
+
+  // Base absolue fiable (prod via env, sinon domaine prod par défaut)
   const site =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
     "https://www.minaoasianfood.com";
-
-  const path = `/${locale}/${SLUG[locale]}`;
+  const base = new URL(site);
 
   return {
-    metadataBase: new URL(site),
-    title: TITLES[locale],
-    description: DESCR[locale],
+    title: titles[locale],
+    description: descriptions[locale],
+    // ✅ canonical spécifique à la home locale
     alternates: {
-      // ✅ Canonical RELATIF (sera absolutisé avec metadataBase)
-      canonical: path,
-      // ✅ hreflang pour chaque langue (relatifs → absolutisés)
-      languages: {
-        fr: `/fr/${SLUG.fr}`,
-        en: `/en/${SLUG.en}`,
-        nl: `/nl/${SLUG.nl}`,
-        "x-default": `/fr/${SLUG.fr}`,
-      },
+      canonical: `/${locale}`,
+      // hreflang (Next les rendra absolus avec metadataBase)
+      languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
     },
     openGraph: {
-      title: TITLES[locale],
-      description: DESCR[locale],
-      url: path,
-      type: "website",
+      title: titles[locale],
+      description: descriptions[locale],
+      url: `/${locale}`,
       siteName: "Minao Asian Food",
-      locale: OG_LOCALE[locale],
+      type: "website",
       images: [
-        {
-          url: "/fr/images/gallery/gallery-preview.webp", // mets ton image OG
-          width: 1200,
-          height: 630,
-          alt: "Galerie photo du restaurant et des plats Minao",
-        },
+        { url: "/images/menu/nouilles-sautees-boeuf.webp", alt: titles[locale] }
       ],
     },
-    twitter: {
-      card: "summary_large_image",
-      title: TITLES[locale],
-      description: DESCR[locale],
-      images: ["/fr/images/gallery/gallery-preview.webp"],
-      site: "@minaobrussels",
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-snippet": -1,
-        "max-image-preview": "large",
-        "max-video-preview": -1,
-      },
-    },
+    twitter: { card: "summary_large_image" },
+    metadataBase: base,
   };
 }
 

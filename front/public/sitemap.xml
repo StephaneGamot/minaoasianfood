@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Sitemap Minao Asian Food - generated manually -->
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Accueil -->
+  <url>
+    <loc>https://www.minaoasianfood.com/fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/"/>
+  </url>
 
-  <!-- Pages FR -->
-  <url><loc>https://www.minaoasianfood.com/fr</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/fr/menu</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/fr/galerie</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/fr/panier</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
+  <!-- Galerie -->
+  <url>
+    <loc>https://www.minaoasianfood.com/fr/galerie</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/galerie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/gallery"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/galerij"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/galerie"/>
+  </url>
 
+  <!-- Menu -->
+  <url>
+    <loc>https://www.minaoasianfood.com/fr/menu</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/menu"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/menu"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/menu"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/menu"/>
+  </url>
 
-  <!-- Pages EN -->
-  <url><loc>https://www.minaoasianfood.com/en</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/en/menu</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/en/galerie</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/en/panier</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-
-
-  <!-- Pages NL -->
-  <url><loc>https://www.minaoasianfood.com/nl</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/nl/menu</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/nl/galerie</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-  <url><loc>https://www.minaoasianfood.com/nl/panier</loc><lastmod>2025-08-01T21:34:33+00:00</lastmod></url>
-
-
+  <!-- Panier / Cart / Winkelmand -->
+  <url>
+    <loc>https://www.minaoasianfood.com/fr/panier</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/panier"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/cart"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/winkelmand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/panier"/>
+  </url>
 </urlset>

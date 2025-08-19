@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from 'next-intl';
 import LangSwitcher from "../LangSwitcher/LangSwitcher";
 
 
@@ -53,17 +53,19 @@ const navigation = {
 
 export default function Footer() {
   const t = useTranslations("footer");
+    const locale = useLocale();
+
 
   return (
     <footer className="bg-zinc-900 text-zinc-300">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* NAVIGATION */}
         <nav className="mb-10 flex justify-center gap-x-8 text-sm font-medium">
-          <Link href="/" className="hover:text-white">{t("nav.home")}</Link>
-          <Link href="/menu" className="hover:text-white">{t("nav.menu")}</Link>
-          <Link href="/galerie" className="hover:text-white">{t("nav.gallery")}</Link>
-          <Link href="/contact" className="hover:text-white">{t("nav.contact")}</Link>
-          <Link href="/faq" className="hover:text-white">{t("nav.faq")}</Link>
+          <Link href={`/${locale}/`} className="hover:text-white">{t("nav.home")}</Link>
+          <Link href={`/${locale}/menu`} className="hover:text-white">{t("nav.menu")}</Link>
+          <Link href={`/${locale}/galerie`} className="hover:text-white">{t("nav.gallery")}</Link>
+          <Link href={`/${locale}/contact`} className="hover:text-white">{t("nav.contact")}</Link>
+         { /*<Link href="/faq" className="hover:text-white">{t("nav.faq")}</Link>*/}
         </nav>
 
         {/* GRID COLONNES CENTRÉES */}

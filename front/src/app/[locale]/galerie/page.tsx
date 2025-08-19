@@ -25,26 +25,55 @@ import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
 export const metadata: Metadata = {
   title: "Galerie – Minao Asian Food à Bruxelles",
-  description: "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
+  description:
+    "Explorez notre galerie de plats asiatiques halal faits maison. Découvrez l’univers visuel de Minao à travers nos spécialités.",
   alternates: {
-    canonical: "https://www.minaoasianfood.com/fr/galerie",
+    // ✅ chemin relatif ; Next l’absolutise avec `metadataBase`
+    canonical: "/fr/galerie",
+    // ✅ hreflang
+    languages: {
+      fr: "/fr/galerie",
+      en: "/en/galerie",
+      nl: "/nl/galerie",
+      "x-default": "/fr/galerie"
+    }
   },
   openGraph: {
     title: "Galerie – Minao Asian Food à Bruxelles",
-    description: "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
-    url: "https://www.minaoasianfood.com/fr/galerie",
+    description:
+      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
+    url: "/fr/galerie",
     type: "website",
     siteName: "Minao Asian Food",
     locale: "fr_BE",
     images: [
       {
-        url: "https://www.minaoasianfood.com/fr/images/gallery/gallery-preview.webp",
+        url: "/fr/images/gallery/gallery-preview.webp",
         width: 1200,
         height: 630,
-        alt: "Galerie photo du restaurant et des plats Minao",
-      },
-    ],
+        alt: "Galerie photo du restaurant et des plats Minao"
+      }
+    ]
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Galerie – Minao Asian Food à Bruxelles",
+    description:
+      "Photos authentiques de notre cuisine asiatique halal et de nos plats signatures à emporter ou sur place.",
+    images: ["/fr/images/gallery/gallery-preview.webp"],
+    site: "@minaobrussels"
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1
+    }
+  }
 };
 
 

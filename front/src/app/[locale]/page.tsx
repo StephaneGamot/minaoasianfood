@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import React from "react";
-
+import Head from 'next/head' 
 import HomePageHero from "@/components/Heros/HomePageHero";
 import WitchRestaurant from "@/components/WitchRestaurant/WitchRestaurant";
 import MenuCategoriesSection from "@/components/Menu/MenuCategoriesSection";
-
 
 type Params = { locale: "fr" | "en" | "nl" };
 
@@ -31,7 +30,6 @@ export async function generateMetadata(
     nl: "nl_BE",
   } as const;
 
-  // ✅ Ne JAMAIS retomber sur localhost en prod
   const site = "https://www.minaoasianfood.com";
 
   const base = new URL(site);
@@ -39,14 +37,10 @@ export async function generateMetadata(
   return {
     metadataBase: base,
     applicationName: "Minao Asian Food",
-
-    // ✅ Titre & description localisés
     title: TITLES[locale],
     description: DESCR[locale],
-
-    // ✅ Canonical spécifique à la home locale + hreflang
     alternates: {
-      canonical: `/${locale}`, // sera absolutisé avec metadataBase
+      canonical: `/${locale}`, 
       languages: {
         fr: "/fr",
         en: "/en",
@@ -55,7 +49,6 @@ export async function generateMetadata(
       },
     },
 
-    // ✅ Open Graph propre
     openGraph: {
       title: TITLES[locale],
       description: DESCR[locale],
@@ -65,13 +58,12 @@ export async function generateMetadata(
       locale: OG_LOCALE[locale],
       images: [
         {
-          url: "/images/menu/nouilles-sautees-boeuf.webp", // ⚠️ mets une image qui existe dans /public
+          url: "/images/menu/nouilles-sautees-boeuf.webp", 
           alt: TITLES[locale],
         },
       ],
     },
 
-    // ✅ Twitter card
     twitter: {
       card: "summary_large_image",
       title: TITLES[locale],
@@ -80,7 +72,6 @@ export async function generateMetadata(
       site: "@minaobrussels",
     },
 
-    // (optionnel) robots
     robots: {
       index: true,
       follow: true,
@@ -95,13 +86,19 @@ export async function generateMetadata(
   };
 }
 
-
 export default function Homepage() {
-  return (
+  return (<>
+      <Head>
+        <link rel="alternate" hrefLang="fr-BE" href="https://www.minaoasianfood.com/fr" />
+        <link rel="alternate" hrefLang="en-GB" href="https://www.minaoasianfood.com/fr" />
+        <link rel="alternate" hrefLang="nl-BE" href="https://www.minaoasianfood.com/fr" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.minaoasianfood.com/fr" />
+      </Head>
     <main id="main" role="main" className="bg-stone-100">
       <HomePageHero />
       <WitchRestaurant />
       <MenuCategoriesSection />
     </main>
+    </>
   );
 }

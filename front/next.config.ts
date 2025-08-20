@@ -7,14 +7,12 @@ const withNextIntl = createNextIntlPlugin();
 const isProd = process.env.NODE_ENV === "production";
 const backendOrigin = process.env.NEXT_PUBLIC_BACKEND_ORIGIN || "http://localhost:8080";
 
-// CSP (on garde large en dev, plus strict en prod)
 const cspDev = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' data:",
-  // en dev : autorise le backend (utile si tu bypasses le proxy) + HMR/Web Vitals
   `connect-src 'self' ${backendOrigin} ws://localhost:3000 https://vitals.vercel-insights.com https://www.google-analytics.com https://va.vercel-scripts.com`,
   "object-src 'none'",
   "base-uri 'self'",
@@ -27,7 +25,6 @@ const cspProd = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' data:",
-  // en prod : pas de backend direct si tu gardes le proxy /api
   "connect-src 'self' https://vitals.vercel-insights.com https://www.google-analytics.com https://va.vercel-scripts.com",
   "object-src 'none'",
   "base-uri 'self'",
@@ -76,7 +73,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Proxy /api → backend (dev ET prod si NEXT_PUBLIC_BACKEND_ORIGIN est défini)
   async rewrites() {
     return [
       {

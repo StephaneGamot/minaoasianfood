@@ -114,12 +114,6 @@ export async function generateMetadata(
 
 export default function GalleryPage() {
 
-    const HREF = {
-    fr: "https://www.minaoasianfood.com/fr/galerie",
-    en: "https://www.minaoasianfood.com/en/galerie",
-    nl: "https://www.minaoasianfood.com/nl/galerie",
-  } as const;
-
   const images = [
     { src: img1, alt: "Salle du restaurant" },
     { src: img2, alt: "Tiramisu crémeux" },
@@ -146,19 +140,13 @@ export default function GalleryPage() {
   ];
 
   return (
-      <>
-     <Head>
-        <link rel="alternate" hrefLang="fr-BE" href={HREF.fr} />
-        <link rel="alternate" hrefLang="en-GB" href={HREF.en} />
-        <link rel="alternate" hrefLang="nl-BE" href={HREF.nl} />
-        <link rel="alternate" hrefLang="x-default" href={HREF.fr} />
-      </Head>
+
     <main aria-labelledby="gallery-heading" className="p-4">
       <h1 className="text-3xl text-center font-bold text-gray-900 mb-4">
         Galerie de Photos
       </h1>
       <Gallery images={images} />
     </main>
-    </>
+    
   );
 }

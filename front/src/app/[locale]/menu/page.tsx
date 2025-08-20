@@ -48,12 +48,11 @@ export async function generateMetadata(
     description: DESCR[locale],
     alternates: {
       canonical: path,
-      languages: {
-        fr: "/fr/menu",
-        en: "/en/menu",
-        nl: "/nl/menu",
-        "x-default": "/fr/menu",
-      },
+    languages: {
+    "fr-BE": "/fr/menu",
+    "en-GB": "/en/menu",
+    "nl-BE": "/nl/menu",
+  },
     },
     openGraph: {
       title: TITLES[locale],

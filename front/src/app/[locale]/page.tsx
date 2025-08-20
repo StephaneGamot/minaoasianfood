@@ -42,11 +42,10 @@ export async function generateMetadata(
     alternates: {
       canonical: path,
       languages: {
-        fr: "/fr/galerie",
-        en: "/en/galerie",
-        nl: "/nl/galerie",
-        "x-default": "/fr/galerie",
-      },
+    "fr-BE": "/fr",
+    "en-GB": "/en",
+    "nl-BE": "/nl"
+  },
     },
     openGraph: {
       title: TITLES[locale],

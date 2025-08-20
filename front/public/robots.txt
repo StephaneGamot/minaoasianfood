@@ -18,6 +18,9 @@ Disallow: /fr/register
 Disallow: /en/register
 Disallow: /nl/register
 
+Disallow: /fr/panier
+Disallow: /en/panier
+Disallow: /nl/panier
 
 
 # Autorise l’exploration des pages importantes

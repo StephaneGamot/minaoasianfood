@@ -5,7 +5,6 @@ import { hasLocale, type AbstractIntlMessages } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
-// Polices locales (plus de Google Fonts)
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/cormorant-garamond/400.css";
@@ -24,7 +23,7 @@ type Params = { locale: Locale };
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
-  const { locale } = await params;
+//  const { locale } = await params;
 
   // ✅ Ne JAMAIS retomber sur localhost en prod
   const site =
@@ -36,9 +35,6 @@ export async function generateMetadata(
   return {
     metadataBase: base,
     applicationName: "Minao Asian Food",
-    alternates: {
-      languages: { fr: "/fr", en: "/en", nl: "/nl", "x-default": "/" },
-    },
     robots: {
       index: true,
       follow: true,
@@ -66,6 +62,8 @@ type LocaleLayoutProps = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>; // ✅ params est un Promise en app router
 };
+
+const HTML_LANG = { fr: "fr-BE", en: "en-GB", nl: "nl-BE" } as const;
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
@@ -99,7 +97,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const nonce = hdrs.get("x-nonce") ?? undefined;
 
   return (
-    <html lang={safeLocale}>
+        <html lang={HTML_LANG[safeLocale]}>
       <body className="bg-light text-dark">
         {/* Skip link a11y */}
         <a

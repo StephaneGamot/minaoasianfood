@@ -66,7 +66,7 @@ export async function generateMetadata({
         "fr-BE": "/fr/galerie",
         "en-GB": "/en/galerie",
         "nl-BE": "/nl/galerie",
-        "x-default": "/fr/galerie",
+     
       },
     },
 

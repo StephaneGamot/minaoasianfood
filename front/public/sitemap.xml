@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <!-- Accueil -->
   <url>
     <loc>https://www.minaoasianfood.com/fr</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en"/>
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl"/>
+    <!-- Si "/" redirige vers "/fr", mets x-default sur /fr pour éviter 308 -->
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr"/>
   </url>
 
   <!-- Galerie -->
   <url>
     <loc>https://www.minaoasianfood.com/fr/galerie</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/galerie"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/galerie"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/galerie"/>
+    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr/galerie"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en/galerie"/>
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl/galerie"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/galerie"/>
   </url>
 
   <!-- Menu -->
   <url>
     <loc>https://www.minaoasianfood.com/fr/menu</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/menu"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/menu"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/menu"/>
+    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr/menu"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en/menu"/>
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl/menu"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/menu"/>
   </url>
 
-    <url>
+  <!-- Contact -->
+  <url>
     <loc>https://www.minaoasianfood.com/fr/contact</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.minaoasianfood.com/fr/contact"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.minaoasianfood.com/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://www.minaoasianfood.com/nl/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl/contact"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/contact"/>
   </url>
 

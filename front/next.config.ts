@@ -81,6 +81,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+
+  async redirects() {
+    return [
+      { source: "/", destination: "/fr", permanent: true },
+      { source: "/galerie", destination: "/fr/galerie", permanent: true },
+      { source: "/menu", destination: "/fr/menu", permanent: true },
+      { source: "/contact", destination: "/fr/contact", permanent: true },
+      { source: "/panier", destination: "/fr/panier", permanent: true },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

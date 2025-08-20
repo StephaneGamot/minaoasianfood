@@ -1,6 +1,5 @@
 "use client"
 
-// src/components/Gallery/Gallery.tsx
 import Image, { StaticImageData } from "next/image";
 import { useTranslations } from "next-intl";
 

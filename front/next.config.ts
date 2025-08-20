@@ -1,8 +1,5 @@
 // next.config.ts
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
-
-const withNextIntl = createNextIntlPlugin();
 
 const isProd = process.env.NODE_ENV === "production";
 const backendOrigin = process.env.NEXT_PUBLIC_BACKEND_ORIGIN || "http://localhost:8080";
@@ -67,7 +64,8 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
       {
-        source: "/Images/:path*",
+        // ⚠️ dossier 'public/images' => route '/images/...'
+        source: "/images/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
     ];
@@ -82,7 +80,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-
   async redirects() {
     return [
       { source: "/", destination: "/fr", permanent: true },
@@ -94,4 +91,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default nextConfig;

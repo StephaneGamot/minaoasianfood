@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Head from "next/head";
 
 import Gallery from "@/components/Gallery/Gallery";
 import img1 from "./../../../../public/images/menu/gyoza-scampi.webp";
@@ -25,17 +24,13 @@ import img20 from "./../../../../public/images/menu/nouilles-sautees-scampis.web
 import img21 from "./../../../../public/images/menu/riz-saute-mixte.webp";
 import img22 from "./../../../../public/images/menu/pad-thai-scampis.webp";
 
-
-
- 
-
-
 type Params = { locale: "fr" | "en" | "nl" };
 
-// ── Metadata localisé (même logique que /menu)
-export async function generateMetadata(
-  { params }: { params: Promise<Params> }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
   const { locale } = await params;
 
   const TITLES = {
@@ -68,12 +63,13 @@ export async function generateMetadata(
     alternates: {
       canonical: path,
       languages: {
-        fr: "/fr/galerie",
-        en: "/en/galerie",
-        nl: "/nl/galerie",
+        "fr-BE": "/fr/galerie",
+        "en-GB": "/en/galerie",
+        "nl-BE": "/nl/galerie",
         "x-default": "/fr/galerie",
       },
     },
+
     openGraph: {
       title: TITLES[locale],
       description: DESCR[locale],
@@ -111,9 +107,7 @@ export async function generateMetadata(
   };
 }
 
-
 export default function GalleryPage() {
-
   const images = [
     { src: img1, alt: "Salle du restaurant" },
     { src: img2, alt: "Tiramisu crémeux" },
@@ -139,14 +133,5 @@ export default function GalleryPage() {
     { src: img22, alt: "Bo bun" },
   ];
 
-  return (
-
-    <main aria-labelledby="gallery-heading" className="p-4">
-      <h1 className="text-3xl text-center font-bold text-gray-900 mb-4">
-        Galerie de Photos
-      </h1>
-      <Gallery images={images} />
-    </main>
-    
-  );
+  return <Gallery images={images} />;
 }

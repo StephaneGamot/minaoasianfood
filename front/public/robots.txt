@@ -26,6 +26,10 @@ Disallow: /fr/contact
 Disallow: /en/contact
 Disallow: /nl/contact
 
+Disallow: /fr/galerie
+Disallow: /en/galerie
+Disallow: /nl/galerie
+
 
 # Autorise l’exploration des pages importantes
 Allow: /fr/

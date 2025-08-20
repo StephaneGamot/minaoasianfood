@@ -12,15 +12,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr"/>
   </url>
 
-  <!-- Galerie -->
-  <url>
-    <loc>https://www.minaoasianfood.com/fr/galerie</loc>
-    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr/galerie"/>
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en/galerie"/>
-    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl/galerie"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/galerie"/>
-  </url>
-
   <!-- Menu -->
   <url>
     <loc>https://www.minaoasianfood.com/fr/menu</loc>

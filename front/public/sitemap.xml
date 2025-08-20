@@ -30,13 +30,4 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/menu"/>
   </url>
 
-  <!-- Contact -->
-  <url>
-    <loc>https://www.minaoasianfood.com/fr/contact</loc>
-    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://www.minaoasianfood.com/fr/contact"/>
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://www.minaoasianfood.com/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://www.minaoasianfood.com/nl/contact"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.minaoasianfood.com/fr/contact"/>
-  </url>
-
 </urlset>

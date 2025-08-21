@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import Pay from "../Paiement/pay";
 
 type DeliveryMode = "delivery" | "pickup";
 
@@ -31,53 +32,39 @@ export default function CheckoutClient() {
 
   const isDisabled = cart.length === 0 || loading;
 
- async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
   if (isDisabled) return;
   setLoading(true);
 
   try {
     const fd = new FormData(e.currentTarget);
-    const payload = {
-      locale,
-      mode,
-      items: cart.map((i) => ({
-        id: i.id,
-        name: i.name,
-        priceNumber: i.priceNumber,
-        quantity: i.quantity,
-        imageSrc: i.imageSrc,
-      })),
-      shipping:
-        mode === "delivery"
-          ? {
-              firstName: String(fd.get("firstName") || ""),
-              lastName: String(fd.get("lastName") || ""),
-              address: String(fd.get("address") || ""),
-              postalCode: String(fd.get("postalCode") || ""),
-              city: String(fd.get("city") || ""),
-              phone: String(fd.get("phone") || ""),
-              email: String(fd.get("email") || ""), 
-            }
-          : {},
-    };
 
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error("Checkout failed");
-    const { url } = await res.json();
+    const shipping =
+      mode === "delivery"
+        ? {
+            firstName: String(fd.get("firstName") ?? ""),
+            lastName: String(fd.get("lastName") ?? ""),
+            address: String(fd.get("address") ?? ""),
+            postalCode: String(fd.get("postalCode") ?? ""),
+            city: String(fd.get("city") ?? ""),
+            phone: String(fd.get("phone") ?? ""),
+            email: String(fd.get("email") ?? ""),
+          }
+        : {};
 
-    // 👉 Redirection immédiate vers Stripe
-    window.location.href = url;
+    // Stocke les infos nécessaires pour la page de paiement
+    sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
+
+    // Redirige vers la page de choix du paiement
+    router.push(`/${locale}/pay?mode=${mode}`);
   } catch (err) {
-    console.error(err);
+    console.error(err instanceof Error ? err : new Error("checkout submit failed"));
+    alert("Impossible de préparer le paiement pour le moment.");
     setLoading(false);
-    alert("Impossible de créer le paiement pour le moment.");
   }
 }
+
 
 
   return (
@@ -122,6 +109,8 @@ export default function CheckoutClient() {
               </div>
             </li>
           ))}
+
+         
 
           {/* Totaux */}
           <li className="p-4">

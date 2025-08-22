@@ -4,9 +4,9 @@ import { getOrder } from "@/lib/orderStore";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// ✅ note: second param DESCTRUCTURÉ ({ params }) + typé inline
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
-  const id = params.id;
+export async function GET(_req: Request, ctx: unknown) {
+  const { params } = ctx as { params: { id: string } };
+  const id = params?.id;
 
   if (!id || typeof id !== "string") {
     return NextResponse.json({ error: "bad id" }, { status: 400 });

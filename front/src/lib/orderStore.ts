@@ -52,9 +52,24 @@ function isValidUrl(u?: string | null): boolean {
   }
 }
 
-const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL?.trim();
-const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
-const HAS_UPSTASH = isValidUrl(UPSTASH_URL) && !!UPSTASH_TOKEN;
+function looksLikePlaceholder(s?: string | null): boolean {
+  if (!s) return true;
+  const v = s.trim().toLowerCase();
+  return v.includes("xxx") || v.includes("...") || v.includes("<") || v.includes("your_");
+}
+
+const rawUrl = process.env.UPSTASH_REDIS_REST_URL ?? "";
+const rawToken = process.env.UPSTASH_REDIS_REST_TOKEN ?? "";
+
+const UPSTASH_URL = rawUrl.trim() || undefined;
+const UPSTASH_TOKEN = rawToken.trim() || undefined;
+
+const HAS_UPSTASH =
+  !!UPSTASH_URL &&
+  !!UPSTASH_TOKEN &&
+  isValidUrl(UPSTASH_URL) &&
+  !looksLikePlaceholder(UPSTASH_URL) &&
+  !looksLikePlaceholder(UPSTASH_TOKEN);
 
 // Pipeline Upstash typé
 type UpstashPrimitive = string | number | boolean | null;
@@ -65,9 +80,10 @@ function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === "object" && x !== null;
 }
 
-// ❌ plus de any ici
+// Appel Upstash (typé, sans any)
 async function upstash<R = unknown>(pipeline: UpstashCmd[]): Promise<UpstashResult<R>[]> {
   if (!HAS_UPSTASH) throw new Error("Upstash not configured");
+
   const res = await fetch(UPSTASH_URL!, {
     method: "POST",
     headers: {
@@ -112,27 +128,43 @@ export function generateBankRef(orderId: string): string {
 // ---------- API ----------
 export async function saveOrder(order: Order): Promise<void> {
   if (HAS_UPSTASH) {
-    const key = PREFIX + order.id;
-    const val = JSON.stringify(order);
-    // "SET" -> "OK", "EXPIRE" -> 1
-    await upstash<string | number>([
-      ["SET", key, val],
-      ["EXPIRE", key, TTL_SECONDS],
-    ]);
-    return;
+    try {
+      const key = PREFIX + order.id;
+      const val = JSON.stringify(order);
+      // "SET" -> "OK", "EXPIRE" -> 1
+      await upstash<string | number>([
+        ["SET", key, val],
+        ["EXPIRE", key, TTL_SECONDS],
+      ]);
+      return;
+    } catch (e) {
+      console.warn(
+        "[orderStore] Upstash save failed, fallback to memory:",
+        (e as Error)?.message
+      );
+      // on retombe en mémoire
+    }
   }
   mem.set(order.id, order);
 }
 
 export async function getOrder(orderId: string): Promise<Order | null> {
   if (HAS_UPSTASH) {
-    const key = PREFIX + orderId;
-    const [getRes] = await upstash<string | null>([["GET", key]]);
-    if (!getRes || getRes.result == null) return null;
     try {
-      return JSON.parse(getRes.result) as Order;
-    } catch {
-      return null;
+      const key = PREFIX + orderId;
+      const [getRes] = await upstash<string | null>([["GET", key]]);
+      if (!getRes || getRes.result == null) return null;
+      try {
+        return JSON.parse(getRes.result) as Order;
+      } catch {
+        return null;
+      }
+    } catch (e) {
+      console.warn(
+        "[orderStore] Upstash get failed, fallback to memory:",
+        (e as Error)?.message
+      );
+      // fallback mémoire
     }
   }
   return mem.get(orderId) ?? null;

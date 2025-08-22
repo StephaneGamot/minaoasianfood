@@ -1,14 +1,13 @@
-// src/app/api/orders/[id]/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getOrder } from "@/lib/orderStore";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: NextRequest, context: { params: { id: string } }) {
-  const { id } = context.params;
+// ✅ note: second param DESCTRUCTURÉ ({ params }) + typé inline
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
+  const id = params.id;
 
-  // Sécurité minimale
   if (!id || typeof id !== "string") {
     return NextResponse.json({ error: "bad id" }, { status: 400 });
   }

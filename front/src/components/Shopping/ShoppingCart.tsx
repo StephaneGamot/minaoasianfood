@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
-import { useMemo } from "react";
-import { useCart } from "@/context/CartContext";
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+import { useMemo } from 'react';
+import { useCart } from '@/context/CartContext';
 
 export default function ShoppingCart() {
   const { cart, removeFromCart, loaded } = useCart();
@@ -14,29 +14,39 @@ export default function ShoppingCart() {
   const deliveryFee = 4.9;
   const isDisabled = !loaded || cart.length === 0;
 
+  // Signature du panier (id:qty) → sert aussi de clé pour éviter d'anciens sous-arbres mis en cache
+  const cartSignature = useMemo(
+    () => cart.map(i => `${i.id}:${i.quantity}`).sort().join('|'),
+    [cart]
+  );
+
   const subtotal = useMemo(
     () => cart.reduce((sum, item) => sum + item.priceNumber * item.quantity, 0),
     [cart]
   );
 
-  const total = useMemo(() => (cart.length ? subtotal + deliveryFee : 0), [subtotal, cart.length]);
+  const total = useMemo(
+    () => (cart.length ? subtotal + deliveryFee : 0),
+    [subtotal, cart.length]
+  );
 
   const EUR = useMemo(
-    () => new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }),
+    () => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }),
     [locale]
   );
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (!loaded || !cart.length) return;
-    // 👉 redirection vers la page de choix de paiement
     router.push(`/${locale}/pay`);
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white" key={cartSignature}>
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:px-0">
-        <h1 className="text-center text-3xl font-bold text-gray-900 sm:text-4xl">🛒 Panier</h1>
+        <h1 className="text-center text-3xl font-bold text-gray-900 sm:text-4xl">
+          🛒 Panier
+        </h1>
 
         {/* État de chargement */}
         {!loaded && (
@@ -60,6 +70,7 @@ export default function ShoppingCart() {
           </div>
         )}
 
+        {/* Liste + totaux */}
         <form className="mt-12" onSubmit={handleSubmit} aria-describedby="order-summary">
           <ul role="list" className="divide-y divide-gray-200 border-b border-t border-gray-200">
             {cart.map((item) => (
@@ -100,17 +111,14 @@ export default function ShoppingCart() {
               <span>Sous-total</span>
               <span>{EUR.format(subtotal)}</span>
             </div>
-
             <div className="flex justify-between text-base text-gray-700">
               <span>Frais de livraison</span>
               <span>{cart.length ? EUR.format(deliveryFee) : EUR.format(0)}</span>
             </div>
-
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Total</span>
               <span>{EUR.format(total)}</span>
             </div>
-
             <button
               type="submit"
               disabled={isDisabled}
@@ -124,4 +132,3 @@ export default function ShoppingCart() {
     </div>
   );
 }
-

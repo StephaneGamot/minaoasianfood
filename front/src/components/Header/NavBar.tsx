@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./../../../public/logos/logo.webp";
@@ -10,6 +10,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import CartBadge from './CartBadge';
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,7 +19,12 @@ export default function NavBar() {
   const router = useRouter();
   const { cart } = useCart();
   const { user, logout } = useAuth();
-  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Compteur panier (mobile)
+  const cartItemCount = useMemo(
+    () => cart.reduce((total, item) => total + item.quantity, 0),
+    [cart]
+  );
 
   const handleLogout = () => {
     logout();
@@ -35,10 +41,10 @@ export default function NavBar() {
   return (
     <header className="bg-red-900 shadow">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
-        {/* Logo */}
+        {/* Logo (garde le locale dans l'URL pour rester dans la langue courante) */}
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <Image alt="Minao Asian Food Logo" src={Logo} className="h-15 w-auto" priority />
+          <Link href={`/${locale}`} className="-m-1.5 p-1.5" aria-label="Accueil">
+            <Image alt="Minao Asian Food" src={Logo} width={130} height={32} priority />
           </Link>
         </div>
 
@@ -47,9 +53,9 @@ export default function NavBar() {
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-stone-100 hover:text-white"
+            aria-label="Ouvrir le menu"
           >
             <Bars3Icon className="h-6 w-6" />
-            <span className="sr-only">Ouvrir le menu</span>
           </button>
         </div>
 
@@ -66,23 +72,12 @@ export default function NavBar() {
           ))}
         </div>
 
-        {/* Cart + login/logout */}
+        {/* Cart + login/logout (desktop) */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
-          {/* Panier */}
-          <Link
-            href={`/${locale}/panier`}
-            className="relative text-stone-100 hover:text-white transition"
-             aria-label="Voir le panier"
-          >
-            <ShoppingCartIcon className="h-6 w-6" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white">
-                {cartItemCount}
-              </span>
-            )}
-          </Link>
+          {/* Panier - via composant dédié qui lit le CartContext */}
+          <CartBadge />
 
-          {/* Auth section */}
+          {/* Auth section (si tu veux l'activer) */}
           {/*
           {!user ? (
             <Link href={`/${locale}/login`} className="text-sm font-semibold text-stone-100 hover:text-white transition">
@@ -107,7 +102,8 @@ export default function NavBar() {
                 Déconnexion
               </button>
             </>
-          )}*/}
+          )}
+          */}
         </div>
       </nav>
 
@@ -116,15 +112,15 @@ export default function NavBar() {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-red-900 p-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <Image src={Logo} alt="Minao" className="h-15 w-auto" />
+            <Link href={`/${locale}`} className="-m-1.5 p-1.5" aria-label="Accueil">
+              <Image src={Logo} alt="Minao" width={120} height={30} />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="-m-2.5 rounded-md p-2.5 text-stone-100 hover:text-white"
+              aria-label="Fermer le menu"
             >
               <XMarkIcon className="h-6 w-6" />
-              <span className="sr-only">Fermer</span>
             </button>
           </div>
 
@@ -142,6 +138,7 @@ export default function NavBar() {
                   </Link>
                 ))}
               </div>
+
               <div className="py-6 space-y-2">
                 <Link
                   href={`/${locale}/panier`}
@@ -150,6 +147,7 @@ export default function NavBar() {
                 >
                   🛒 Panier ({cartItemCount})
                 </Link>
+
 {/*
                 {!user ? (
                   <Link

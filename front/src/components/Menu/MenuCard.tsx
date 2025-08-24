@@ -1,74 +1,77 @@
-"use client";
+'use client';
 
 import Image from "next/image";
 import { useState } from "react";
 import { tagStyles } from "./tagStyles";
 import Modal from "./Modal";
+import { useCart, type CartItem as CtxCartItem } from "@/context/CartContext";
 
 type Category = {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   href: string;
   imageSrc: string;
   imageAlt: string;
-  price?: string;
+  price?: string;       // ex: "6,90 €"
   tags?: string[];
   searchTag?: string[];
-};
-
-type CartItem = {
-  id: number;
-  name: string;
-  price?: string;
-  quantity: number;
-  imageSrc: string;
 };
 
 interface MenuCardProps {
   categories: Category[];
 }
 
+// convertit "6,90 €" → 6.9
+function parsePriceEUR(s?: string): number {
+  if (!s) return 0;
+  const n = Number(
+    s.replace(/\s/g, "")
+     .replace(",", ".")
+     .replace(/[^\d.]/g, "")
+  );
+  return Number.isFinite(n) ? n : 0;
+}
+
 export default function MenuCard({ categories }: MenuCardProps) {
   const [selected, setSelected] = useState<Category | null>(null);
   const [quantity, setQuantity] = useState(1);
 
-const handleAddToCart = () => {
-  if (!selected) return;
+  const { addToCart } = useCart();
 
-  const item = {
-    id: selected.id,
-    name: selected.name,
-    price: selected.price || "",
-    priceNumber: parseFloat(
-      (selected.price || "").replace(",", ".").replace(/[^\d.]/g, "")
-    ), // ✅ convertit "6,90 €" en 6.9
-    quantity: quantity,
-    imageSrc: selected.imageSrc,
+  const handleAddToCart = () => {
+    if (!selected) return;
+
+    const id = Number(selected.id);
+    const priceNumber = parsePriceEUR(selected.price);
+
+    // On passe par le CartContext → mise à jour instantanée + persistance
+    const item: CtxCartItem = {
+      id,
+      name: selected.name,
+      priceNumber,
+      price: selected.price ?? `${priceNumber.toFixed(2)} €`,
+      imageSrc: selected.imageSrc,
+      quantity: Math.max(1, Math.floor(quantity || 1)),
+    };
+
+    addToCart(item);
+
+    // reset modal
+    setSelected(null);
+    setQuantity(1);
   };
-
-  const existingCart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
-  const existingIndex = existingCart.findIndex((i) => i.id === item.id);
-
-  if (existingIndex !== -1) {
-    existingCart[existingIndex].quantity += quantity;
-  } else {
-    existingCart.push(item);
-  }
-
-  localStorage.setItem("cart", JSON.stringify(existingCart));
-  setSelected(null);
-  setQuantity(1);
-};
-
 
   return (
     <>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {categories.map((cat) => (
           <div
-            key={cat.id}
-            onClick={() => setSelected(cat)}
+            key={String(cat.id)}
+            onClick={() => {
+              setSelected(cat);
+              setQuantity(1);
+            }}
             className="group relative block cursor-pointer overflow-hidden rounded-xl border border-gray-100 shadow-sm transition hover:shadow-md bg-white"
           >
             <div className="aspect-[3/2] overflow-hidden relative">

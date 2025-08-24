@@ -14,7 +14,6 @@ export default function ShoppingCart() {
   const deliveryFee = 4.9;
   const isDisabled = !loaded || cart.length === 0;
 
-  // Signature du panier (id:qty) → sert aussi de clé pour éviter d'anciens sous-arbres mis en cache
   const cartSignature = useMemo(
     () => cart.map(i => `${i.id}:${i.quantity}`).sort().join('|'),
     [cart]
@@ -38,7 +37,7 @@ export default function ShoppingCart() {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (!loaded || !cart.length) return;
-    router.push(`/${locale}/pay`);
+    router.push(`/${locale}/checkout`);
   };
 
   return (

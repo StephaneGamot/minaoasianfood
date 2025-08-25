@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
     if (!session.url) return NextResponse.json({ error: "Stripe n’a pas retourné d’URL" }, { status: 500 });
     return NextResponse.json({ url: session.url }, { status: 200 });
-  } catch (e: unknown) { // ✅ pas de any
+  } catch (e: unknown) { 
     const message = e instanceof Error ? e.message : "Checkout error";
     console.error("Checkout error:", message);
     return NextResponse.json({ error: message }, { status: 500 });

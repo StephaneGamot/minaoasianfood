@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
-import Pay from "../Paiement/pay";
 
 type DeliveryMode = "delivery" | "pickup";
 
@@ -32,40 +31,49 @@ export default function CheckoutClient() {
 
   const isDisabled = cart.length === 0 || loading;
 
-async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  if (isDisabled) return;
-  setLoading(true);
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const form = e.currentTarget;
 
-  try {
-    const fd = new FormData(e.currentTarget);
+    // 🔒 Laisse la validation native s’exécuter si nécessaire
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      form.reportValidity();
+      return;
+    }
 
-    const shipping =
-      mode === "delivery"
-        ? {
-            firstName: String(fd.get("firstName") ?? ""),
-            lastName: String(fd.get("lastName") ?? ""),
-            address: String(fd.get("address") ?? ""),
-            postalCode: String(fd.get("postalCode") ?? ""),
-            city: String(fd.get("city") ?? ""),
-            phone: String(fd.get("phone") ?? ""),
-            email: String(fd.get("email") ?? ""),
-          }
-        : {};
+    e.preventDefault();
+    if (isDisabled) return;
+    setLoading(true);
 
-    // Stocke les infos nécessaires pour la page de paiement
-    sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
+    try {
+      const fd = new FormData(form);
 
-    // Redirige vers la page de choix du paiement
-    router.push(`/${locale}/pay?mode=${mode}`);
-  } catch (err) {
-    console.error(err instanceof Error ? err : new Error("checkout submit failed"));
-    alert("Impossible de préparer le paiement pour le moment.");
-    setLoading(false);
+      const shipping =
+        mode === "delivery"
+          ? {
+              firstName: String(fd.get("firstName") ?? ""),
+              lastName: String(fd.get("lastName") ?? ""),
+              address: String(fd.get("address") ?? ""),
+              postalCode: String(fd.get("postalCode") ?? ""),
+              city: String(fd.get("city") ?? ""),
+              phone: String(fd.get("phone") ?? ""),
+              // email optionnel — ajoute un champ si tu veux le rendre requis
+              email: String(fd.get("email") ?? ""),
+            }
+          : {};
+
+      // 👉 stock pour /pay
+      sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
+
+      // 👉 va à la page de choix du paiement
+      router.push(`/${locale}/pay?mode=${mode}`);
+    } catch (err) {
+      console.error(err);
+      alert("Impossible de préparer le paiement pour le moment.");
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
-
 
   return (
     <form className="mt-8" onSubmit={onSubmit} noValidate>
@@ -109,8 +117,6 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
               </div>
             </li>
           ))}
-
-         
 
           {/* Totaux */}
           <li className="p-4">
@@ -159,7 +165,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         </div>
       </fieldset>
 
-      {/* Coordonnées livraison (affichées si livraison) */}
+      {/* Coordonnées livraison (affichées & requises si livraison) */}
       {mode === "delivery" && (
         <section className="mt-8 rounded-lg border border-gray-200 p-4">
           <h2 className="text-sm font-semibold text-gray-900">Informations de livraison</h2>
@@ -171,7 +177,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 id="firstName"
                 name="firstName"
                 autoComplete="given-name"
-                required
+                required={mode === "delivery"}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -181,7 +187,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 id="lastName"
                 name="lastName"
                 autoComplete="family-name"
-                required
+                required={mode === "delivery"}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -191,7 +197,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 id="address"
                 name="address"
                 autoComplete="street-address"
-                required
+                required={mode === "delivery"}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -201,8 +207,9 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 id="postalCode"
                 name="postalCode"
                 autoComplete="postal-code"
-                required
+                required={mode === "delivery"}
                 inputMode="numeric"
+                pattern=".{3,10}" /* simple garde-fou */
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -212,7 +219,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 id="city"
                 name="city"
                 autoComplete="address-level2"
-                required
+                required={mode === "delivery"}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -223,7 +230,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 name="phone"
                 autoComplete="tel"
                 inputMode="tel"
-                required
+                required={mode === "delivery"}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
@@ -231,7 +238,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         </section>
       )}
 
-      {/* CTA paiement */}
+      {/* CTA */}
       <div className="mt-8">
         <button
           type="submit"

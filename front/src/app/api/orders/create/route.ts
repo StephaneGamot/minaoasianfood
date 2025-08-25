@@ -8,7 +8,7 @@ import {
   generateOrderId,
   generateBankRef,
 } from "@/lib/orderStore";
-import { notifyRestaurantNewOrder } from "@/lib/notify"; // attrape en try/catch si pas configuré
+import { notifyRestaurantNewOrder } from "@/lib/notify";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -55,14 +55,21 @@ export async function POST(req: Request) {
     });
 
     const subtotal = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
-    const deliveryFee = mode === "delivery" ? (typeof body.deliveryFee === "number" ? body.deliveryFee : 4.9) : 0;
+    const deliveryFee =
+      mode === "delivery"
+        ? typeof body.deliveryFee === "number"
+          ? body.deliveryFee
+          : 4.9
+        : 0;
     const total = Math.max(0, +(subtotal + deliveryFee).toFixed(2));
 
     // Méthode de paiement & statut initial
-    const reqMethod = body.method === "qr" ? "stripe" : (body.method ?? "stripe"); // "qr" est Stripe Checkout
+    const reqMethod: Order["paymentMethod"] =
+      body.method === "qr" ? "stripe" : (body.method ?? "stripe");
+
     let paymentStatus: Order["paymentStatus"] = "pending";
-    if (reqMethod === "cash") paymentStatus = "pending";
     if (reqMethod === "qr_bank") paymentStatus = "awaiting_bank";
+    // cash reste "pending" jusqu’à remise
 
     const orderId = generateOrderId();
     const bankRef = reqMethod === "qr_bank" ? generateBankRef(orderId) : undefined;
@@ -85,9 +92,11 @@ export async function POST(req: Request) {
     // Enregistre (Upstash si configuré, sinon mémoire)
     await saveOrder(order);
 
-    // Notifie le restaurant (Resend si configuré, sinon console.log dans notify)
+    // 🔔 Email immédiat uniquement si CASH ou VIREMENT
     try {
-      await notifyRestaurantNewOrder(order);
+      if (order.paymentMethod === "cash" || order.paymentMethod === "qr_bank") {
+        await notifyRestaurantNewOrder(order);
+      }
     } catch (e) {
       console.warn("[notifyRestaurantNewOrder] failed (non bloquant)", e);
     }

@@ -5,25 +5,19 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useCart } from "@/context/CartContext";
 
-import { loadStripe } from "@stripe/stripe-js";
-import type { StripeElementLocale } from "@stripe/stripe-js";
+import { loadStripe, type StripeElementLocale } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { QRCodeCanvas } from "qrcode.react";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+// --- Stripe side (client) ---
+const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim();
+const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null;
 
 type DeliveryMode = "delivery" | "pickup";
 type Method = "stripe" | "qr" | "qr_bank" | "cash";
 
 function toStripeElementLocale(loc: string): StripeElementLocale {
-  switch (loc) {
-    case "fr":
-    case "en":
-    case "nl":
-      return loc;
-    default:
-      return "auto";
-  }
+  return loc === "fr" || loc === "en" || loc === "nl" ? loc : "auto";
 }
 
 function cleanIban(iban: string) {
@@ -99,11 +93,15 @@ export default function PayPage() {
   const sp = useSearchParams();
 
   const [mode] = useState<DeliveryMode>((sp.get("mode") as DeliveryMode) || "delivery");
-  const [method, setMethod] = useState<Method>("stripe");
 
+  // ✅ par défaut : CASH (sinon la commande est créée en "stripe")
+  const [method, setMethod] = useState<Method>("cash");
+
+  // état commande
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderBankRef, setOrderBankRef] = useState<string | null>(null);
 
+  // état paiement
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [qrUrl, setQrUrl] = useState<string | null>(null);
 
@@ -114,25 +112,43 @@ export default function PayPage() {
   const deliveryFee = useMemo(() => (mode === "delivery" && cart.length ? 4.9 : 0), [mode, cart.length]);
   const total = useMemo(() => subtotal + deliveryFee, [subtotal, deliveryFee]);
 
-  // Redirection si panier vide (mais seulement après hydratation)
+  // Redirection si panier vide (après hydratation)
   useEffect(() => {
     if (!loaded) return;
     if (!cart.length) router.replace(`/${locale}/menu`);
   }, [loaded, cart.length, router, locale]);
 
-  // 1) créer la commande UNE fois (quand loaded + panier prêt + pas encore d’orderId)
+  // 🔄 si l’utilisateur change de méthode : on repart propre et on recrée une commande pour la bonne méthode
   useEffect(() => {
+    setOrderId(null);
+    setOrderBankRef(null);
+    setClientSecret(null);
+    setQrUrl(null);
+    setErrMsg(null);
+  }, [method]);
+
+  // 1) créer la commande UNE fois pour la méthode courante
+  useEffect(() => {
+    if (!loaded || !cart.length || orderId == null && method === "stripe" && !PUBLISHABLE_KEY) {
+      // si l'utilisateur a choisi "stripe" mais pas de clé client → on laissera un message plus bas
+    }
+
     if (!loaded || !cart.length || orderId) return;
 
     (async () => {
       setErrMsg(null);
+
+      // mappe la méthode UI vers la méthode ordre
+      const orderMethod: "stripe" | "cash" | "qr_bank" =
+        method === "qr_bank" ? "qr_bank" : method === "cash" ? "cash" : "stripe";
+
       const payload = {
         locale,
         mode,
         items: cart.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, priceNumber: i.priceNumber })),
         deliveryFee,
         shipping: JSON.parse(sessionStorage.getItem("checkoutShipping") || "{}"),
-        method: method === "qr_bank" ? "qr_bank" : method === "cash" ? "cash" : "stripe",
+        method: orderMethod,
       };
 
       const r = await fetch("/api/orders/create", {
@@ -143,9 +159,9 @@ export default function PayPage() {
       const d = await r.json();
       if (!r.ok) throw new Error(d?.error || "create order failed");
 
-      setOrderId(d.orderId as string);
-      sessionStorage.setItem("lastOrderId", d.orderId as string); // 👈 utile pour la page succès
-      if (d.bankRef) setOrderBankRef(d.bankRef as string);
+      setOrderId(String(d.orderId));
+      sessionStorage.setItem("lastOrderId", String(d.orderId));
+      if (d.bankRef) setOrderBankRef(String(d.bankRef));
     })().catch(err => {
       const m = err instanceof Error ? err.message : "create order failed";
       setErrMsg(m);
@@ -156,6 +172,11 @@ export default function PayPage() {
   useEffect(() => {
     if (!loaded || !cart.length || method !== "stripe" || !orderId) return;
 
+    if (!PUBLISHABLE_KEY || !stripePromise) {
+      setErrMsg("Le paiement par carte est temporairement indisponible.");
+      return;
+    }
+
     setLoading(true);
     setErrMsg(null);
     setClientSecret(null);
@@ -163,7 +184,7 @@ export default function PayPage() {
     const payload = {
       items: cart.map(i => ({ id: i.id, quantity: i.quantity, priceNumber: i.priceNumber, name: i.name })),
       mode,
-      orderId,
+      orderId, // lie l'intent à la commande (webhook)
       metadata: { source: "pay-page" },
     };
 
@@ -184,7 +205,7 @@ export default function PayPage() {
       .finally(() => setLoading(false));
   }, [loaded, method, cart, mode, orderId]);
 
-  // 3) Stripe Checkout (QR) — nécessite un orderId
+  // 3) Stripe Checkout (QR) — si tu veux le remettre
   const createQr = async () => {
     setLoading(true);
     setErrMsg(null);
@@ -241,33 +262,25 @@ export default function PayPage() {
 
       {/* Choix */}
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-4">
+        {/* Carte / Bancontact */}
         <button
           onClick={() => setMethod("stripe")}
           className={`rounded-lg border p-3 text-left ${method === "stripe" ? "border-red-700 ring-1 ring-red-700" : "border-gray-300"}`}
+          disabled={!PUBLISHABLE_KEY}
+          title={!PUBLISHABLE_KEY ? "Paiement par carte indisponible" : undefined}
         >
           <div className="font-medium">Carte / Bancontact</div>
-          <div className="text-xs text-gray-600">Visa, Mastercard, Bancontact, Apple Pay, Google Pay…</div>
+          <div className="text-xs text-gray-600">
+            Visa, Mastercard, Bancontact, Apple Pay, Google Pay…
+          </div>
+          {!PUBLISHABLE_KEY && (
+            <div className="mt-2 text-xs text-red-700">
+              Indisponible (clé Stripe manquante)
+            </div>
+          )}
         </button>
 
-        {/* Décommente si tu veux réactiver ces méthodes */}
-        {/*
-        <button
-          onClick={() => setMethod("qr")}
-          className={`rounded-lg border p-3 text-left ${method === "qr" ? "border-red-700 ring-1 ring-red-700" : "border-gray-300"}`}
-        >
-          <div className="font-medium">QR code (Checkout)</div>
-          <div className="text-xs text-gray-600">Scannez et payez via Stripe</div>
-        </button>
-
-        <button
-          onClick={() => setMethod("qr_bank")}
-          className={`rounded-lg border p-3 text-left ${method === "qr_bank" ? "border-red-700 ring-1 ring-red-700" : "border-gray-300"}`}
-        >
-          <div className="font-medium">Virement (QR bancaire)</div>
-          <div className="text-xs text-gray-600">SEPA / communication unique</div>
-        </button>
-        */}
-
+        {/* Cash */}
         <button
           onClick={() => setMethod("cash")}
           className={`rounded-lg border p-3 text-left ${method === "cash" ? "border-red-700 ring-1 ring-red-700" : "border-gray-300"}`}
@@ -287,7 +300,7 @@ export default function PayPage() {
       {/* Panneaux */}
       <div className="mt-8">
         {method === "stripe" && (
-          clientSecret ? (
+          clientSecret && stripePromise ? (
             <Elements
               stripe={stripePromise}
               options={{
@@ -300,11 +313,16 @@ export default function PayPage() {
             </Elements>
           ) : (
             <p className="text-sm text-gray-600">
-              {loading ? "Préparation du paiement…" : "Impossible de préparer le paiement."}
+              {loading
+                ? "Préparation du paiement…"
+                : !PUBLISHABLE_KEY
+                  ? "Paiement par carte indisponible."
+                  : "Impossible de préparer le paiement."}
             </p>
           )
         )}
 
+        {/* (optionnels) réactive si besoin
         {method === "qr" && (
           <div className="rounded-lg border p-4">
             {!qrUrl ? (
@@ -331,6 +349,7 @@ export default function PayPage() {
             orderRef={orderBankRef ?? (orderId ? orderId : `CMD-${Date.now()}`)}
           />
         )}
+        */}
 
         {method === "cash" && (
           <div className="rounded-lg border p-4">
@@ -363,7 +382,7 @@ function StripePayForm() {
     setErr(null);
 
     try {
-      const origin = window.location.origin;
+      const origin = window.location.origin; // URL absolue
       const oid = sessionStorage.getItem("lastOrderId") || "";
       const { error } = await stripe.confirmPayment({
         elements,

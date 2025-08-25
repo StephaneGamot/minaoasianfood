@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
-import RestaurantSelector, { type RestaurantKey } from "@/components/Checkout/RestaurantSelector";
+import { RESTAURANTS } from "@/lib/restaurants";
 
 type DeliveryMode = "delivery" | "pickup";
+type RestaurantId = keyof typeof RESTAURANTS;
 
 export default function CheckoutClient() {
   const { cart, removeFromCart } = useCart();
   const [mode, setMode] = useState<DeliveryMode>("delivery");
-  const [restaurant, setRestaurant] = useState<RestaurantKey | "">("");
+  const [restaurantId, setRestaurantId] = useState<RestaurantId | "">(() => {
+    const saved = sessionStorage.getItem("selectedRestaurant") as RestaurantId | null;
+    return saved && (saved in RESTAURANTS) ? saved : "";
+  });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const locale = useLocale();
@@ -31,12 +35,10 @@ export default function CheckoutClient() {
     [locale]
   );
 
-  const isDisabled = cart.length === 0 || loading || restaurant === "";
+  const isDisabled = cart.length === 0 || loading || !restaurantId;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     const form = e.currentTarget;
-
-    // Laisse la validation native s’exécuter (champs delivery + radio resto)
     if (!form.checkValidity()) {
       e.preventDefault();
       form.reportValidity();
@@ -59,15 +61,15 @@ export default function CheckoutClient() {
               postalCode: String(fd.get("postalCode") ?? ""),
               city: String(fd.get("city") ?? ""),
               phone: String(fd.get("phone") ?? ""),
-              email: String(fd.get("email") ?? ""), // optionnel
+              email: String(fd.get("email") ?? ""),
             }
           : {};
 
-      // ↪️ stocke pour /pay
+      // Sauvegarde pour /pay
       sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
-      sessionStorage.setItem("selectedRestaurant", restaurant as RestaurantKey);
+      sessionStorage.setItem("selectedRestaurant", restaurantId);
 
-      // ↪️ redirection vers la page de paiement
+      // Va à la page paiement
       router.push(`/${locale}/pay?mode=${mode}`);
     } catch (err) {
       console.error(err);
@@ -79,11 +81,31 @@ export default function CheckoutClient() {
 
   return (
     <form className="mt-8" onSubmit={onSubmit} noValidate>
-      {/* 0) Choix du restaurant (obligatoire) */}
-     
+      {/* Choix du restaurant (obligatoire) */}
+      <fieldset className="rounded-lg border border-gray-200 p-4">
+        <legend className="text-sm font-semibold text-gray-900">Choix du restaurant</legend>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {Object.values(RESTAURANTS).map(r => (
+            <label key={r.id} className="flex items-center gap-2 rounded-md border p-3">
+              <input
+                type="radio"
+                name="restaurantId"
+                value={r.id}
+                checked={restaurantId === r.id}
+                onChange={() => setRestaurantId(r.id)}
+                required
+              />
+              <span>{r.label}</span>
+            </label>
+          ))}
+        </div>
+        {!restaurantId && (
+          <p className="mt-2 text-xs text-red-700">Veuillez choisir un restaurant pour continuer.</p>
+        )}
+      </fieldset>
 
-      {/* 1) Résumé commande */}
-      <section aria-labelledby="order-heading" className="mt-6 rounded-lg border border-gray-200">
+      {/* Résumé commande */}
+      <section aria-labelledby="order-heading" className="mt-8 rounded-lg border border-gray-200">
         <h2 id="order-heading" className="sr-only">Résumé de la commande</h2>
 
         <ul role="list" className="divide-y divide-gray-200">
@@ -142,8 +164,8 @@ export default function CheckoutClient() {
           </li>
         </ul>
       </section>
- <RestaurantSelector value={restaurant} onChange={setRestaurant} />
-      {/* 2) Mode de réception */}
+
+      {/* Mode de réception */}
       <fieldset className="mt-8 rounded-lg border border-gray-200 p-4">
         <legend className="text-sm font-semibold text-gray-900">Mode de réception</legend>
         <div className="mt-3 space-y-3">
@@ -170,7 +192,7 @@ export default function CheckoutClient() {
         </div>
       </fieldset>
 
-      {/* 3) Coordonnées livraison (affichées & requises si livraison) */}
+      {/* Coordonnées livraison (requis si livraison) */}
       {mode === "delivery" && (
         <section className="mt-8 rounded-lg border border-gray-200 p-4">
           <h2 className="text-sm font-semibold text-gray-900">Informations de livraison</h2>
@@ -178,33 +200,33 @@ export default function CheckoutClient() {
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="firstName" className="block text-sm text-gray-700">Prénom</label>
-              <input id="firstName" name="firstName" autoComplete="given-name" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="firstName" name="firstName" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
             <div>
               <label htmlFor="lastName" className="block text-sm text-gray-700">Nom</label>
-              <input id="lastName" name="lastName" autoComplete="family-name" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="lastName" name="lastName" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="address" className="block text-sm text-gray-700">Adresse</label>
-              <input id="address" name="address" autoComplete="street-address" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="address" name="address" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
             <div>
               <label htmlFor="postalCode" className="block text-sm text-gray-700">Code postal</label>
-              <input id="postalCode" name="postalCode" autoComplete="postal-code" required inputMode="numeric" pattern=".{3,10}" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="postalCode" name="postalCode" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
             <div>
               <label htmlFor="city" className="block text-sm text-gray-700">Ville</label>
-              <input id="city" name="city" autoComplete="address-level2" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="city" name="city" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="phone" className="block text-sm text-gray-700">Téléphone</label>
-              <input id="phone" name="phone" autoComplete="tel" inputMode="tel" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+              <input id="phone" name="phone" required className="mt-1 block w-full rounded-md border px-3 py-2" />
             </div>
           </div>
         </section>
       )}
 
-      {/* 4) CTA */}
+      {/* CTA */}
       <div className="mt-8">
         <button
           type="submit"
@@ -213,10 +235,8 @@ export default function CheckoutClient() {
         >
           {loading ? "Redirection…" : "Procéder au paiement"}
         </button>
-        {cart.length === 0 && (
-          <p role="status" aria-live="polite" className="mt-2 text-center text-sm text-gray-500">
-            Votre panier est vide.
-          </p>
+        {!restaurantId && (
+          <p className="mt-2 text-center text-sm text-red-700">Choisissez d’abord un restaurant.</p>
         )}
       </div>
     </form>

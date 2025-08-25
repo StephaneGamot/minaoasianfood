@@ -8,12 +8,12 @@ import { useCart } from "@/context/CartContext";
 import { loadStripe, type StripeElementLocale } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-// --- Stripe (client) ---
 const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim();
 const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null;
 
 type DeliveryMode = "delivery" | "pickup";
 type Method = "stripe" | "cash";
+type RestaurantId = "resto_a" | "resto_b";
 
 function toStripeElementLocale(loc: string): StripeElementLocale {
   return loc === "fr" || loc === "en" || loc === "nl" ? loc : "auto";
@@ -26,36 +26,31 @@ export default function PayPage() {
   const locale = useLocale();
 
   const [mode] = useState<DeliveryMode>((sp.get("mode") as DeliveryMode) || "delivery");
-  const [method, setMethod] = useState<Method | null>(null); // on démarre sans méthode sélectionnée
+  const [method, setMethod] = useState<Method | null>(null);
 
-  // État commande / paiement
   const [orderId, setOrderId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<string | null>(null);
 
-  // Rediriger si panier vide (après hydratation)
+  // Redirection si panier vide
   useEffect(() => {
     if (!loaded) return;
     if (!cart.length) router.replace(`/${locale}/menu`);
   }, [loaded, cart.length, router, locale]);
 
-  const deliveryFee = useMemo(
-    () => (mode === "delivery" && cart.length ? 4.9 : 0),
-    [mode, cart.length]
-  );
-  const subtotal = useMemo(
-    () => cart.reduce((s, i) => s + i.priceNumber * i.quantity, 0),
-    [cart]
-  );
-  const total = useMemo(() => subtotal + deliveryFee, [subtotal, deliveryFee]);
-  const EUR = useMemo(
-    () => new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }),
-    [locale]
-  );
+  // Récupère le restaurant choisi sur /checkout
+  const restaurantId = ((): RestaurantId => {
+    const v = sessionStorage.getItem("selectedRestaurant") as RestaurantId | null;
+    return v === "resto_a" || v === "resto_b" ? v : "resto_a";
+  })();
 
-  // Choisir une méthode => crée la commande (et prépare Stripe si besoin)
+  const deliveryFee = useMemo(() => (mode === "delivery" && cart.length ? 4.9 : 0), [mode, cart.length]);
+  const subtotal = useMemo(() => cart.reduce((s, i) => s + i.priceNumber * i.quantity, 0), [cart]);
+  const total = useMemo(() => subtotal + deliveryFee, [subtotal, deliveryFee]);
+  const EUR = useMemo(() => new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }), [locale]);
+
   const chooseMethod = async (m: Method) => {
     setMethod(m);
     setOrderId(null);
@@ -64,19 +59,13 @@ export default function PayPage() {
 
     try {
       setLoading(true);
-
       const shipping = JSON.parse(sessionStorage.getItem("checkoutShipping") || "{}");
 
-      // Crée la commande avec la bonne méthode
       const payload = {
         locale,
         mode,
-        items: cart.map((i) => ({
-          id: i.id,
-          name: i.name,
-          quantity: i.quantity,
-          priceNumber: i.priceNumber,
-        })),
+        restaurantId, // 👈 on envoie le resto
+        items: cart.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, priceNumber: i.priceNumber })),
         deliveryFee,
         shipping,
         method: m, // "cash" ou "stripe"
@@ -93,7 +82,6 @@ export default function PayPage() {
       setOrderId(String(d.orderId));
       sessionStorage.setItem("lastOrderId", String(d.orderId));
 
-      // Si Stripe → préparer le PaymentIntent
       if (m === "stripe") {
         if (!PUBLISHABLE_KEY || !stripePromise) {
           throw new Error("Le paiement par carte est indisponible (clé publique manquante).");
@@ -114,7 +102,6 @@ export default function PayPage() {
       }
     } catch (e) {
       setErrMsg(e instanceof Error ? e.message : "Action impossible.");
-      // en cas d’erreur, on remet la méthode à null
       setMethod(null);
     } finally {
       setLoading(false);
@@ -125,7 +112,6 @@ export default function PayPage() {
     <main className="mx-auto max-w-2xl px-4 py-10">
       <h1 className="text-3xl font-bold">Choisissez votre moyen de paiement</h1>
 
-      {/* Récap */}
       <div className="mt-6 rounded-lg border p-4">
         <div className="flex justify-between text-sm">
           <span>Sous-total</span>
@@ -141,7 +127,6 @@ export default function PayPage() {
         </div>
       </div>
 
-      {/* Choix de méthode */}
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <button
           onClick={() => chooseMethod("stripe")}
@@ -150,12 +135,7 @@ export default function PayPage() {
           title={!PUBLISHABLE_KEY ? "Paiement par carte indisponible (clé Stripe manquante)" : undefined}
         >
           <div className="font-medium">Carte / Bancontact</div>
-          <div className="text-xs text-gray-600">
-            Visa, Mastercard, Bancontact, Apple Pay, Google Pay…
-          </div>
-          {!PUBLISHABLE_KEY && (
-            <div className="mt-2 text-xs text-red-700">Indisponible (configuration Stripe)</div>
-          )}
+          <div className="text-xs text-gray-600">Visa, Mastercard, Bancontact, Apple Pay, Google Pay…</div>
         </button>
 
         <button
@@ -168,25 +148,16 @@ export default function PayPage() {
         </button>
       </div>
 
-      {/* Erreurs lisibles */}
       {errMsg && (
-        <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800">
-          {errMsg}
-        </div>
+        <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800">{errMsg}</div>
       )}
 
-      {/* Panneaux selon méthode */}
       <div className="mt-8">
-        {/* STRIPE */}
         {method === "stripe" && (
           clientSecret && stripePromise ? (
             <Elements
               stripe={stripePromise}
-              options={{
-                clientSecret,
-                locale: toStripeElementLocale(locale),
-                appearance: { labels: "floating" },
-              }}
+              options={{ clientSecret, locale: toStripeElementLocale(locale), appearance: { labels: "floating" } }}
             >
               <StripePayForm />
             </Elements>
@@ -197,15 +168,14 @@ export default function PayPage() {
           )
         )}
 
-        {/* CASH */}
         {method === "cash" && orderId && (
           <div className="rounded-lg border p-4">
             <p className="text-sm text-gray-700">
-              Votre commande <strong>{orderId}</strong> est enregistrée et sera <strong>payée en espèces</strong> au retrait / à la livraison.
+              Votre commande <strong>{orderId}</strong> est enregistrée pour le restaurant sélectionné. Vous paierez en espèces au retrait / à la livraison.
             </p>
             <button
               onClick={() => {
-                clearCart(); // vide le panier côté client
+                clearCart();
                 router.push(`/${locale}/checkout/success?cash=1&oid=${encodeURIComponent(orderId)}`);
               }}
               className="mt-4 rounded-md bg-red-900 px-4 py-2 text-white hover:bg-red-800"
@@ -259,9 +229,8 @@ function StripePayForm() {
         {submitting ? "Traitement…" : "Payer maintenant"}
       </button>
       {err && <p className="mt-2 text-sm text-red-700">{err}</p>}
-      <p className="mt-2 text-xs text-gray-600">
-        Apple Pay / Google Pay apparaissent automatiquement si disponibles.
-      </p>
+      <p className="mt-2 text-xs text-gray-600">Apple Pay / Google Pay apparaissent automatiquement si disponibles.</p>
     </div>
   );
 }
+

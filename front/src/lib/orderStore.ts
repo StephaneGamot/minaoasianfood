@@ -31,7 +31,8 @@ export type Order = {
   total: number; // euros
   shipping?: Shipping;
   items: OrderItem[];
-  bankRef?: string; // communication pour virement
+  bankRef?: string;
+  restaurantId: "resto_a" | "resto_b";
 };
 
 // ---------- Constantes ----------

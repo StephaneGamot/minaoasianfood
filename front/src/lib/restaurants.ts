@@ -12,7 +12,7 @@ export type RestaurantConfig = {
 export const RESTAURANTS: Record<RestaurantId, RestaurantConfig> = {
   resto_a: {
     id: "resto_a",
-    label: process.env.RESTAURANT_A_LABEL ?? "Restaurant A",
+    label: process.env.RESTAURANT_A_LABEL ?? "Minao Bruxelles",
     email:
       process.env.RESTAURANT_A_EMAIL ??
       process.env.RESTAURANT_EMAIL ??           // fallback global
@@ -23,7 +23,7 @@ export const RESTAURANTS: Record<RestaurantId, RestaurantConfig> = {
   },
   resto_b: {
     id: "resto_b",
-    label: process.env.RESTAURANT_B_LABEL ?? "Restaurant B",
+    label: process.env.RESTAURANT_B_LABEL ?? "Minao Dilbeek",
     email:
       process.env.RESTAURANT_B_EMAIL ??
       process.env.RESTAURANT_EMAIL ??           // fallback global

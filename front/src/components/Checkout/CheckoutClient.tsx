@@ -81,28 +81,7 @@ export default function CheckoutClient() {
 
   return (
     <form className="mt-8" onSubmit={onSubmit} noValidate>
-      {/* Choix du restaurant (obligatoire) */}
-      <fieldset className="rounded-lg border border-gray-200 p-4">
-        <legend className="text-sm font-semibold text-gray-900">Choix du restaurant</legend>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {Object.values(RESTAURANTS).map(r => (
-            <label key={r.id} className="flex items-center gap-2 rounded-md border p-3">
-              <input
-                type="radio"
-                name="restaurantId"
-                value={r.id}
-                checked={restaurantId === r.id}
-                onChange={() => setRestaurantId(r.id)}
-                required
-              />
-              <span>{r.label}</span>
-            </label>
-          ))}
-        </div>
-        {!restaurantId && (
-          <p className="mt-2 text-xs text-red-700">Veuillez choisir un restaurant pour continuer.</p>
-        )}
-      </fieldset>
+ 
 
       {/* Résumé commande */}
       <section aria-labelledby="order-heading" className="mt-8 rounded-lg border border-gray-200">
@@ -164,6 +143,30 @@ export default function CheckoutClient() {
           </li>
         </ul>
       </section>
+
+     {/* Choix du restaurant (obligatoire) */}
+      <fieldset className="rounded-lg border border-gray-200 mt-5 p-4">
+        <legend className="text-sm font-semibold text-gray-900">Choix du restaurant</legend>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {Object.values(RESTAURANTS).map(r => (
+            <label key={r.id} className="flex items-center gap-2 rounded-md border p-3">
+              <input
+                type="radio"
+                name="restaurantId"
+                value={r.id}
+                checked={restaurantId === r.id}
+                onChange={() => setRestaurantId(r.id)}
+                required
+              />
+              <span>{r.label}</span>
+            </label>
+          ))}
+        </div>
+        {!restaurantId && (
+          <p className="mt-2 text-xs text-red-700">Veuillez choisir un restaurant pour continuer.</p>
+        )}
+      </fieldset>
+
 
       {/* Mode de réception */}
       <fieldset className="mt-8 rounded-lg border border-gray-200 p-4">

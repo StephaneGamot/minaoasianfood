@@ -37,8 +37,6 @@ export async function generateMetadata(
 export default function CheckoutPage() {
   return (
     <main id="main" role="main" className="bg-white">
-      {/* Client component qui gère le panier + formulaire */}
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
       <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-0">
         <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">Paiement</h1>
         <p className="mt-2 text-gray-600">

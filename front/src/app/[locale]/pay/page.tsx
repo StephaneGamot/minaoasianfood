@@ -26,7 +26,7 @@ export default function PayPage() {
   const locale = useLocale();
 
   const [mode] = useState<DeliveryMode>((sp.get("mode") as DeliveryMode) || "delivery");
-  const [method, setMethod] = useState<Method | null>(null); // 🚦 on démarre sans méthode
+  const [method, setMethod] = useState<Method | null>(null); // on démarre sans méthode sélectionnée
 
   // État commande / paiement
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -55,7 +55,7 @@ export default function PayPage() {
     [locale]
   );
 
-  // 👉 Choisir la méthode crée la commande (et prépare Stripe si besoin)
+  // Choisir une méthode => crée la commande (et prépare Stripe si besoin)
   const chooseMethod = async (m: Method) => {
     setMethod(m);
     setOrderId(null);
@@ -114,7 +114,7 @@ export default function PayPage() {
       }
     } catch (e) {
       setErrMsg(e instanceof Error ? e.message : "Action impossible.");
-      // en cas d’erreur, on remet la méthode à null pour éviter un état bancal
+      // en cas d’erreur, on remet la méthode à null
       setMethod(null);
     } finally {
       setLoading(false);

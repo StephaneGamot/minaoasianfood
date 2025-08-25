@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
     let paymentStatus: Order["paymentStatus"] = "pending";
     if (reqMethod === "qr_bank") paymentStatus = "awaiting_bank";
-    // cash reste "pending" jusqu’à remise
+    // cash reste “pending” (réglé à la remise)
 
     const orderId = generateOrderId();
     const bankRef = reqMethod === "qr_bank" ? generateBankRef(orderId) : undefined;

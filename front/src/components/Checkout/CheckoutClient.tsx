@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import RestaurantSelector, { type RestaurantKey } from "@/components/Checkout/RestaurantSelector";
 
 type DeliveryMode = "delivery" | "pickup";
 
 export default function CheckoutClient() {
   const { cart, removeFromCart } = useCart();
   const [mode, setMode] = useState<DeliveryMode>("delivery");
+  const [restaurant, setRestaurant] = useState<RestaurantKey | "">("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const locale = useLocale();
@@ -29,12 +31,12 @@ export default function CheckoutClient() {
     [locale]
   );
 
-  const isDisabled = cart.length === 0 || loading;
+  const isDisabled = cart.length === 0 || loading || restaurant === "";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     const form = e.currentTarget;
 
-    // 🔒 Laisse la validation native s’exécuter si nécessaire
+    // Laisse la validation native s’exécuter (champs delivery + radio resto)
     if (!form.checkValidity()) {
       e.preventDefault();
       form.reportValidity();
@@ -57,15 +59,15 @@ export default function CheckoutClient() {
               postalCode: String(fd.get("postalCode") ?? ""),
               city: String(fd.get("city") ?? ""),
               phone: String(fd.get("phone") ?? ""),
-              // email optionnel — ajoute un champ si tu veux le rendre requis
-              email: String(fd.get("email") ?? ""),
+              email: String(fd.get("email") ?? ""), // optionnel
             }
           : {};
 
-      // 👉 stock pour /pay
+      // ↪️ stocke pour /pay
       sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
+      sessionStorage.setItem("selectedRestaurant", restaurant as RestaurantKey);
 
-      // 👉 va à la page de choix du paiement
+      // ↪️ redirection vers la page de paiement
       router.push(`/${locale}/pay?mode=${mode}`);
     } catch (err) {
       console.error(err);
@@ -77,8 +79,11 @@ export default function CheckoutClient() {
 
   return (
     <form className="mt-8" onSubmit={onSubmit} noValidate>
-      {/* Résumé commande */}
-      <section aria-labelledby="order-heading" className="rounded-lg border border-gray-200">
+      {/* 0) Choix du restaurant (obligatoire) */}
+     
+
+      {/* 1) Résumé commande */}
+      <section aria-labelledby="order-heading" className="mt-6 rounded-lg border border-gray-200">
         <h2 id="order-heading" className="sr-only">Résumé de la commande</h2>
 
         <ul role="list" className="divide-y divide-gray-200">
@@ -137,8 +142,8 @@ export default function CheckoutClient() {
           </li>
         </ul>
       </section>
-
-      {/* Mode de réception */}
+ <RestaurantSelector value={restaurant} onChange={setRestaurant} />
+      {/* 2) Mode de réception */}
       <fieldset className="mt-8 rounded-lg border border-gray-200 p-4">
         <legend className="text-sm font-semibold text-gray-900">Mode de réception</legend>
         <div className="mt-3 space-y-3">
@@ -165,7 +170,7 @@ export default function CheckoutClient() {
         </div>
       </fieldset>
 
-      {/* Coordonnées livraison (affichées & requises si livraison) */}
+      {/* 3) Coordonnées livraison (affichées & requises si livraison) */}
       {mode === "delivery" && (
         <section className="mt-8 rounded-lg border border-gray-200 p-4">
           <h2 className="text-sm font-semibold text-gray-900">Informations de livraison</h2>
@@ -173,72 +178,33 @@ export default function CheckoutClient() {
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="firstName" className="block text-sm text-gray-700">Prénom</label>
-              <input
-                id="firstName"
-                name="firstName"
-                autoComplete="given-name"
-                required={mode === "delivery"}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="firstName" name="firstName" autoComplete="given-name" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
             <div>
               <label htmlFor="lastName" className="block text-sm text-gray-700">Nom</label>
-              <input
-                id="lastName"
-                name="lastName"
-                autoComplete="family-name"
-                required={mode === "delivery"}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="lastName" name="lastName" autoComplete="family-name" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="address" className="block text-sm text-gray-700">Adresse</label>
-              <input
-                id="address"
-                name="address"
-                autoComplete="street-address"
-                required={mode === "delivery"}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="address" name="address" autoComplete="street-address" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
             <div>
               <label htmlFor="postalCode" className="block text-sm text-gray-700">Code postal</label>
-              <input
-                id="postalCode"
-                name="postalCode"
-                autoComplete="postal-code"
-                required={mode === "delivery"}
-                inputMode="numeric"
-                pattern=".{3,10}" /* simple garde-fou */
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="postalCode" name="postalCode" autoComplete="postal-code" required inputMode="numeric" pattern=".{3,10}" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
             <div>
               <label htmlFor="city" className="block text-sm text-gray-700">Ville</label>
-              <input
-                id="city"
-                name="city"
-                autoComplete="address-level2"
-                required={mode === "delivery"}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="city" name="city" autoComplete="address-level2" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="phone" className="block text-sm text-gray-700">Téléphone</label>
-              <input
-                id="phone"
-                name="phone"
-                autoComplete="tel"
-                inputMode="tel"
-                required={mode === "delivery"}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
+              <input id="phone" name="phone" autoComplete="tel" inputMode="tel" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
             </div>
           </div>
         </section>
       )}
 
-      {/* CTA */}
+      {/* 4) CTA */}
       <div className="mt-8">
         <button
           type="submit"

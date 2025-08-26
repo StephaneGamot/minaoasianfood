@@ -1,11 +1,11 @@
 import type { Order } from "./orderStore";
-import { resolveRestaurant } from "./restaurants";
+import { getRestaurantConfig, getFallbackRestaurantEmail, getEmailFrom } from "./restaurants";
 
 function summarize(order: Order) {
   return [
     `Commande: ${order.id}`,
     `Date: ${new Date(order.createdAt).toLocaleString("fr-BE")}`,
-    `Restaurant: ${resolveRestaurant(order.restaurantId).label}`,
+    `Restaurant: ${order.restaurantId ?? "-"}`,
     `Mode: ${order.mode}`,
     `Paiement: ${order.paymentMethod} / ${order.paymentStatus}`,
     `Sous-total: ${order.subtotal.toFixed(2)} €`,
@@ -21,43 +21,53 @@ function summarize(order: Order) {
   ].join("\n");
 }
 
-function getToEmail(order: Order) {
-  const cfg = resolveRestaurant(order.restaurantId);
-  const fallback = process.env.RESTAURANT_EMAIL;
-  return cfg.email || fallback || "";
+function resolveToEmail(restaurantId?: string): string | null {
+  const cfg = getRestaurantConfig(restaurantId);
+  return cfg.email || getFallbackRestaurantEmail();
 }
 
 export async function notifyRestaurantNewOrder(order: Order) {
-  const to = getToEmail(order);
-  if (!to || !process.env.RESEND_API_KEY) {
-    console.log("[EMAIL->RESTAURANT] (dev)", to, summarize(order));
+  const to = resolveToEmail(order.restaurantId);
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const subject =
+    order.paymentStatus === "paid" && order.paymentMethod === "stripe"
+      ? `✅ Paiement confirmé – ${order.id}`
+      : `🆕 Nouvelle commande ${order.id} – ${order.paymentMethod} – ${order.total.toFixed(2)} €`;
+
+  const text = summarize(order);
+
+  if (!to || !apiKey) {
+    console.log("[EMAIL->RESTAURANT FAKE SEND]", { to, subject, text });
     return;
   }
+
   const { Resend } = await import("resend");
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(apiKey);
   await resend.emails.send({
-    from: "Minao <noreply@minaoasianfood.com>",
+    from: getEmailFrom(),
     to,
-    subject: `Nouvelle commande ${order.id} – ${order.paymentMethod} – ${order.total.toFixed(2)} € – ${resolveRestaurant(order.restaurantId).label}`,
-    text: summarize(order),
+    subject,
+    text,
   });
 }
 
-export async function notifyRestaurantPaymentUpdate(orderId: string, status: string, restaurantId?: Order["restaurantId"]) {
-  const to =
-    (restaurantId ? resolveRestaurant(restaurantId).email : "") ||
-    process.env.RESTAURANT_EMAIL ||
-    "";
-  if (!to || !process.env.RESEND_API_KEY) {
-    console.log("[EMAIL->RESTAURANT] Payment update", to, orderId, status);
+export async function notifyRestaurantPaymentUpdate(orderId: string, status: string, restaurantId?: string) {
+  const to = resolveToEmail(restaurantId);
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const subject = `Paiement ${status} – ${orderId}`;
+  const text = `Le paiement de la commande ${orderId} est maintenant : ${status}`;
+
+  if (!to || !apiKey) {
+    console.log("[EMAIL->RESTAURANT Payment update FAKE SEND]", { to, subject, text });
     return;
   }
+
   const { Resend } = await import("resend");
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(apiKey);
   await resend.emails.send({
-    from: "Minao <noreply@minaoasianfood.com>",
+    from: getEmailFrom(),
     to,
-    subject: `Paiement ${status} – ${orderId}`,
-    text: `Le paiement de la commande ${orderId} est maintenant : ${status}`,
+    subject,
+    text,
   });
 }

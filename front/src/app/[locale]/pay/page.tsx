@@ -1,9 +1,11 @@
+// src/app/[locale]/pay/page.tsx (ou ton chemin équivalent)
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useCart } from "@/context/CartContext";
+import { isRestaurantId, type RestaurantId } from "@/lib/restaurants";
 
 import { loadStripe, type StripeElementLocale } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -13,7 +15,7 @@ const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null;
 
 type DeliveryMode = "delivery" | "pickup";
 type Method = "stripe" | "cash";
-type RestaurantId = "resto_a" | "resto_b";
+const SESSION_RESTO_KEY = "checkoutRestaurantId";
 
 function toStripeElementLocale(loc: string): StripeElementLocale {
   return loc === "fr" || loc === "en" || loc === "nl" ? loc : "auto";
@@ -27,6 +29,7 @@ export default function PayPage() {
 
   const [mode] = useState<DeliveryMode>((sp.get("mode") as DeliveryMode) || "delivery");
   const [method, setMethod] = useState<Method | null>(null);
+  const [restaurantId, setRestaurantId] = useState<RestaurantId>("resto_a");
 
   const [orderId, setOrderId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -40,11 +43,11 @@ export default function PayPage() {
     if (!cart.length) router.replace(`/${locale}/menu`);
   }, [loaded, cart.length, router, locale]);
 
-  // Récupère le restaurant choisi sur /checkout
-  const restaurantId = ((): RestaurantId => {
-    const v = sessionStorage.getItem("selectedRestaurant") as RestaurantId | null;
-    return v === "resto_a" || v === "resto_b" ? v : "resto_a";
-  })();
+  // Relit le resto choisi
+  useEffect(() => {
+    const v = sessionStorage.getItem(SESSION_RESTO_KEY);
+    if (isRestaurantId(v)) setRestaurantId(v);
+  }, []);
 
   const deliveryFee = useMemo(() => (mode === "delivery" && cart.length ? 4.9 : 0), [mode, cart.length]);
   const subtotal = useMemo(() => cart.reduce((s, i) => s + i.priceNumber * i.quantity, 0), [cart]);
@@ -64,7 +67,7 @@ export default function PayPage() {
       const payload = {
         locale,
         mode,
-        restaurantId, // 👈 on envoie le resto
+        restaurantId, // 👈 important
         items: cart.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, priceNumber: i.priceNumber })),
         deliveryFee,
         shipping,
@@ -233,4 +236,3 @@ function StripePayForm() {
     </div>
   );
 }
-

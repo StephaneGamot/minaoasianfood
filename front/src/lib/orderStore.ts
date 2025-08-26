@@ -32,7 +32,7 @@ export type Order = {
   shipping?: Shipping;
   items: OrderItem[];
   bankRef?: string;
-  restaurantId: "resto_a" | "resto_b";
+  restaurantId: "resto_a" | "resto_b"; 
 };
 
 // ---------- Constantes ----------

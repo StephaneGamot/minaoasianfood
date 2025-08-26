@@ -1,3 +1,4 @@
+// src/components/Checkout/CheckoutClient.tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -5,17 +6,17 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
-import { RESTAURANTS } from "@/lib/restaurants";
+import { RESTAURANTS, type RestaurantId, type RestaurantConfig } from "@/lib/restaurants";
 
 type DeliveryMode = "delivery" | "pickup";
-type RestaurantId = keyof typeof RESTAURANTS;
+const SESSION_RESTO_KEY = "checkoutRestaurantId";
 
 export default function CheckoutClient() {
   const { cart, removeFromCart } = useCart();
   const [mode, setMode] = useState<DeliveryMode>("delivery");
   const [restaurantId, setRestaurantId] = useState<RestaurantId | "">(() => {
-    const saved = sessionStorage.getItem("selectedRestaurant") as RestaurantId | null;
-    return saved && (saved in RESTAURANTS) ? saved : "";
+    const saved = sessionStorage.getItem(SESSION_RESTO_KEY) as RestaurantId | null;
+    return saved === "resto_a" || saved === "resto_b" ? saved : "";
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function CheckoutClient() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     const form = e.currentTarget;
+
     if (!form.checkValidity()) {
       e.preventDefault();
       form.reportValidity();
@@ -65,11 +67,9 @@ export default function CheckoutClient() {
             }
           : {};
 
-      // Sauvegarde pour /pay
       sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
-      sessionStorage.setItem("selectedRestaurant", restaurantId);
+      sessionStorage.setItem(SESSION_RESTO_KEY, restaurantId as RestaurantId);
 
-      // Va à la page paiement
       router.push(`/${locale}/pay?mode=${mode}`);
     } catch (err) {
       console.error(err);
@@ -81,10 +81,8 @@ export default function CheckoutClient() {
 
   return (
     <form className="mt-8" onSubmit={onSubmit} noValidate>
- 
-
       {/* Résumé commande */}
-      <section aria-labelledby="order-heading" className="mt-8 rounded-lg border border-gray-200">
+      <section aria-labelledby="order-heading" className="rounded-lg border border-gray-200">
         <h2 id="order-heading" className="sr-only">Résumé de la commande</h2>
 
         <ul role="list" className="divide-y divide-gray-200">
@@ -144,11 +142,11 @@ export default function CheckoutClient() {
         </ul>
       </section>
 
-     {/* Choix du restaurant (obligatoire) */}
+      {/* Choix du restaurant (obligatoire) */}
       <fieldset className="rounded-lg border border-gray-200 mt-5 p-4">
         <legend className="text-sm font-semibold text-gray-900">Choix du restaurant</legend>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {Object.values(RESTAURANTS).map(r => (
+          {(Object.values(RESTAURANTS) as RestaurantConfig[]).map((r) => (
             <label key={r.id} className="flex items-center gap-2 rounded-md border p-3">
               <input
                 type="radio"
@@ -166,7 +164,6 @@ export default function CheckoutClient() {
           <p className="mt-2 text-xs text-red-700">Veuillez choisir un restaurant pour continuer.</p>
         )}
       </fieldset>
-
 
       {/* Mode de réception */}
       <fieldset className="mt-8 rounded-lg border border-gray-200 p-4">

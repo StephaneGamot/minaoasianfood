@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[next]/internal/font/google/open_sans_2f079e3f.module.css"],"sourcesContent":["@font-face {\n    font-family: 'Open Sans Fallback';\n    src: local(\"Arial\");\n    ascent-override: 101.65%;\ndescent-override: 27.86%;\nline-gap-override: 0.00%;\nsize-adjust: 105.15%;\n\n}\n.className {\n    font-family: 'Open Sans', 'Open Sans Fallback';\n    font-style: normal;\n\n}\n.variable {\n    --font-body: 'Open Sans', 'Open Sans Fallback';\n}\n"],"names":[],"mappings":"AAAA;;;;;;;;;AASA;;;;;AAKA","ignoreList":[0]}}]
-}

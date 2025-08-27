@@ -1,3 +1,4 @@
+// src/app/api/orders/create/route.ts
 import { NextResponse } from "next/server";
 import {
   type Order,
@@ -7,7 +8,11 @@ import {
   generateOrderId,
   generateBankRef,
 } from "@/lib/orderStore";
-import { getRestaurantConfig } from "@/lib/restaurants"; 
+import {
+  getRestaurantConfig,
+  isRestaurantId,
+  type RestaurantId,
+} from "@/lib/restaurants";
 import { notifyRestaurantNewOrder } from "@/lib/notify";
 
 export const runtime = "nodejs";
@@ -17,52 +22,80 @@ type InItem = {
   id: string | number;
   name: string;
   quantity: number;
-  priceNumber?: number;
+  priceNumber?: number; // en euros
   imageSrc?: string;
 };
 
 type Payload = {
   locale?: string;
   mode?: "delivery" | "pickup";
-  deliveryFee?: number;
+  deliveryFee?: number; // euros
   items: InItem[];
   shipping?: Shipping;
-  method?: "stripe" | "cash" | "qr_bank" | "qr";
-  restaurantId: "resto_a" | "resto_b";             
+  method?: "stripe" | "cash" | "qr_bank" | "qr"; // "qr" = Stripe Checkout (traité comme stripe)
+  restaurantId?: RestaurantId; // optionnel → défaut resto_a si absent/invalid
 };
 
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as Payload;
-  const restaurantId = body.restaurantId === "resto_a" || body.restaurantId === "resto_b" ? body.restaurantId : "resto_a";
+
+    // --- Normalisations / validations
+    const restaurantId: RestaurantId = isRestaurantId(body.restaurantId)
+      ? body.restaurantId
+      : "resto_a";
+
     const locale = (body.locale || "fr").toLowerCase();
     const mode = body.mode ?? "delivery";
+
     const itemsIn = Array.isArray(body.items) ? body.items : [];
     if (!itemsIn.length) {
       return NextResponse.json({ error: "Empty cart" }, { status: 400 });
     }
 
+    // --- Normalise les items
     const items: OrderItem[] = itemsIn.map((i) => {
       const q = Math.max(1, Math.floor(i.quantity || 1));
       const p = typeof i.priceNumber === "number" ? i.priceNumber : 0;
-      return { id: i.id, name: i.name || `Article ${i.id}`, quantity: q, unitPrice: p, imageSrc: i.imageSrc };
+      return {
+        id: i.id,
+        name: i.name || `Article ${i.id}`, // ✅ template string corrigé
+        quantity: q,
+        unitPrice: p,
+        imageSrc: i.imageSrc,
+      };
     });
 
+    // --- Totaux
     const subtotal = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
-    const deliveryFee = mode === "delivery" ? (typeof body.deliveryFee === "number" ? body.deliveryFee : 4.9) : 0;
+    const deliveryFee =
+      mode === "delivery"
+        ? typeof body.deliveryFee === "number"
+          ? body.deliveryFee
+          : 4.9
+        : 0;
     const total = Math.max(0, +(subtotal + deliveryFee).toFixed(2));
 
-    const reqMethod: Order["paymentMethod"] = body.method === "qr" ? "stripe" : (body.method ?? "stripe");
+    // --- Méthode & statut initial
+    const reqMethod: Order["paymentMethod"] =
+      body.method === "qr" ? "stripe" : (body.method ?? "stripe");
+
     let paymentStatus: Order["paymentStatus"] = "pending";
     if (reqMethod === "qr_bank") paymentStatus = "awaiting_bank";
+    // cash & stripe commencent en "pending"
 
-    const cfg = getRestaurantConfig(body.restaurantId); // 👈 choix du resto
+    // --- Id / Réf
     const orderId = generateOrderId();
     const bankRef = reqMethod === "qr_bank" ? generateBankRef(orderId) : undefined;
 
+    // --- Récup cfg resto (renvoyée dans la réponse)
+    const cfg = getRestaurantConfig(restaurantId);
+
+    // --- Objet ordre
     const order: Order = {
       id: orderId,
       createdAt: Date.now(),
+      restaurantId, // ✅ stocke le resto choisi
       locale,
       mode,
       paymentMethod: reqMethod,
@@ -73,13 +106,12 @@ export async function POST(req: Request) {
       shipping: body.shipping,
       items,
       bankRef,
-         restaurantId,
-             
     };
 
+    // --- Persistance
     await saveOrder(order);
 
-    // Email immédiat uniquement si CASH ou VIREMENT
+    // --- Email immédiat UNIQUEMENT pour cash / virement
     try {
       if (order.paymentMethod === "cash" || order.paymentMethod === "qr_bank") {
         await notifyRestaurantNewOrder(order);
@@ -88,7 +120,7 @@ export async function POST(req: Request) {
       console.warn("[notifyRestaurantNewOrder] failed (non bloquant)", e);
     }
 
-    // Renvoie aussi les coordonnées bancaires du resto (utile si tu réactives le virement/QR)
+    // --- Réponse
     return NextResponse.json(
       {
         orderId: order.id,

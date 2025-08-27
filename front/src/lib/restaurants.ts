@@ -4,64 +4,65 @@ export type RestaurantId = "resto_a" | "resto_b";
 export type RestaurantConfig = {
   id: RestaurantId;
   label: string;
-  email: string | null;    // où envoyer l’email (Resend)
-  creditorName: string;    // intitulé compte bancaire
-  iban: string;
-  bic?: string;
+  email: string | null;
+  creditorName: string | null;
+  iban: string | null;
+  bic: string | null;
 };
 
-function env(name: string, fallback = "") {
+// --- helpers env sûrs ---
+function env(name: string): string | null {
   const v = process.env[name];
-  return (typeof v === "string" ? v : fallback).trim();
+  return typeof v === "string" && v.trim() ? v.trim() : null;
 }
 
-// ⚙️ Renseigne tes .env :
-// RESTAURANT_A_LABEL, RESTAURANT_A_EMAIL, RESTAURANT_A_CREDITOR_NAME, RESTAURANT_A_IBAN, RESTAURANT_A_BIC
-// RESTAURANT_B_LABEL, RESTAURANT_B_EMAIL, RESTAURANT_B_CREDITOR_NAME, RESTAURANT_B_IBAN, RESTAURANT_B_BIC
-// (optionnel) RESTAURANT_EMAIL → fallback global si A/B manquent
+// ✅ type guard demandé par ta page /pay
+export function isRestaurantId(x: unknown): x is RestaurantId {
+  return x === "resto_a" || x === "resto_b";
+}
+
+// ✅ config des 2 restos
 export const RESTAURANTS: Record<RestaurantId, RestaurantConfig> = {
   resto_a: {
     id: "resto_a",
-    label: env("RESTAURANT_A_LABEL", "Minao Bruxelles"),
-    email: env("RESTAURANT_A_EMAIL") || env("RESTAURANT_EMAIL") || null,
-    creditorName: env("RESTAURANT_A_CREDITOR_NAME", "Minao Bruxelles"),
+    label: env("RESTAURANT_A_LABEL") ?? "Minao Bruxelles",
+    email: env("RESTAURANT_A_EMAIL"),
+    creditorName: env("RESTAURANT_A_CREDITOR_NAME"),
     iban: env("RESTAURANT_A_IBAN"),
     bic: env("RESTAURANT_A_BIC"),
   },
   resto_b: {
     id: "resto_b",
-    label: env("RESTAURANT_B_LABEL", "Minao Dilbeek"),
-    email: env("RESTAURANT_B_EMAIL") || env("RESTAURANT_EMAIL") || null,
-    creditorName: env("RESTAURANT_B_CREDITOR_NAME", "Minao Dilbeek"),
+    label: env("RESTAURANT_B_LABEL") ?? "Minao Dilbeek",
+    email: env("RESTAURANT_B_EMAIL"),
+    creditorName: env("RESTAURANT_B_CREDITOR_NAME"),
     iban: env("RESTAURANT_B_IBAN"),
     bic: env("RESTAURANT_B_BIC"),
   },
-} as const;
+};
 
-export function isRestaurantId(v: unknown): v is RestaurantId {
-  return v === "resto_a" || v === "resto_b";
+// ✅ récupère une config en garantissant un fallback
+export function getRestaurantConfig(id?: string | null): RestaurantConfig {
+  if (isRestaurantId(id)) return RESTAURANTS[id];
+  return RESTAURANTS.resto_a; // défaut
 }
 
-export function getRestaurantConfig(id?: unknown): RestaurantConfig {
-  return isRestaurantId(id) ? RESTAURANTS[id] : RESTAURANTS.resto_a;
-}
-
-// ✅ manquante dans ton import
+// ✅ fallback email global si email resto manquant
 export function getFallbackRestaurantEmail(): string | null {
-  const v = env("RESTAURANT_EMAIL");
-  return v || null;
+  return env("RESTAURANT_EMAIL");
 }
 
-// ✅ manquante dans ton import
-// Idéalement configure RESEND_FROM = 'Minao <orders@mg.minaoasianfood.com>'
+// ✅ adresse d’expéditeur pour Resend
 export function getEmailFrom(): string {
+  // idéal: configure RESEND_FROM="Minao <orders@ton-domaine-verify.resend.dev>"
   const configured = env("RESEND_FROM");
   if (configured) return configured;
 
-  const domain = env("RESEND_DOMAIN"); // ex: mg.minaoasianfood.com
-  if (domain) return `orders@${domain}`;
+  // si tu as configuré un domaine: RESEND_DOMAIN="mg.minaoasianfood.com"
+  const domain = env("RESEND_DOMAIN");
+  if (domain) return `Minao Asian Food <orders@${domain}>`;
 
-  // fallback dev
-  return "no-reply@localhost";
+  // fallback sandbox
+  return "Minao Asian Food <onboarding@resend.dev>";
 }
 

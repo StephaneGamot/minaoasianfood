@@ -1,5 +1,9 @@
 import type { Order } from "./orderStore";
-import { getRestaurantConfig, getFallbackRestaurantEmail, getEmailFrom } from "./restaurants";
+import {
+  getRestaurantConfig,
+  getFallbackRestaurantEmail,
+  getEmailFrom,
+} from "./restaurants";
 
 function summarize(order: Order) {
   return [
@@ -28,13 +32,16 @@ function resolveToEmail(restaurantId?: string): string | null {
 
 export async function notifyRestaurantNewOrder(order: Order) {
   const to = resolveToEmail(order.restaurantId);
-  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const apiKey = process.env.RESEND_API_KEY?.trim() || "";
   const subject =
     order.paymentStatus === "paid" && order.paymentMethod === "stripe"
       ? `✅ Paiement confirmé – ${order.id}`
       : `🆕 Nouvelle commande ${order.id} – ${order.paymentMethod} – ${order.total.toFixed(2)} €`;
 
   const text = summarize(order);
+
+  // LOGS pour debug ciblé
+  console.log("[EMAIL NEW ORDER] to=", to, "restaurantId=", order.restaurantId, "subject=", subject);
 
   if (!to || !apiKey) {
     console.log("[EMAIL->RESTAURANT FAKE SEND]", { to, subject, text });
@@ -43,19 +50,22 @@ export async function notifyRestaurantNewOrder(order: Order) {
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: getEmailFrom(),
     to,
     subject,
     text,
   });
+  if (error) console.error("[Resend send error]", error);
 }
 
 export async function notifyRestaurantPaymentUpdate(orderId: string, status: string, restaurantId?: string) {
   const to = resolveToEmail(restaurantId);
-  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const apiKey = process.env.RESEND_API_KEY?.trim() || "";
   const subject = `Paiement ${status} – ${orderId}`;
   const text = `Le paiement de la commande ${orderId} est maintenant : ${status}`;
+
+  console.log("[EMAIL PAY UPDATE] to=", to, "restaurantId=", restaurantId, "subject=", subject);
 
   if (!to || !apiKey) {
     console.log("[EMAIL->RESTAURANT Payment update FAKE SEND]", { to, subject, text });
@@ -64,10 +74,11 @@ export async function notifyRestaurantPaymentUpdate(orderId: string, status: str
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: getEmailFrom(),
     to,
     subject,
     text,
   });
+  if (error) console.error("[Resend send error]", error);
 }

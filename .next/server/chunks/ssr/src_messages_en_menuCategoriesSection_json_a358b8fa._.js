@@ -1,7 +1,0 @@
-module.exports = {
-
-"[project]/src/messages/en/menuCategoriesSection.json (json)": ((__turbopack_context__) => {
-
-__turbopack_context__.v(JSON.parse("{\"title\":\"Explore our menu\",\"categories\":[{\"id\":\"starters\",\"name\":\"Starters\",\"description\":\"Dumplings, spring rolls, gyozas… A taste of Asia to begin.\",\"alt\":\"Asian starters: dumplings, spring rolls, gyozas.\"},{\"id\":\"baos\",\"name\":\"Baos\",\"description\":\"Soft, steamed, and full of flavor.\",\"alt\":\"Steamed bao buns filled with delight.\"},{\"id\":\"dishes\",\"name\":\"Saucy dishes\",\"description\":\"Slow-cooked classics with bold aromas.\",\"alt\":\"Saucy Asian dishes with rich flavors.\"},{\"id\":\"rice\",\"name\":\"Fried rice\",\"description\":\"Aromatic and generous, full of toppings.\",\"alt\":\"Asian fried rice with veggies and proteins.\"},{\"id\":\"noodles\",\"name\":\"Stir-fried noodles\",\"description\":\"Wok-seared with bold taste and texture.\",\"alt\":\"Asian noodles stir-fried in a wok.\"},{\"id\":\"pad\",\"name\":\"Pad Thai\",\"description\":\"Thailand’s iconic dish, sweet and addictive.\",\"alt\":\"Authentic Pad Thai with shrimp and peanuts.\"},{\"id\":\"sweets\",\"name\":\"Desserts\",\"description\":\"Mango, coconut, sesame… Sweet Asian delights.\",\"alt\":\"Asian desserts: mango, coconut, sweet treats.\"},{\"id\":\"drinks\",\"name\":\"Drinks\",\"description\":\"Bubble tea, iced teas, and exotic sodas.\",\"alt\":\"Asian-style drinks, cold or hot.\"}]}"));}),
-
-};

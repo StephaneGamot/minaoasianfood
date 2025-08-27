@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 21, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/i18n/routing.ts"],"sourcesContent":["import {defineRouting} from 'next-intl/routing';\n\nexport const routing = defineRouting({\n  locales: ['fr', 'en', 'nl'],\n  defaultLocale: 'fr',\n  \n});\n"],"names":[],"mappings":";;;AAAA;;AAEO,MAAM,UAAU,CAAA,GAAA,0OAAA,CAAA,gBAAa,AAAD,EAAE;IACnC,SAAS;QAAC;QAAM;QAAM;KAAK;IAC3B,eAAe;AAEjB"}},
-    {"offset": {"line": 38, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/middleware.ts"],"sourcesContent":["// middleware.ts\nimport createMiddleware from 'next-intl/middleware';\nimport { routing } from './i18n/routing'; \n\nexport default createMiddleware({\n  ...routing,\n  localePrefix: 'always' // ou 'as-needed' si c'est ce que tu veux\n});\n\nexport const config = {\n  matcher: ['/', '/(fr|en|nl)/:path*']\n};\n"],"names":[],"mappings":"AAAA,gBAAgB;;;;;AAChB;AACA;;;uCAEe,CAAA,GAAA,8LAAA,CAAA,UAAgB,AAAD,EAAE;IAC9B,GAAG,8HAAA,CAAA,UAAO;IACV,cAAc,SAAS,yCAAyC;AAClE;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;QAAK;KAAqB;AACtC"}}]
-}

@@ -1,19 +1,32 @@
 // src/lib/notify.ts
 import type { Order } from "./orderStore";
-import {
-  getRestaurantConfig,
-  getFallbackRestaurantEmail,
-  getEmailFrom,
-} from "./restaurants";
+import { getRestaurantConfig, getFallbackRestaurantEmail, getEmailFrom } from "./restaurants";
 
-/** Validation simple d’email (évite espaces/points erronés) */
-function isValidEmail(v?: string | null): boolean {
-  if (!v) return false;
-  const s = String(v).trim();
+// ---------- Types sûrs (pas de any) ----------
+type SendOk = { ok: true; id: string; to: string[] };
+type SendFail = { ok: false; error: string; to: string[] };
+type SendResult = SendOk | SendFail;
+
+// ---------- Helpers ----------
+function stripQuotes(s: string): string {
+  // Supprime des guillemets collés dans les .env : "mail@...", 'mail@...'
+  return s.replace(/^["']+|["']+$/g, "").trim();
+}
+
+function normalizeTo(to: string | string[] | undefined | null): string[] {
+  if (!to) return [];
+  const arr = Array.isArray(to) ? to : [to];
+  return arr
+    .map((t) => stripQuotes(t))
+    .filter(Boolean);
+}
+
+function isValidEmail(s: string): boolean {
+  // vérif simple suffisant pour éviter les erreurs 422 Resend
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
-function summarize(order: Order): string {
+function summarize(order: Order) {
   return [
     `Commande: ${order.id}`,
     `Date: ${new Date(order.createdAt).toLocaleString("fr-BE")}`,
@@ -28,89 +41,70 @@ function summarize(order: Order): string {
     `Adresse: ${order.shipping?.address ?? ""}, ${order.shipping?.postalCode ?? ""} ${order.shipping?.city ?? ""}`,
     "",
     "Articles:",
-    ...order.items.map((i) => `- ${i.name} x${i.quantity} @ ${i.unitPrice.toFixed(2)} €`),
+    ...order.items.map(i => `- ${i.name} x${i.quantity} @ ${i.unitPrice.toFixed(2)} €`),
     order.bankRef ? `\nRéf. virement: ${order.bankRef}` : "",
   ].join("\n");
 }
 
-type ResolveReason = "restaurant" | "fallback" | "invalid" | "missing";
-
-/** Retourne l’adresse cible et la raison (routing/fallback/…) */
-function resolveToEmail(restaurantId?: string): { to: string | null; reason: ResolveReason } {
+function resolveToEmail(restaurantId?: string): string | null {
   const cfg = getRestaurantConfig(restaurantId);
-  const primary = cfg.email?.trim() || null;
-  const fallback = getFallbackRestaurantEmail();
-
-  if (isValidEmail(primary)) return { to: primary, reason: "restaurant" };
-  if (isValidEmail(fallback)) return { to: fallback, reason: "fallback" };
-  return { to: null, reason: primary ? "invalid" : "missing" };
+  // cfg.email peut contenir des guillemets si la valeur a été saisie avec "..."
+  const email = cfg.email ? stripQuotes(cfg.email) : null;
+  return email || getFallbackRestaurantEmail();
 }
 
-/** Parse en toute sécurité la réponse du SDK Resend (schémas possibles). */
-function parseResendResponse(
-  res: unknown
-): { id?: string; errorMessage?: string } {
-  if (typeof res !== "object" || res === null) return {};
-
-  const obj = res as Record<string, unknown>;
-
-  // Certains retours ont directement "id"
-  const idDirect = obj["id"];
-  let id: string | undefined;
-  if (typeof idDirect === "string") id = idDirect;
-
-  // D’autres ont "data: { id: string }"
-  if (!id) {
-    const data = obj["data"];
-    if (typeof data === "object" && data !== null) {
-      const dataId = (data as Record<string, unknown>)["id"];
-      if (typeof dataId === "string") id = dataId;
-    }
-  }
-
-  // Erreur éventuelle sous "error"
-  const err = obj["error"];
-  let errorMessage: string | undefined;
-  if (typeof err === "object" && err !== null) {
-    const errObj = err as Record<string, unknown>;
-    if (typeof errObj["message"] === "string") errorMessage = errObj["message"];
-    else if (typeof errObj["name"] === "string") errorMessage = errObj["name"];
-  }
-
-  return { id, errorMessage };
-}
-
-/** Envoi via Resend (sans `any`) */
-async function sendWithResend(
-  to: string,
-  subject: string,
-  text: string
-): Promise<{ id?: string }> {
+async function sendWithResend(params: {
+  from: string;
+  to: string | string[];
+  subject: string;
+  text: string;
+}): Promise<SendResult> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = stripQuotes(params.from);
+  const to = normalizeTo(params.to);
 
   if (!apiKey) {
-    console.log("[EMAIL] RESEND_API_KEY absent → log only", { to, subject });
-    return {};
+    return { ok: false, error: "RESEND_API_KEY missing", to };
+  }
+  if (!from) {
+    return { ok: false, error: "Missing 'from' address", to };
+  }
+  if (to.length === 0 || !to.every(isValidEmail)) {
+    return { ok: false, error: "Invalid 'to' address", to };
   }
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
-  const from = getEmailFrom();
 
-  const raw = await resend.emails.send({ from, to, subject, text });
-  const { id, errorMessage } = parseResendResponse(raw);
+  try {
+    const resp = await resend.emails.send({
+      from,
+      to,               // ← tableau d'emails normalisé
+      subject: params.subject,
+      text: params.text,
+      // reply_to: "une@boite.reelle" // optionnel si tu veux recevoir les réponses
+    });
 
-  if (errorMessage) {
-    console.error("[EMAIL] Resend error:", errorMessage);
-    throw new Error(errorMessage);
+    // Le SDK retourne { data?: { id: string }, error?: { name, message } }
+    if ((resp as { error?: { message?: string } }).error) {
+      const msg = (resp as { error: { message?: string } }).error.message || "Resend error";
+      return { ok: false, error: msg, to };
+    }
+
+    const id = (resp as { data?: { id?: string } }).data?.id || "";
+    if (!id) return { ok: false, error: "No id returned by Resend", to };
+
+    return { ok: true, id, to };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown send error";
+    return { ok: false, error: msg, to };
   }
-
-  console.log("[EMAIL] sent via Resend:", { to, subject, id });
-  return { id };
 }
 
-export async function notifyRestaurantNewOrder(order: Order): Promise<void> {
-  const { to, reason } = resolveToEmail(order.restaurantId);
+// ---------- API publiques ----------
+export async function notifyRestaurantNewOrder(order: Order): Promise<SendResult> {
+  const toOne = resolveToEmail(order.restaurantId);
+  const from = getEmailFrom(); // lit RESEND_FROM || fallback onboarding@resend.dev
   const subject =
     order.paymentStatus === "paid" && order.paymentMethod === "stripe"
       ? `✅ Paiement confirmé – ${order.id}`
@@ -118,37 +112,26 @@ export async function notifyRestaurantNewOrder(order: Order): Promise<void> {
 
   const text = summarize(order);
 
-  console.log("[EMAIL:new-order] resolve", {
-    restaurantId: order.restaurantId,
-    to,
-    reason,
-  });
-
-  if (!to) {
-    console.warn("[EMAIL:new-order] pas de destinataire valable → log only");
-    console.log("[EMAIL:new-order] WOULD SEND", { subject, text });
-    return;
+  if (!toOne) {
+    return { ok: false, error: "No destination email configured", to: [] };
   }
 
-  await sendWithResend(to, subject, text);
+  return await sendWithResend({ from, to: toOne, subject, text });
 }
 
 export async function notifyRestaurantPaymentUpdate(
   orderId: string,
   status: string,
   restaurantId?: string
-): Promise<void> {
-  const { to, reason } = resolveToEmail(restaurantId);
+): Promise<SendResult> {
+  const toOne = resolveToEmail(restaurantId);
+  const from = getEmailFrom();
   const subject = `Paiement ${status} – ${orderId}`;
   const text = `Le paiement de la commande ${orderId} est maintenant : ${status}`;
 
-  console.log("[EMAIL:payment-update] resolve", { restaurantId, to, reason });
-
-  if (!to) {
-    console.warn("[EMAIL:payment-update] pas de destinataire valable → log only");
-    console.log("[EMAIL:payment-update] WOULD SEND", { subject, text });
-    return;
+  if (!toOne) {
+    return { ok: false, error: "No destination email configured", to: [] };
   }
 
-  await sendWithResend(to, subject, text);
+  return await sendWithResend({ from, to: toOne, subject, text });
 }

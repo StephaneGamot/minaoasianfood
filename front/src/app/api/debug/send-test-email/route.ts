@@ -26,14 +26,8 @@ function buildTestOrder(id: string, restaurantId: "resto_a" | "resto_b"): Order 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const rid = (url.searchParams.get("rid") || "resto_a") as "resto_a" | "resto_b";
+  const order = buildTestOrder(`TEST-${rid}-${Date.now()}`, rid);
 
-  try {
-    await notifyRestaurantNewOrder(buildTestOrder(`TEST-${rid}-${Date.now()}`, rid));
-    return NextResponse.json({ ok: true, rid });
-  } catch (e) {
-    return NextResponse.json(
-      { ok: false, rid, error: e instanceof Error ? e.message : "unknown error" },
-      { status: 500 }
-    );
-  }
+  const res = await notifyRestaurantNewOrder(order);
+  return NextResponse.json({ rid, ...res }, { status: res.ok ? 200 : 500 });
 }

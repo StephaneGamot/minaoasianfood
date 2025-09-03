@@ -6,14 +6,14 @@ import {
   getEmailFrom,
 } from "./restaurants";
 
-function isValidEmail(v?: string | null) {
+/** Validation simple d’email (évite espaces/points erronés) */
+function isValidEmail(v?: string | null): boolean {
   if (!v) return false;
   const s = String(v).trim();
-  // Regex simple; évite 99% des erreurs (espaces, point final, etc.)
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
-function summarize(order: Order) {
+function summarize(order: Order): string {
   return [
     `Commande: ${order.id}`,
     `Date: ${new Date(order.createdAt).toLocaleString("fr-BE")}`,
@@ -33,7 +33,10 @@ function summarize(order: Order) {
   ].join("\n");
 }
 
-function resolveToEmail(restaurantId?: string): { to: string | null; reason: string } {
+type ResolveReason = "restaurant" | "fallback" | "invalid" | "missing";
+
+/** Retourne l’adresse cible et la raison (routing/fallback/…) */
+function resolveToEmail(restaurantId?: string): { to: string | null; reason: ResolveReason } {
   const cfg = getRestaurantConfig(restaurantId);
   const primary = cfg.email?.trim() || null;
   const fallback = getFallbackRestaurantEmail();
@@ -43,30 +46,70 @@ function resolveToEmail(restaurantId?: string): { to: string | null; reason: str
   return { to: null, reason: primary ? "invalid" : "missing" };
 }
 
-async function sendWithResend(to: string, subject: string, text: string) {
+/** Parse en toute sécurité la réponse du SDK Resend (schémas possibles). */
+function parseResendResponse(
+  res: unknown
+): { id?: string; errorMessage?: string } {
+  if (typeof res !== "object" || res === null) return {};
+
+  const obj = res as Record<string, unknown>;
+
+  // Certains retours ont directement "id"
+  const idDirect = obj["id"];
+  let id: string | undefined;
+  if (typeof idDirect === "string") id = idDirect;
+
+  // D’autres ont "data: { id: string }"
+  if (!id) {
+    const data = obj["data"];
+    if (typeof data === "object" && data !== null) {
+      const dataId = (data as Record<string, unknown>)["id"];
+      if (typeof dataId === "string") id = dataId;
+    }
+  }
+
+  // Erreur éventuelle sous "error"
+  const err = obj["error"];
+  let errorMessage: string | undefined;
+  if (typeof err === "object" && err !== null) {
+    const errObj = err as Record<string, unknown>;
+    if (typeof errObj["message"] === "string") errorMessage = errObj["message"];
+    else if (typeof errObj["name"] === "string") errorMessage = errObj["name"];
+  }
+
+  return { id, errorMessage };
+}
+
+/** Envoi via Resend (sans `any`) */
+async function sendWithResend(
+  to: string,
+  subject: string,
+  text: string
+): Promise<{ id?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
+
   if (!apiKey) {
     console.log("[EMAIL] RESEND_API_KEY absent → log only", { to, subject });
-    return { id: "no-api-key-log-only" };
+    return {};
   }
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
-
   const from = getEmailFrom();
 
-  const res = await resend.emails.send({ from, to, subject, text });
-  // Resend renvoie { id, error? }
-  if ((res as any)?.error) {
-    console.error("[EMAIL] Resend error:", (res as any).error);
-    throw new Error((res as any).error?.message || "Resend send failed");
+  const raw = await resend.emails.send({ from, to, subject, text });
+  const { id, errorMessage } = parseResendResponse(raw);
+
+  if (errorMessage) {
+    console.error("[EMAIL] Resend error:", errorMessage);
+    throw new Error(errorMessage);
   }
 
-  console.log("[EMAIL] sent via Resend:", { to, subject, id: (res as any)?.id });
-  return res;
+  console.log("[EMAIL] sent via Resend:", { to, subject, id });
+  return { id };
 }
 
-export async function notifyRestaurantNewOrder(order: Order) {
+export async function notifyRestaurantNewOrder(order: Order): Promise<void> {
   const { to, reason } = resolveToEmail(order.restaurantId);
   const subject =
     order.paymentStatus === "paid" && order.paymentMethod === "stripe"
@@ -94,7 +137,7 @@ export async function notifyRestaurantPaymentUpdate(
   orderId: string,
   status: string,
   restaurantId?: string
-) {
+): Promise<void> {
   const { to, reason } = resolveToEmail(restaurantId);
   const subject = `Paiement ${status} – ${orderId}`;
   const text = `Le paiement de la commande ${orderId} est maintenant : ${status}`;

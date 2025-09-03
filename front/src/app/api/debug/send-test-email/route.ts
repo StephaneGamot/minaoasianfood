@@ -6,62 +6,34 @@ import type { Order } from "@/lib/orderStore";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Optional security: set DEBUG_EMAIL_TOKEN in Vercel to protect this endpoint
-const REQUIRED_TOKEN = (process.env.DEBUG_EMAIL_TOKEN || "").trim();
-
-type Resto = "resto_a" | "resto_b";
-function isResto(v: unknown): v is Resto {
-  return v === "resto_a" || v === "resto_b";
-}
-
-function buildTestOrder(id: string, restaurantId: Resto, paid = false): Order {
+function buildTestOrder(id: string, restaurantId: "resto_a" | "resto_b"): Order {
   return {
     id,
     createdAt: Date.now(),
     restaurantId,
     locale: "fr",
     mode: "pickup",
-    paymentMethod: paid ? "stripe" : "cash",
-    paymentStatus: paid ? "paid" : "pending",
+    paymentMethod: "cash",
+    paymentStatus: "pending",
     subtotal: 10,
     deliveryFee: 0,
     total: 10,
-    shipping: {
-      firstName: "Test",
-      lastName: "Email",
-      phone: "0485 00 00 00",
-      email: "test@example.com",
-      address: "Rue de Test 1",
-      postalCode: "1000",
-      city: "Bruxelles",
-    },
-    items: [{ id: "sku_test", name: "Article de test", unitPrice: 10, quantity: 1 }],
+    shipping: { firstName: "Test", lastName: "Email" },
+    items: [{ id: "1", name: "TEST ITEM", unitPrice: 10, quantity: 1 }],
   };
 }
 
 export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const rid = (url.searchParams.get("rid") || "resto_a") as "resto_a" | "resto_b";
+
   try {
-    const url = new URL(req.url);
-
-    // Token check (optional but recommended in prod)
-    if (REQUIRED_TOKEN && url.searchParams.get("token") !== REQUIRED_TOKEN) {
-      return NextResponse.json({ error: "forbidden" }, { status: 403 });
-    }
-
-    // ?r=resto_a|resto_b  (if omitted, send both)
-    const r = url.searchParams.get("r");
-    const paid = url.searchParams.get("paid") === "1";
-
-    if (isResto(r)) {
-      await notifyRestaurantNewOrder(buildTestOrder(`TEST-${r.toUpperCase()}`, r, paid));
-    } else {
-      await notifyRestaurantNewOrder(buildTestOrder("TEST-A", "resto_a", paid));
-      await notifyRestaurantNewOrder(buildTestOrder("TEST-B", "resto_b", paid));
-    }
-
-    return NextResponse.json({ ok: true });
+    await notifyRestaurantNewOrder(buildTestOrder(`TEST-${rid}-${Date.now()}`, rid));
+    return NextResponse.json({ ok: true, rid });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "unknown error";
-    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, rid, error: e instanceof Error ? e.message : "unknown error" },
+      { status: 500 }
+    );
   }
 }

@@ -6,21 +6,13 @@ import {
   getEmailFrom,
 } from "./restaurants";
 
-// helpers de typage sûrs
-function isRecord(x: unknown): x is Record<string, unknown> {
-  return typeof x === "object" && x !== null;
-}
-function errorToString(err: unknown): string {
-  if (err instanceof Error) return err.message;
-  if (isRecord(err) && typeof err.message === "string") return err.message;
-  try {
-    return JSON.stringify(err);
-  } catch {
-    return String(err);
-  }
+function isValidEmail(v?: string | null) {
+  if (!v) return false;
+  const s = String(v).trim();
+  // Regex simple; évite 99% des erreurs (espaces, point final, etc.)
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
-// Résumé lisible de la commande
 function summarize(order: Order) {
   return [
     `Commande: ${order.id}`,
@@ -41,66 +33,79 @@ function summarize(order: Order) {
   ].join("\n");
 }
 
-function resolveToEmail(restaurantId?: string): string | null {
+function resolveToEmail(restaurantId?: string): { to: string | null; reason: string } {
   const cfg = getRestaurantConfig(restaurantId);
-  const to = (cfg.email || getFallbackRestaurantEmail() || "").trim();
-  return to || null;
+  const primary = cfg.email?.trim() || null;
+  const fallback = getFallbackRestaurantEmail();
+
+  if (isValidEmail(primary)) return { to: primary, reason: "restaurant" };
+  if (isValidEmail(fallback)) return { to: fallback, reason: "fallback" };
+  return { to: null, reason: primary ? "invalid" : "missing" };
 }
 
-// On ne dépend pas des types internes exacts de Resend, on reste "minimal"
-type ResendSendResponse = {
-  id?: string;
-  // d'autres champs existent, mais non nécessaires ici
-};
-
-async function sendEmail(to: string, subject: string, text: string): Promise<void> {
-  const apiKey = (process.env.RESEND_API_KEY || "").trim();
-  const from = getEmailFrom();
-
-  if (!apiKey || !to) {
-    console.log("[EMAIL FAKE SEND]", { to, from, subject, preview: text.slice(0, 120) });
-    return;
+async function sendWithResend(to: string, subject: string, text: string) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) {
+    console.log("[EMAIL] RESEND_API_KEY absent → log only", { to, subject });
+    return { id: "no-api-key-log-only" };
   }
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
 
-  try {
-    const result = (await resend.emails.send({ from, to, subject, text })) as unknown;
+  const from = getEmailFrom();
 
-    // log propre, sans any
-    let id: string | undefined;
-    if (isRecord(result) && typeof result.id === "string") {
-      id = result.id;
-    }
-    console.log("[EMAIL SENT]", { to, subject, id: id ?? "(no id returned)" });
-  } catch (err: unknown) {
-    console.error("[EMAIL ERROR]", {
-      to,
-      subject,
-      message: errorToString(err),
-    });
-    // On ne bloque pas le flux métier si l'email échoue.
+  const res = await resend.emails.send({ from, to, subject, text });
+  // Resend renvoie { id, error? }
+  if ((res as any)?.error) {
+    console.error("[EMAIL] Resend error:", (res as any).error);
+    throw new Error((res as any).error?.message || "Resend send failed");
   }
+
+  console.log("[EMAIL] sent via Resend:", { to, subject, id: (res as any)?.id });
+  return res;
 }
 
-export async function notifyRestaurantNewOrder(order: Order): Promise<void> {
-  const to = resolveToEmail(order.restaurantId);
+export async function notifyRestaurantNewOrder(order: Order) {
+  const { to, reason } = resolveToEmail(order.restaurantId);
   const subject =
     order.paymentStatus === "paid" && order.paymentMethod === "stripe"
       ? `✅ Paiement confirmé – ${order.id}`
       : `🆕 Nouvelle commande ${order.id} – ${order.paymentMethod} – ${order.total.toFixed(2)} €`;
 
-  await sendEmail(to || "", subject, summarize(order));
+  const text = summarize(order);
+
+  console.log("[EMAIL:new-order] resolve", {
+    restaurantId: order.restaurantId,
+    to,
+    reason,
+  });
+
+  if (!to) {
+    console.warn("[EMAIL:new-order] pas de destinataire valable → log only");
+    console.log("[EMAIL:new-order] WOULD SEND", { subject, text });
+    return;
+  }
+
+  await sendWithResend(to, subject, text);
 }
 
 export async function notifyRestaurantPaymentUpdate(
   orderId: string,
   status: string,
   restaurantId?: string
-): Promise<void> {
-  const to = resolveToEmail(restaurantId);
+) {
+  const { to, reason } = resolveToEmail(restaurantId);
   const subject = `Paiement ${status} – ${orderId}`;
   const text = `Le paiement de la commande ${orderId} est maintenant : ${status}`;
-  await sendEmail(to || "", subject, text);
+
+  console.log("[EMAIL:payment-update] resolve", { restaurantId, to, reason });
+
+  if (!to) {
+    console.warn("[EMAIL:payment-update] pas de destinataire valable → log only");
+    console.log("[EMAIL:payment-update] WOULD SEND", { subject, text });
+    return;
+  }
+
+  await sendWithResend(to, subject, text);
 }

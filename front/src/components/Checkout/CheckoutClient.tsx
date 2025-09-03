@@ -41,6 +41,7 @@ export default function CheckoutClient() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     const form = e.currentTarget;
 
+    // Laisse la validation native agir (champs requis si livraison)
     if (!form.checkValidity()) {
       e.preventDefault();
       form.reportValidity();
@@ -63,14 +64,15 @@ export default function CheckoutClient() {
               postalCode: String(fd.get("postalCode") ?? ""),
               city: String(fd.get("city") ?? ""),
               phone: String(fd.get("phone") ?? ""),
-              email: String(fd.get("email") ?? ""),
+              email: String(fd.get("email") ?? ""), // optionnel
             }
           : {};
 
       sessionStorage.setItem("checkoutShipping", JSON.stringify(shipping));
       sessionStorage.setItem(SESSION_RESTO_KEY, restaurantId as RestaurantId);
 
-      router.push(`/${locale}/pay?mode=${mode}`);
+      // 👉 passe aussi le resto dans l'URL pour robustesse
+      router.push(`/${locale}/pay?mode=${mode}&r=${restaurantId}`);
     } catch (err) {
       console.error(err);
       alert("Impossible de préparer le paiement pour le moment.");
@@ -200,27 +202,67 @@ export default function CheckoutClient() {
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="firstName" className="block text-sm text-gray-700">Prénom</label>
-              <input id="firstName" name="firstName" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="firstName"
+                name="firstName"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
             <div>
               <label htmlFor="lastName" className="block text-sm text-gray-700">Nom</label>
-              <input id="lastName" name="lastName" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="lastName"
+                name="lastName"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="address" className="block text-sm text-gray-700">Adresse</label>
-              <input id="address" name="address" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="address"
+                name="address"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
             <div>
               <label htmlFor="postalCode" className="block text-sm text-gray-700">Code postal</label>
-              <input id="postalCode" name="postalCode" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="postalCode"
+                name="postalCode"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
             <div>
               <label htmlFor="city" className="block text-sm text-gray-700">Ville</label>
-              <input id="city" name="city" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="city"
+                name="city"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="phone" className="block text-sm text-gray-700">Téléphone</label>
-              <input id="phone" name="phone" required className="mt-1 block w-full rounded-md border px-3 py-2" />
+              <input
+                id="phone"
+                name="phone"
+                required={mode === "delivery"}
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
+            </div>
+            {/* Email (optionnel) */}
+            <div className="sm:col-span-2">
+              <label htmlFor="email" className="block text-sm text-gray-700">Email (optionnel)</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                className="mt-1 block w-full rounded-md border px-3 py-2"
+              />
             </div>
           </div>
         </section>

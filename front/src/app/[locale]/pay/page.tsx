@@ -37,6 +37,13 @@ export default function PayPage() {
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<string | null>(null);
 
+  const rParam = sp.get("r");
+useEffect(() => {
+  if (isRestaurantId(rParam)) {
+    sessionStorage.setItem("checkoutRestaurantId", rParam); // harmonise la source de vérité
+  }
+}, [rParam]);
+
   // Redirection si panier vide
   useEffect(() => {
     if (!loaded) return;

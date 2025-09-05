@@ -17,7 +17,7 @@ const clean = (v?: string | null) =>
 export const RESTAURANTS: Record<RestaurantId, RestaurantConfig> = {
   resto_a: {
     id: "resto_a",
-    label: clean(process.env.RESTAURANT_A_LABEL) || "Restaurant A",
+    label: clean(process.env.RESTAURANT_A_LABEL) || "Minao Bruxelles",
     email: clean(process.env.RESTAURANT_A_EMAIL) || null,
     creditorName: clean(process.env.RESTAURANT_A_CREDITOR_NAME) || null,
     iban: clean(process.env.RESTAURANT_A_IBAN) || null,
@@ -25,7 +25,7 @@ export const RESTAURANTS: Record<RestaurantId, RestaurantConfig> = {
   },
   resto_b: {
     id: "resto_b",
-    label: clean(process.env.RESTAURANT_B_LABEL) || "Restaurant B",
+    label: clean(process.env.RESTAURANT_B_LABEL) || "Minao Dilbeek",
     email: clean(process.env.RESTAURANT_B_EMAIL) || null,
     creditorName: clean(process.env.RESTAURANT_B_CREDITOR_NAME) || null,
     iban: clean(process.env.RESTAURANT_B_IBAN) || null,

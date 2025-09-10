@@ -44,7 +44,7 @@ export default function NavBar() {
         {/* Logo (garde le locale dans l'URL pour rester dans la langue courante) */}
         <div className="flex lg:flex-1">
           <Link href={`/${locale}`} className="-m-1.5 p-1.5" aria-label="Accueil">
-            <Image alt="Minao Asian Food" src={Logo} width={130} height={32} priority />
+            <Image alt="Minao Asian Food" src={Logo} width={50} height={50} priority />
           </Link>
         </div>
 

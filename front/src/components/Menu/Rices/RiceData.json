@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 18,
     "name": "Riz sauté veggie",
     "description": "",
     "href": "/menu/riz",
@@ -12,7 +12,7 @@
     "searchTag": ["riz", "veggie", "végétarien"]
   },
   {
-    "id": 2,
+    "id": 19,
     "name": "Riz sauté poulet",
     "description": "",
     "href": "/menu/riz",
@@ -24,7 +24,7 @@
     "searchTag": ["riz", "poulet"]
   },
   {
-    "id": 3,
+    "id": 20,
     "name": "Riz sauté viande boeuf",
     "description": "",
     "href": "/menu/riz",
@@ -36,7 +36,7 @@
     "searchTag": ["riz", "viande", "bœuf"]
   },
   {
-    "id": 4,
+    "id": 21,
     "name": "Riz sauté scampis",
     "description": "",
     "href": "/menu/riz",
@@ -48,7 +48,7 @@
     "searchTag": ["riz", "scampi", "océan"]
   },
   {
-    "id": 5,
+    "id": 22,
     "name": "Riz sauté mixte",
     "description": "",
     "href": "/menu/riz",
@@ -60,7 +60,7 @@
     "searchTag": ["riz", "mixte", "poulet", "viande", "scampi"]
   },
   {
-    "id": 6,
+    "id": 23,
     "name": "Riz énergie",
     "description": "Riz blanc aux légumes frais, protéiné et sans sauce",
     "href": "/menu/riz",

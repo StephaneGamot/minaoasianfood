@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 34,
     "name": "Duo de bao veggie",
     "description": "Guacamole cream et falafel.",
     "href": "/menu/baos",
@@ -12,7 +12,7 @@
     "searchTag": ["bao", "veggie", "falafel", "guacamole", "végétarien"]
   },
   {
-    "id": 2,
+    "id": 35,
     "name": "Duo de bao niwatori",
     "description": "Poulet fumé et légumes pickles.",
     "href": "/menu/baos",
@@ -24,7 +24,7 @@
     "searchTag": ["bao", "niwatori", "poulet", "fumé", "pickles"]
   },
   {
-    "id": 3,
+    "id": 36,
     "name": "Duo de bao niku",
     "description": "Viande laquée, soja miel et sésame.",
     "href": "/menu/baos",
@@ -36,7 +36,7 @@
     "searchTag": ["bao", "niku", "viande", "soja", "miel", "sésame"]
   },
   {
-    "id": 4,
+    "id": 37,
     "name": "Duo de bao sukanpi",
     "description": "Scampis saté et cream cheese.",
     "href": "/menu/baos",
@@ -48,7 +48,7 @@
     "searchTag": ["bao", "sukanpi", "scampis", "saté", "cream cheese"]
   },
   {
-    "id": 5,
+    "id": 38,
     "name": "Duo de bao sweet",
     "description": "Poulet sucré et salé.",
     "href": "/menu/baos",
@@ -60,7 +60,7 @@
     "searchTag": ["bao", "sweet", "poulet", "sucré", "salé"]
   },
   {
-    "id": 6,
+    "id": 39,
     "name": "Duo de bao mixte",
     "description": "Servi avec chips aux crevettes",
     "href": "/menu/baos",

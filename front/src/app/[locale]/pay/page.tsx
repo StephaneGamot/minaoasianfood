@@ -138,7 +138,7 @@ useEffect(() => {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button
+          {/*   <button
           onClick={() => chooseMethod("stripe")}
           className={`rounded-lg border p-3 text-left ${method === "stripe" ? "border-red-700 ring-1 ring-red-700" : "border-gray-300"}`}
           disabled={!PUBLISHABLE_KEY || loading}
@@ -146,7 +146,7 @@ useEffect(() => {
         >
           <div className="font-medium">Carte / Bancontact</div>
           <div className="text-xs text-gray-600">Visa, Mastercard, Bancontact, Apple Pay, Google Pay…</div>
-        </button>
+        </button>  */}
 
         <button
           onClick={() => chooseMethod("cash")}

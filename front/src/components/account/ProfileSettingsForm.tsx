@@ -313,7 +313,7 @@ export default function ProfileSettingsForm({ locale }: Props) {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center justify-center rounded-md bg-red-900 px-4 py-2 text-sm text-white hover:bg-red-800 disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-md bg-[#f47457] px-4 py-2 text-sm text-white hover:bg-red-500 disabled:opacity-60"
           >
             {saving
               ? (t("saving", { default: "Enregistrement..." }) as string)

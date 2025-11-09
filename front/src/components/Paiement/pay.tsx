@@ -106,7 +106,7 @@ export default function Pay() {
         <button
           disabled={!selected}
           onClick={handleConfirm}
-          className="px-6 py-3 rounded-md text-white bg-red-800 hover:bg-red-700 disabled:opacity-50"
+          className="px-6 py-3 rounded-md text-white bg-red-500 hover:bg-red-700 disabled:opacity-50"
         >
           Continuer
         </button>

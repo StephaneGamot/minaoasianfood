@@ -138,7 +138,7 @@ export default function CheckoutReviewPage() {
       )}
 
       {/* Actions */}
-      {errMsg && <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800">{errMsg}</div>}
+      {errMsg && <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-bg-[#f47457]">{errMsg}</div>}
 
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <button onClick={goCard} className="rounded-lg border p-3 text-left hover:bg-gray-50">
@@ -149,7 +149,7 @@ export default function CheckoutReviewPage() {
         <button
           onClick={proceedCash}
           disabled={loadingCash}
-          className="rounded-lg border p-3 text-left bg-red-900 text-white hover:bg-red-800 disabled:opacity-50"
+          className="rounded-lg border p-3 text-left bg-[#f47457] text-white hover:bg-red-500 disabled:opacity-50"
         >
           {loadingCash ? "Confirmation…" : "Confirmer la commande (espèces à la remise)"}
         </button>

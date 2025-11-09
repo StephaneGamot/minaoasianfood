@@ -65,7 +65,7 @@ export default function SuccessPage() {
       <div className="mt-8 flex gap-3">
         <Link
           href={`/${locale}/menu`}
-          className="inline-flex items-center justify-center rounded-md bg-red-900 px-4 py-2 text-white hover:bg-red-800"
+          className="inline-flex items-center justify-center rounded-md bg-[#f47457] px-4 py-2 text-white hover:bg-red-500"
         >
           Revenir au menu
         </Link>

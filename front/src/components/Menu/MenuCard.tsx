@@ -159,7 +159,7 @@ export default function MenuCard({ categories }: MenuCardProps) {
 
             <div className="flex items-center justify-between mb-4">
               {selected.price && (
-                <p className="text-lg font-semibold text-red-800">
+                <p className="text-lg font-semibold text-bg-[#f47457]">
                   {selected.price}
                 </p>
               )}
@@ -183,7 +183,7 @@ export default function MenuCard({ categories }: MenuCardProps) {
 
             <button
               onClick={handleAddToCart}
-              className="mt-2 w-full rounded-lg bg-red-900 text-white py-2 hover:bg-red-800 transition"
+              className="mt-2 w-full rounded-lg bg-[#f47457] text-white py-2 hover:bg-red-500 transition"
             >
               Ajouter {quantity > 1 ? `${quantity}` : ""} au panier
             </button>

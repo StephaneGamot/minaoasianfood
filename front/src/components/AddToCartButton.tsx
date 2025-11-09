@@ -37,7 +37,7 @@ export default function AddToCartButton({ item, className, label = 'Ajouter au p
       type="button"
       onClick={onAdd}
       disabled={adding}
-      className={className ?? 'rounded bg-red-900 px-3 py-2 text-white hover:bg-red-800 disabled:opacity-50'}
+      className={className ?? 'rounded bg-[#f47457] px-3 py-2 text-white hover:bg-red-500 disabled:opacity-50'}
     >
       {adding ? 'Ajout…' : label}
     </button>

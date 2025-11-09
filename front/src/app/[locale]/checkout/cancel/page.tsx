@@ -15,7 +15,7 @@ export default function CheckoutCancelPage() {
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Link
           href={`/${locale}/pay`}
-          className="inline-flex items-center justify-center rounded-md bg-red-900 px-4 py-2 text-white hover:bg-red-800"
+          className="inline-flex items-center justify-center rounded-md bg-[#f47457] px-4 py-2 text-white hover:bg-red-500"
         >
           Réessayer le paiement
         </Link>

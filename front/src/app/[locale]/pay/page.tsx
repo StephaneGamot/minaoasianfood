@@ -159,7 +159,7 @@ useEffect(() => {
       </div>
 
       {errMsg && (
-        <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800">{errMsg}</div>
+        <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-bg-[#f47457]">{errMsg}</div>
       )}
 
       <div className="mt-8">
@@ -188,7 +188,7 @@ useEffect(() => {
                 clearCart();
                 router.push(`/${locale}/checkout/success?cash=1&oid=${encodeURIComponent(orderId)}`);
               }}
-              className="mt-4 rounded-md bg-red-900 px-4 py-2 text-white hover:bg-red-800"
+              className="mt-4 rounded-md bg-[#f47457] px-4 py-2 text-white hover:bg-red-500"
             >
               Confirmer et terminer
             </button>
@@ -234,7 +234,7 @@ function StripePayForm() {
       <button
         onClick={onPay}
         disabled={!stripe || submitting}
-        className="mt-4 w-full rounded-md bg-red-900 px-4 py-3 text-white hover:bg-red-800 disabled:opacity-50"
+        className="mt-4 w-full rounded-md bg-[#f47457] px-4 py-3 text-white hover:bg-red-500 disabled:opacity-50"
       >
         {submitting ? "Traitement…" : "Payer maintenant"}
       </button>

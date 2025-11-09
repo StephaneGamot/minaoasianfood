@@ -40,7 +40,7 @@ export default function WitchRestaurant() {
     sizes="(max-width: 768px) 100vw, 33vw"
     className="object-cover"
   />
-              <span className="absolute top-3 left-3 bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              <span className="absolute top-3 left-3 bg-[#f47457] text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                 {t(`restaurants.${id}.badge`)}
               </span>
             </div>
@@ -53,11 +53,11 @@ export default function WitchRestaurant() {
                 <Link
                   href={
                     id === 1
-                      ? "https://goo.gl/maps/example1"
-                      : "https://goo.gl/maps/example2"
+                      ? "https://maps.app.goo.gl/QZgbMkPRXNiAbUar5"
+                      : "https://maps.app.goo.gl/3QiofiEq8GbYRj2CA"
                   }
                   target="_blank"
-                  className="inline-block text-red-800 font-medium hover:underline"
+                  className="inline-block text-bg-[#f47457] font-medium hover:underline"
                 >
                   {t("map")}
                 </Link>

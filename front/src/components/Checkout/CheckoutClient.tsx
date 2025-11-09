@@ -273,7 +273,7 @@ export default function CheckoutClient() {
         <button
           type="submit"
           disabled={isDisabled}
-          className="w-full rounded-md bg-red-900 px-4 py-3 text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-md bg-[#f47457] px-4 py-3 text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "Redirection…" : "Procéder au paiement"}
         </button>

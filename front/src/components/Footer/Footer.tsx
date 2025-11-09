@@ -57,20 +57,20 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-zinc-900 text-zinc-300">
+    <footer className="bg-[#323232] text-zinc-300">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* NAVIGATION */}
-        <nav className="mb-10 flex justify-center gap-x-8 text-sm font-medium">
-          <Link href={`/${locale}/`} className="hover:text-white">
+        <nav className="mb-10 flex justify-center gap-x-8 text-xl font-medium">
+          <Link href={`/${locale}/`} className="text-[#f47457] hover:text-red-300">
             {t("nav.home")}
           </Link>
-          <Link href={`/${locale}/menu`} className="hover:text-white">
+          <Link href={`/${locale}/menu`} className="text-[#f47457] hover:text-red-300">
             {t("nav.menu")}
           </Link>
-          <Link href={`/${locale}/galerie`} className="hover:text-white">
+          <Link href={`/${locale}/galerie`} className="text-[#f47457] hover:text-red-300">
             {t("nav.gallery")}
           </Link>
-          <Link href={`/${locale}/contact`} className="hover:text-white">
+          <Link href={`/${locale}/contact`} className="text-[#f47457] hover:text-red-300">
             {t("nav.contact")}
           </Link>
           {/*<Link href="/faq" className="hover:text-white">{t("nav.faq")}</Link>*/}
@@ -80,7 +80,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm text-center md:text-left max-w-5xl mx-auto">
           {/* Horaires */}
           <div>
-            <h3 className="text-white font-semibold mb-3">
+            <h3 className="text-[#f47457] font-semibold mb-3">
               {t("hours.title")}
             </h3>
             <ul className="space-y-1">
@@ -96,7 +96,7 @@ export default function Footer() {
 
           {/* Particularités */}
           <div>
-            <h3 className="text-white font-semibold mb-3">
+            <h3 className="text-[#f47457] font-semibold mb-3">
               {t("features.title")}
             </h3>
             <ul className="space-y-2">
@@ -120,7 +120,7 @@ export default function Footer() {
 
           {/* Contact & Adresse */}
           <div>
-            <h3 className="text-white font-semibold mb-3">
+            <h3 className="text-[#f47457] font-semibold mb-3">
               {t("contact.title")}
             </h3>
             <ul className="space-y-2">
@@ -138,7 +138,7 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-            <h3 className="text-white font-semibold mt-5 mb-2">
+            <h3 className="text-[#f47457] font-semibold mt-5 mb-2">
               {t("address.title")}
             </h3>
             <address className="not-italic leading-6">

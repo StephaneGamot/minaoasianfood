@@ -100,7 +100,7 @@ export default function ProfileClient({ locale }: Props) {
     return (
       <main className="max-w-5xl mx-auto p-6">
         {/* Skeleton */}
-        <div className="rounded-3xl overflow-hidden shadow-sm border bg-gradient-to-br from-red-900 via-red-800 to-red-600 h-40" />
+        <div className="rounded-3xl overflow-hidden shadow-sm border bg-gradient-to-br from-red-900 via-bg-[#f47457] to-red-600 h-40" />
         <div className="-mt-10 mx-4 md:mx-6 bg-white rounded-2xl shadow-sm border p-6">
           <div className="animate-pulse">
             <div className="flex items-center gap-4">
@@ -149,7 +149,7 @@ export default function ProfileClient({ locale }: Props) {
   return (
     <main className="max-w-5xl mx-auto p-6">
       {/* Hero */}
-      <div className="rounded-3xl overflow-hidden shadow-sm border bg-gradient-to-br from-red-900 via-red-800 to-red-600 p-6 relative">
+      <div className="rounded-3xl overflow-hidden shadow-sm border bg-gradient-to-br from-red-900 via-bg-[#f47457] to-red-600 p-6 relative">
         {/* Avatar */}
         <div className="absolute left-6 -bottom-10">
           {profile?.profilePicUrl ? (
@@ -252,7 +252,7 @@ export default function ProfileClient({ locale }: Props) {
                 type="button"
                 onClick={handleLogout}
                 disabled={busyLogout}
-                className="w-full inline-flex items-center justify-center rounded-md bg-red-900 text-white px-3 py-2 text-sm hover:bg-red-800 disabled:opacity-60"
+                className="w-full inline-flex items-center justify-center rounded-md bg-[#f47457] text-white px-3 py-2 text-sm hover:bg-red-500 disabled:opacity-60"
               >
                 {t("logout", { default: "Se déconnecter" })}
               </button>

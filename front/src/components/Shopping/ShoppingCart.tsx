@@ -121,7 +121,7 @@ export default function ShoppingCart() {
             <button
               type="submit"
               disabled={isDisabled}
-              className="mt-6 w-full rounded-md bg-red-900 px-4 py-3 text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-6 w-full rounded-md bg-[#f47457] px-4 py-3 text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Valider la commande
             </button>

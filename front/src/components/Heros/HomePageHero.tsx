@@ -11,7 +11,7 @@ export default function HomePageHero() {
       <p className="text-lg text-gray-700">
         {t.rich('description', {
           strong: (chunks) => <strong>{chunks}</strong>,
-          span: (chunks) => <span className="text-red-700 font-semibold">{chunks}</span>,
+          span: (chunks) => <span className="text-[#f47457] font-semibold">{chunks}</span>,
           br: () => <br />
         })}
       </p>

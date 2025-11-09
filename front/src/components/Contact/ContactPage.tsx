@@ -65,7 +65,7 @@ export default function ContactPageClient() {
                   {t("labels.phone")}
                 </span>
                 <a
-                  className="text-red-800 hover:underline"
+                  className="text-bg-[#f47457] hover:underline"
                   href={`tel:${loc.phone.replace(/\s+/g, "")}`}
                 >
                   {loc.phone}
@@ -75,13 +75,13 @@ export default function ContactPageClient() {
                 <span className="block text-sm font-medium text-gray-900">
                   {t("labels.email")}
                 </span>
-                <a className="text-red-800 hover:underline" href={`mailto:${loc.email}`}>
+                <a className="text-bg-[#f47457] hover:underline" href={`mailto:${loc.email}`}>
                   {loc.email}
                 </a>
               </li>
               <li>
                 <a
-                  className="inline-flex items-center text-red-800 hover:underline"
+                  className="inline-flex items-center text-bg-[#f47457] hover:underline"
                   href={`https://maps.google.com/?q=${encodeURIComponent(loc.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"

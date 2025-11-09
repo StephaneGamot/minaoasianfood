@@ -5,7 +5,7 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "./../../../public/logos/logo.webp";
+import Logo from "./../../../public/logos/Logo-Minao2.png";
 import { useTranslations, useLocale } from 'next-intl';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -39,12 +39,12 @@ export default function NavBar() {
   ];
 
   return (
-    <header className="bg-red-900 shadow">
+    <header className="bg-white shadow">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
         {/* Logo (garde le locale dans l'URL pour rester dans la langue courante) */}
         <div className="flex lg:flex-1">
           <Link href={`/${locale}`} className="-m-1.5 p-1.5" aria-label="Accueil">
-            <Image alt="Minao Asian Food" src={Logo} width={50} height={50} priority />
+            <Image alt="Minao Asian Food" src={Logo} width={70} height={70} priority />
           </Link>
         </div>
 
@@ -65,7 +65,7 @@ export default function NavBar() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold text-stone-100 hover:text-gray-300 transition"
+              className="text-2xl font-semibold text-[#f47457] hover:text-red-500 transition"
             >
               {item.name}
             </Link>
@@ -110,7 +110,7 @@ export default function NavBar() {
       {/* Menu mobile (Drawer) */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <div className="fixed inset-0 z-50" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-red-900 p-6 sm:max-w-sm">
+        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-[#f47457] p-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
             <Link href={`/${locale}`} className="-m-1.5 p-1.5" aria-label="Accueil">
               <Image src={Logo} alt="Minao" width={120} height={30} />
@@ -132,7 +132,7 @@ export default function NavBar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
+                    className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white transition"
                   >
                     {item.name}
                   </Link>
@@ -143,7 +143,7 @@ export default function NavBar() {
                 <Link
                   href={`/${locale}/panier`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
+                  className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white transition"
                 >
                   🛒 Panier ({cartItemCount})
                 </Link>
@@ -153,7 +153,7 @@ export default function NavBar() {
                   <Link
                     href={`/${locale}/login`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white transition"
+                    className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white transition"
                   >
                     Connexion →
                   </Link>
@@ -163,7 +163,7 @@ export default function NavBar() {
                       <Link
                         href={`/${locale}/admin`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white"
                       >
                         Admin
                       </Link>
@@ -172,7 +172,7 @@ export default function NavBar() {
                       <Link
                         href={`/${locale}/dashboard`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                        className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white"
                       >
                         Tableau de bord
                       </Link>
@@ -180,7 +180,7 @@ export default function NavBar() {
                     <Link
                       href={`/${locale}/profile`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                      className="block rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white"
                     >
                       Mon compte
                     </Link>
@@ -189,7 +189,7 @@ export default function NavBar() {
                         setMobileMenuOpen(false);
                         handleLogout();
                       }}
-                      className="block w-full text-left rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-800 hover:text-white"
+                      className="block w-full text-left rounded-lg px-3 py-2 text-base font-semibold text-stone-100 hover:bg-red-500 hover:text-white"
                     >
                       Déconnexion
                     </button>

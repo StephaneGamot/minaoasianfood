@@ -65,7 +65,7 @@ export default function NavBar() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-2xl font-semibold text-[#f47457] hover:text-red-500 transition"
+              className="text-2xl font-semibold text-amber-600 hover:text-[#f47457] transition"
             >
               {item.name}
             </Link>

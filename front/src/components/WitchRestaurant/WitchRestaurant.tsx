@@ -40,7 +40,7 @@ export default function WitchRestaurant() {
     sizes="(max-width: 768px) 100vw, 33vw"
     className="object-cover"
   />
-              <span className="absolute top-3 left-3 bg-[#f47457] text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              <span className="absolute top-3 left-3 bg-[#f47457] text-black text-xs font-semibold px-3 py-1 rounded-full shadow">
                 {t(`restaurants.${id}.badge`)}
               </span>
             </div>

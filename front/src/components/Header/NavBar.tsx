@@ -52,7 +52,7 @@ export default function NavBar() {
         <div className="flex lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-stone-100 hover:text-white"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-black hover:text-white"
             aria-label="Ouvrir le menu"
           >
             <Bars3Icon className="h-6 w-6" />

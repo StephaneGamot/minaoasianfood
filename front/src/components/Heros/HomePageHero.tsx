@@ -12,7 +12,7 @@ export default function HomePageHero() {
       {/* Image de fond */}
       <Image
         src={ImgBGHero}
-        alt={t('imageAlt') ?? 'Delicious asian food'}
+        alt={'Delicious asian food'}
         fill
         priority
         className="object-cover"

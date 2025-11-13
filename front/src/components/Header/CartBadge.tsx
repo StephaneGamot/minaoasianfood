@@ -14,7 +14,7 @@ export default function CartBadge() {
   return (
     <Link
       href={`/${locale}/panier`}
-      className="relative text-stone-100 hover:text-white transition"
+      className="relative text-black hover:text-white transition"
       aria-label="Voir le panier"
     >
       <ShoppingCartIcon className="h-6 w-6" />

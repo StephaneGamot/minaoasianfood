@@ -60,7 +60,7 @@ export default function WitchRestaurant() {
         <p className="mt-2 text-gray-600">{t("description")}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto place-items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto items-stretch">
         {[1, 2].map((id) => (
           <AnimatedCard key={id}>
             <div className="overflow-hidden rounded-xl shadow-lg transition hover:shadow-xl max-w-[500px] w-full">
@@ -77,7 +77,7 @@ export default function WitchRestaurant() {
                   {t(`restaurants.${id}.badge`)}
                 </span>
               </div>
-              <div className="p-6 bg-white">
+              <div className="flex-1 p-6 bg-white">
                 <h3 className="text-xl font-bold text-gray-900">
                   {t(`restaurants.${id}.name`)}
                 </h3>
